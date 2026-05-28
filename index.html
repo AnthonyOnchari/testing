@@ -1,5 +1,3 @@
-Hello 002
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -831,6 +829,14 @@ Hello 002
             margin-top: 10px;
         }
 
+        .btn-pay {
+            background: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
         .or-divider {
             text-align: center;
             margin: 12px 0;
@@ -954,6 +960,26 @@ Hello 002
             <div class="card">
                 <div class="step-title">Complete Payment</div>
                 
+                <!-- PesaPal STK Push Option -->
+                <div class="form-group">
+                    <label>M-Pesa Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="paymentPhone" placeholder="0712345678">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" id="paymentEmail" placeholder="you@example.com">
+                </div>
+
+                <button class="btn-submit btn-pay" id="payWithPesapalBtn">
+                    <i class="fas fa-mobile-alt"></i> Pay with M-Pesa (STK Push)
+                </button>
+
+                <div class="or-divider">
+                    <hr>
+                    <span>OR Pay Manually</span>
+                </div>
+
                 <!-- Manual Till Method -->
                 <div class="mpesa-container">
                     <div class="till-number">8941840</div>
@@ -980,7 +1006,7 @@ Hello 002
 
                 <div class="button-group" style="margin-top: 10px;">
                     <button class="btn-back" id="backToStep2Manual">Back</button>
-                    <button class="btn-submit" id="submitOrder" style="background: var(--primary);">Place Order (Verify Payment)</button>
+                    <button class="btn-submit" id="submitOrder" style="background: var(--primary);">Place Order (Manual Payment)</button>
                 </div>
             </div>
         </div>
@@ -1127,6 +1153,7 @@ Hello 002
         let autoRefreshInterval = null;
         let currentTrackingIdForAutoRefresh = null;
         let selectedRating = 0;
+        let paymentPollInterval = null;
 
         const platformSettings = {
             facebook: { 
@@ -1159,10 +1186,6 @@ Hello 002
             };
             
             let rate = basePrices[platform]?.[service] || 0.4;
-            
-            // Apply platform multiplier (Instagram is 4.5x Facebook)
-            const multiplier = platform === 'instagram' ? 4.5 : 1;
-            rate = rate * multiplier;
             
             let price = Math.round(qty * rate);
             
@@ -1733,6 +1756,44 @@ Hello 002
             if (successModal) successModal.classList.add("show");
         }
 
+        // Payment polling function
+        function startPaymentPolling(trackingId, orderData) {
+            let attempts = 0;
+            const maxAttempts = 60; // 2 minutes
+            
+            if (paymentPollInterval) clearInterval(paymentPollInterval);
+            
+            const checkPaymentStatus = () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const paymentStatus = urlParams.get('payment_status');
+                const ref = urlParams.get('reference');
+                
+                if (paymentStatus === 'COMPLETED' && ref === trackingId) {
+                    clearInterval(paymentPollInterval);
+                    paymentPollInterval = null;
+                    showNotification('✅ Payment Successful!', 'Your payment has been confirmed. Your order is now being processed.');
+                    updateOrderStatus(trackingId, "Processing");
+                    showSuccessModal(trackingId);
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    return true;
+                }
+                return false;
+            };
+            
+            if (checkPaymentStatus()) return;
+            
+            paymentPollInterval = setInterval(() => {
+                attempts++;
+                if (checkPaymentStatus()) return;
+                
+                if (attempts >= maxAttempts) {
+                    clearInterval(paymentPollInterval);
+                    paymentPollInterval = null;
+                    showNotification('Payment Pending', 'If you completed payment, your order will be confirmed soon.', false);
+                }
+            }, 2000);
+        }
+
         // ========== ATTACH ALL EVENT LISTENERS ==========
         function attachEventListeners() {
             console.log("Attaching event listeners...");
@@ -1793,6 +1854,104 @@ Hello 002
                 });
             }
             
+            // PesaPal Payment Button Handler
+            const payWithPesapalBtn = document.getElementById("payWithPesapalBtn");
+            if (payWithPesapalBtn) {
+                payWithPesapalBtn.addEventListener("click", async () => {
+                    const paymentPhone = document.getElementById("paymentPhone")?.value.trim() || "";
+                    const paymentEmail = document.getElementById("paymentEmail")?.value.trim() || "";
+                    const name = document.getElementById("customerName")?.value.trim() || "";
+                    const profile = document.getElementById("socialProfile")?.value.trim() || "";
+                    const phone = document.getElementById("customerPhone")?.value.trim() || "";
+                    const link = document.getElementById("postLink")?.value.trim() || "";
+
+                    if (!name) { showNotification('Error', 'Enter your full name', true); showStep(2); return; }
+                    if (!profile) { showNotification('Error', `Enter ${platformSettings[currentPlatform].usernameLabel}`, true); showStep(2); return; }
+                    if (!phone) { showNotification('Error', 'Enter WhatsApp number', true); showStep(2); return; }
+                    if ((currentService === "likes" || currentService === "comments") && !link) { showNotification('Error', `Enter ${platformSettings[currentPlatform].postLabel}`, true); showStep(2); return; }
+                    if (!paymentPhone) { showNotification('Error', 'Enter M-Pesa phone number', true); return; }
+                    if (!paymentEmail) { showNotification('Error', 'Enter email address', true); return; }
+
+                    let price = calculatePrice(currentPlatform, currentService, currentQuantity);
+                    let deliveryTime = getDeliveryTime(currentQuantity, currentPlatform);
+                    let fullServiceName = `${platformSettings[currentPlatform].name} ${serviceNames[currentService]}`;
+                    let finalTrackingId = currentTrackingId;
+
+                    const orderData = {
+                        trackingId: finalTrackingId,
+                        platform: platformSettings[currentPlatform].name,
+                        service: fullServiceName,
+                        quantity: currentQuantity,
+                        price: price,
+                        deliveryTime: deliveryTime,
+                        customerName: name,
+                        profile: profile,
+                        postLink: link || "Not provided",
+                        phone: phone,
+                        transactionId: "PesaPal - Pending",
+                        mpesaConfirmation: "Payment via PesaPal STK Push",
+                        status: "Payment Pending",
+                        paymentMethod: "PesaPal STK Push",
+                        timestamp: new Date().toLocaleString("en-KE")
+                    };
+
+                    const btn = payWithPesapalBtn;
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<span class="loading-spinner"></span> Sending STK Push...';
+                    btn.disabled = true;
+
+                    try {
+                        const saved = await saveToGoogleSheets(orderData);
+                        if (!saved) throw new Error("Failed to save order");
+
+                        addOrder(orderData);
+
+                        const response = await fetch('/.netlify/functions/pesapal-initiate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                amount: price,
+                                email: paymentEmail,
+                                phone: paymentPhone,
+                                reference: finalTrackingId,
+                                customerName: name
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success && result.redirect_url) {
+                            window.open(result.redirect_url, '_blank');
+                            showNotification('STK Push Sent!', 'Check your phone for the M-Pesa prompt. Complete payment in the new window.', false);
+                            
+                            startPaymentPolling(finalTrackingId, orderData);
+                            
+                            currentTrackingId = generateTrackingId();
+                            const trackingIdSpan = document.getElementById("trackingId");
+                            if (trackingIdSpan) trackingIdSpan.innerText = currentTrackingId;
+                            
+                            document.getElementById("customerName").value = "";
+                            document.getElementById("socialProfile").value = "";
+                            document.getElementById("postLink").value = "";
+                            document.getElementById("customerPhone").value = "";
+                            document.getElementById("paymentPhone").value = "";
+                            document.getElementById("paymentEmail").value = "";
+                            
+                            setTimeout(() => {
+                                showStep(1);
+                            }, 2000);
+                        } else {
+                            throw new Error(result.error || 'Payment initialization failed');
+                        }
+                    } catch (error) {
+                        console.error('Payment error:', error);
+                        showNotification('Error', error.message || 'Payment failed. Please try again or use manual payment.', true);
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
+                });
+            }
+            
             // Manual order submission
             const submitOrderBtn = document.getElementById("submitOrder");
             if (submitOrderBtn) {
@@ -1829,6 +1988,7 @@ Hello 002
                         transactionId: transactionId,
                         mpesaConfirmation: mpesaText.substring(0, 500),
                         status: "Pending",
+                        paymentMethod: "Manual M-Pesa",
                         timestamp: new Date().toLocaleString("en-KE")
                     };
 
@@ -1872,7 +2032,7 @@ Hello 002
                         showNotification('Error', 'Failed to save order. Please try again.', true);
                     }
                     
-                    btn.innerHTML = "Place Order (Verify Payment)";
+                    btn.innerHTML = "Place Order (Manual Payment)";
                     btn.disabled = false;
                 });
             }
