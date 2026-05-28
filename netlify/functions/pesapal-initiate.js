@@ -1,6 +1,8 @@
 // netlify/functions/pesapal-initiate.js
+const https = require('https');
+
 exports.handler = async (event, context) => {
-    // Handle OPTIONS preflight request for CORS
+    // Handle CORS preflight
     if (event.httpMethod === 'OPTIONS') {
         return {
             statusCode: 200,
@@ -13,53 +15,42 @@ exports.handler = async (event, context) => {
         };
     }
 
-    // Only allow POST requests
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ error: 'Method not allowed. Use POST.' })
+            headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ error: 'Method not allowed' })
         };
     }
 
     try {
-        console.log("📱 PesaPal Initiate Function Called");
-        console.log("Request body:", event.body);
-        
         const { amount, email, phone, reference, customerName } = JSON.parse(event.body);
         
-        console.log(`Processing payment: ${amount} KES for ${customerName} (${reference})`);
+        console.log("=== PESAPAL PAYMENT INITIATION ===");
+        console.log("Amount:", amount, "KES");
+        console.log("Reference:", reference);
+        console.log("Customer:", customerName);
+        console.log("Email:", email);
+        console.log("Phone:", phone);
         
-        // Format phone number
+        // Format phone number for PesaPal
         let formattedPhone = phone.replace(/\s/g, '');
         if (formattedPhone.startsWith('0')) {
             formattedPhone = '254' + formattedPhone.substring(1);
         } else if (formattedPhone.startsWith('+')) {
             formattedPhone = formattedPhone.substring(1);
         }
-
-        // Your PesaPal credentials
+        
+        // Use LIVE endpoint since you have live credentials
+        const PESAPAL_ENDPOINT = "https://pay.pesapal.com/v3";
         const CONSUMER_KEY = "WXzl1T/tz7NL0nILHBpm4pbHmudQN/eW";
         const CONSUMER_SECRET = "PJ6cyCt8zr9SeA435v+Py2wXnYo=";
         
-        // Use Sandbox for testing first
-        const PESAPAL_ENDPOINT = "https://cybqa.pesapal.com/pesapalv3";
-        // For production, change to: "https://pay.pesapal.com/v3"
-        
-        // Get the site URL from environment or use the hardcoded one
-        let siteUrl = process.env.URL || 'https://loquacious-kitten-73b278.netlify.app';
-        if (!siteUrl.startsWith('http')) {
-            siteUrl = 'https://' + siteUrl;
-        }
-        siteUrl = siteUrl.replace(/\/$/, '');
-        
-        console.log(`Site URL: ${siteUrl}`);
+        const siteUrl = 'https://loquacious-kitten-73b278.netlify.app';
         
         // Step 1: Get Access Token
-        console.log("Getting access token...");
+        console.log("Step 1: Getting access token...");
+        
         const authString = Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString('base64');
         
         const tokenResponse = await fetch(`${PESAPAL_ENDPOINT}/api/Auth/RequestToken`, {
@@ -71,52 +62,54 @@ exports.handler = async (event, context) => {
             },
             body: JSON.stringify({})
         });
-
+        
         const tokenData = await tokenResponse.json();
+        console.log("Token Response:", JSON.stringify(tokenData));
         
         if (!tokenData.token) {
-            console.error("Token error:", tokenData);
-            throw new Error('Failed to get access token');
+            throw new Error(`Failed to get token: ${JSON.stringify(tokenData)}`);
         }
-
+        
         const accessToken = tokenData.token;
         console.log("✅ Access token obtained");
-
-        // Step 2: Register IPN URL (optional but recommended)
+        
+        // Step 2: Register IPN (Instant Payment Notification)
+        console.log("Step 2: Registering IPN...");
+        
         const ipnUrl = `${siteUrl}/.netlify/functions/pesapal-ipn`;
         
+        const ipnResponse = await fetch(`${PESAPAL_ENDPOINT}/api/URLSetup/RegisterIPN`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                url: ipnUrl,
+                ipn_notification_type: "GET"
+            })
+        });
+        
         let ipnId = null;
-        try {
-            const ipnResponse = await fetch(`${PESAPAL_ENDPOINT}/api/URLSetup/RegisterIPN`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
-                },
-                body: JSON.stringify({
-                    url: ipnUrl,
-                    ipn_notification_type: "GET"
-                })
-            });
-
-            if (ipnResponse.ok) {
-                const ipnData = await ipnResponse.json();
-                ipnId = ipnData.ipn_id;
-                console.log("✅ IPN registered with ID:", ipnId);
-            }
-        } catch (ipnError) {
-            console.log("IPN registration skipped:", ipnError.message);
+        if (ipnResponse.ok) {
+            const ipnData = await ipnResponse.json();
+            ipnId = ipnData.ipn_id;
+            console.log("✅ IPN Registered:", ipnId);
+        } else {
+            console.log("IPN registration skipped, continuing without IPN");
         }
-
-        // Step 3: Submit Order Request
+        
+        // Step 3: Submit Order
+        console.log("Step 3: Submitting order...");
+        
         const callbackUrl = `${siteUrl}/.netlify/functions/pesapal-callback`;
         
-        const orderData = {
+        const orderRequest = {
             id: reference,
             currency: "KES",
             amount: amount,
-            description: `Get Fans Kenya - ${customerName}`,
+            description: `Social Media Growth - ${customerName}`,
             callback_url: callbackUrl,
             notification_id: ipnId,
             branch_name: "Get Fans Kenya",
@@ -129,28 +122,25 @@ exports.handler = async (event, context) => {
                 line_1: "Nairobi, Kenya"
             }
         };
-
-        console.log("Submitting order to PesaPal...");
         
-        const submitResponse = await fetch(`${PESAPAL_ENDPOINT}/api/Transactions/SubmitOrderRequest`, {
+        console.log("Order Request:", JSON.stringify(orderRequest));
+        
+        const orderResponse = await fetch(`${PESAPAL_ENDPOINT}/api/Transactions/SubmitOrderRequest`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             },
-            body: JSON.stringify(orderData)
+            body: JSON.stringify(orderRequest)
         });
-
-        const submitData = await submitResponse.json();
-        console.log("PesaPal Response:", submitData);
-
-        if (submitData.order_tracking_id) {
-            // For Sandbox, the redirect_url might be different
-            let redirectUrl = submitData.redirect_url;
-            if (!redirectUrl) {
-                redirectUrl = `${PESAPAL_ENDPOINT}/api/Transactions/Redirect?order_tracking_id=${submitData.order_tracking_id}`;
-            }
+        
+        const orderData = await orderResponse.json();
+        console.log("Order Response:", JSON.stringify(orderData));
+        
+        if (orderData.order_tracking_id) {
+            // Construct the redirect URL for STK Push
+            const redirectUrl = orderData.redirect_url || `${PESAPAL_ENDPOINT}/api/Transactions/Redirect?order_tracking_id=${orderData.order_tracking_id}`;
             
             return {
                 statusCode: 200,
@@ -161,16 +151,18 @@ exports.handler = async (event, context) => {
                 body: JSON.stringify({
                     success: true,
                     redirect_url: redirectUrl,
-                    order_tracking_id: submitData.order_tracking_id,
-                    message: "STK Push initiated successfully"
+                    order_tracking_id: orderData.order_tracking_id,
+                    merchant_reference: reference,
+                    message: "STK Push initiated. Check your phone."
                 })
             };
         } else {
-            throw new Error(submitData.error?.message || JSON.stringify(submitData));
+            throw new Error(orderData.error?.message || 'Failed to create order');
         }
-
+        
     } catch (error) {
-        console.error('❌ PesaPal error:', error);
+        console.error("❌ Error:", error);
+        
         return {
             statusCode: 500,
             headers: {
@@ -179,7 +171,8 @@ exports.handler = async (event, context) => {
             },
             body: JSON.stringify({
                 success: false,
-                error: error.message || 'Payment initialization failed'
+                error: error.message,
+                details: "Check function logs for more information"
             })
         };
     }

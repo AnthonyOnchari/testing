@@ -4,7 +4,10 @@ exports.handler = async (event, context) => {
     const orderTrackingId = params.OrderTrackingId || params.order_tracking_id;
     const orderMerchantReference = params.OrderMerchantReference;
     
-    console.log("📞 Callback received:", { orderTrackingId, orderMerchantReference });
+    console.log("=== PESAPAL CALLBACK RECEIVED ===");
+    console.log("Order Tracking ID:", orderTrackingId);
+    console.log("Merchant Reference:", orderMerchantReference);
+    console.log("All params:", params);
     
     const siteUrl = 'https://loquacious-kitten-73b278.netlify.app';
     const redirectUrl = `${siteUrl}?payment_status=COMPLETED&reference=${orderMerchantReference}`;
