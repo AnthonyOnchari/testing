@@ -1766,7 +1766,7 @@
         btn.disabled = false;
     });
 
-    // ========== PESAPAL PAYMENT INTEGRATION ==========
+    // ========== PESAPAL PAYMENT INTEGRATION (UPDATED FOR NETLIFY) ==========
     async function pollPesaPalPayment(trackingId) {
         let attempts = 0;
         const maxAttempts = 60; // 2 minutes
@@ -1777,7 +1777,6 @@
             attempts++;
             
             try {
-                // Check URL parameters first (from callback redirect)
                 const urlParams = new URLSearchParams(window.location.search);
                 const paymentStatus = urlParams.get('payment_status');
                 const ref = urlParams.get('reference');
@@ -1790,7 +1789,6 @@
                     showNotification('✅ Payment Successful!', 'Your order is now being processed');
                     showSuccessModal(trackingId);
                     
-                    // Clear URL parameters
                     window.history.replaceState({}, document.title, window.location.pathname);
                     
                 } else if (paymentStatus === 'FAILED' && ref === trackingId) {
@@ -1809,7 +1807,7 @@
         }, 2000);
     }
 
-    // PesaPal Payment Handler
+    // PesaPal Payment Handler - UPDATED URL FOR NETLIFY
     document.getElementById("payWithPesapalBtn")?.addEventListener("click", async function() {
         const paymentPhone = document.getElementById("paymentPhone").value.trim();
         const paymentEmail = document.getElementById("paymentEmail").value.trim();
@@ -1857,7 +1855,8 @@
 
             addOrder(orderData);
 
-            const response = await fetch('/api/pesapal-initiate', {
+            // UPDATED: Netlify function URL
+            const response = await fetch('/.netlify/functions/pesapal-initiate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1871,9 +1870,8 @@
 
             const result = await response.json();
 
-            if (result.success && result.payment_url) {
-                window.open(result.payment_url, '_blank');
-                showNotification('Payment Window Opened', 'Complete payment in the new tab. Then return here.', false);
+            if (result.success) {
+                showNotification('STK Push Sent!', 'Check your phone for the M-Pesa prompt', false);
                 pollPesaPalPayment(finalTrackingId);
             } else {
                 throw new Error(result.message || 'Payment initialization failed');
