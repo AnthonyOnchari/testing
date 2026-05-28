@@ -1,9 +1,11 @@
+Hello 002
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Get Fans Kenya | Facebook Growth</title>
+    <title>Get Fans Kenya | Social Media Growth</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -21,6 +23,8 @@
             --border: #e5e5e5;
             --primary: #1877f2;
             --primary-dark: #0d65d9;
+            --instagram: #e4405f;
+            --instagram-dark: #c13584;
             --success: #2ecc71;
             --warning: #f39c12;
             --danger: #e74c3c;
@@ -51,7 +55,6 @@
             min-height: 100vh;
         }
 
-        /* Fix for buttons not being clickable */
         .btn-next, .btn-back, .btn-submit, .platform-btn, .service-btn, .track-btn, .admin-small-btn, .theme-toggle, .copy-btn, .track-order-btn, .btn-review, .delete-btn, .refresh-btn, .close-modal {
             cursor: pointer;
             position: relative;
@@ -238,6 +241,10 @@
             background: var(--primary);
             color: white;
             border-color: transparent;
+        }
+
+        .platform-btn.instagram.active {
+            background: var(--instagram);
         }
 
         .service-buttons {
@@ -824,14 +831,6 @@
             margin-top: 10px;
         }
 
-        .btn-pay {
-            background: #25D366;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
         .or-divider {
             text-align: center;
             margin: 12px 0;
@@ -905,6 +904,9 @@
                     <div class="platform-btn active" data-platform="facebook">
                         <i class="fab fa-facebook"></i> Facebook
                     </div>
+                    <div class="platform-btn" data-platform="instagram">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </div>
                 </div>
                 <div class="service-buttons" id="serviceButtons"></div>
                 <div class="qty-row">
@@ -926,7 +928,7 @@
                 <div class="step-title">Your Information</div>
                 <div class="form-group">
                     <label id="usernameLabel">Facebook Profile URL <span class="required">*</span></label>
-                    <input type="text" id="facebookProfile" placeholder="Profile URL or username">
+                    <input type="text" id="socialProfile" placeholder="Profile URL or username">
                 </div>
                 <div class="form-group" id="postLinkGroup" style="display: none;">
                     <label id="postLinkLabel">Post Link <span class="required">*</span></label>
@@ -952,28 +954,8 @@
             <div class="card">
                 <div class="step-title">Complete Payment</div>
                 
-                <!-- PesaPal STK Push Option -->
-                <div class="form-group">
-                    <label>M-Pesa Phone Number <span class="required">*</span></label>
-                    <input type="tel" id="paymentPhone" placeholder="0712345678">
-                </div>
-
-                <div class="form-group">
-                    <label>Email Address <span class="required">*</span></label>
-                    <input type="email" id="paymentEmail" placeholder="you@example.com">
-                </div>
-
-                <button class="btn-submit btn-pay" id="payWithPesapalBtn">
-                    <i class="fas fa-mobile-alt"></i> Pay with M-Pesa (STK Push)
-                </button>
-
-                <div class="or-divider">
-                    <hr>
-                    <span>OR Pay Manually</span>
-                </div>
-
                 <!-- Manual Till Method -->
-                <div class="mpesa-container" style="margin-top: 0;">
+                <div class="mpesa-container">
                     <div class="till-number">8941840</div>
                     <div class="payment-steps">
                         <div>📝 1. M-Pesa > Lipa Na M-Pesa > Buy Goods</div>
@@ -982,8 +964,8 @@
                         <div>🔐 4. Enter PIN and confirm</div>
                     </div>
                     <div class="mpesa-field">
-                        <label>📋 Paste M-Pesa Confirmation (for manual verification)</label>
-                        <textarea id="mpesaConfirmation" rows="2" placeholder="Paste the M-Pesa message here for manual verification"></textarea>
+                        <label>📋 Paste M-Pesa Confirmation Message</label>
+                        <textarea id="mpesaConfirmation" rows="3" placeholder="Paste the full M-Pesa confirmation message here..."></textarea>
                     </div>
                 </div>
 
@@ -998,7 +980,7 @@
 
                 <div class="button-group" style="margin-top: 10px;">
                     <button class="btn-back" id="backToStep2Manual">Back</button>
-                    <button class="btn-submit" id="submitOrder" style="background: var(--primary);">Place Order (Manual Payment)</button>
+                    <button class="btn-submit" id="submitOrder" style="background: var(--primary);">Place Order (Verify Payment)</button>
                 </div>
             </div>
         </div>
@@ -1049,6 +1031,7 @@
                 <button class="track-order-btn" id="trackFromSuccessBtn">Track Order</button>
             </div>
             <p style="font-size: 0.7rem; margin-top: 12px; color: var(--text-light);">Save your Tracking ID to check order status</p>
+            <p style="font-size: 0.7rem; margin-top: 8px; color: var(--success);">Our team will verify your payment and deliver within the estimated time!</p>
         </div>
     </div>
 </div>
@@ -1066,7 +1049,7 @@
                 <button id="searchTrackBtn">Track</button>
             </div>
             <div id="trackingResult" class="tracking-result"></div>
-            <div class="auto-refresh-badge" id="autoRefreshStatus">🔄 Auto-refreshing every 2 seconds</div>
+            <div class="auto-refresh-badge" id="autoRefreshStatus">🔄 Auto-refreshing every 5 seconds</div>
             <a href="https://wa.me/254750600715?text=Hello%20Get%20Fans%20Kenya%2C%20I%20need%20help%20with%20my%20order" class="whatsapp-track-link" target="_blank">
                 <i class="fab fa-whatsapp"></i> Need help? WhatsApp us
             </a>
@@ -1114,7 +1097,7 @@
     </div>
 </div>
 
-<a href="https://wa.me/254750600715?text=Hi" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+<a href="https://wa.me/254750600715?text=Hi%20Get%20Fans%20Kenya%2C%20I%20want%20to%20order" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
 
 <script>
 // Wait for DOM to be fully loaded before running any JavaScript
@@ -1143,36 +1126,59 @@
         let isAdminLoggedIn = false;
         let autoRefreshInterval = null;
         let currentTrackingIdForAutoRefresh = null;
-        let autoStatusTimeout = null;
-        let paymentPollInterval = null;
         let selectedRating = 0;
 
         const platformSettings = {
-            facebook: { name: "Facebook", usernameLabel: "Facebook Profile URL", usernamePlaceholder: "Profile URL or username", postLabel: "Post Link" }
+            facebook: { 
+                name: "Facebook", 
+                usernameLabel: "Facebook Profile URL", 
+                usernamePlaceholder: "Profile URL or username", 
+                postLabel: "Post Link",
+                multiplier: 1
+            },
+            instagram: { 
+                name: "Instagram", 
+                usernameLabel: "Instagram Username", 
+                usernamePlaceholder: "@username or profile URL", 
+                postLabel: "Post URL",
+                multiplier: 4.5
+            }
         };
 
         const serviceOptions = {
-            facebook: ["followers", "likes", "comments"]
+            facebook: ["followers", "likes", "comments"],
+            instagram: ["followers", "likes", "comments"]
         };
 
         const serviceNames = { followers: "Followers", likes: "Likes", comments: "Comments" };
 
         function calculatePrice(platform, service, qty) {
             const basePrices = {
-                facebook: { followers: 0.4, likes: 0.25, comments: 0.3 }
+                facebook: { followers: 0.4, likes: 0.25, comments: 0.3 },
+                instagram: { followers: 1.8, likes: 1.125, comments: 1.35 }
             };
-            const rate = basePrices[platform]?.[service] || 0.4;
+            
+            let rate = basePrices[platform]?.[service] || 0.4;
+            
+            // Apply platform multiplier (Instagram is 4.5x Facebook)
+            const multiplier = platform === 'instagram' ? 4.5 : 1;
+            rate = rate * multiplier;
+            
             let price = Math.round(qty * rate);
+            
+            // Bulk discounts
             if (qty >= 10000) price = Math.round(price * 0.9);
             if (qty >= 50000) price = Math.round(price * 0.8);
             if (qty >= 100000) price = Math.round(price * 0.7);
+            
             return Math.max(price, 25);
         }
 
-        function getDeliveryTime(qty) {
-            if (qty <= 50000) return "30 minutes";
-            if (qty <= 300000) return "3 hours";
-            return "6 hours";
+        function getDeliveryTime(qty, platform) {
+            const baseTime = platform === 'instagram' ? 1.5 : 1;
+            if (qty <= 50000) return `${Math.round(30 * baseTime)} minutes`;
+            if (qty <= 300000) return `${Math.round(3 * baseTime)} hours`;
+            return `${Math.round(6 * baseTime)} hours`;
         }
 
         function getDeliveryClass(qty) {
@@ -1182,7 +1188,7 @@
         }
 
         function updateDeliveryDisplay(qty) {
-            const time = getDeliveryTime(qty);
+            const time = getDeliveryTime(qty, currentPlatform);
             const deliveryClass = getDeliveryClass(qty);
             const noteDiv = document.getElementById("deliveryTimeNote");
             if (noteDiv) {
@@ -1260,8 +1266,23 @@
             const usernameLabel = document.getElementById("usernameLabel");
             if (usernameLabel) usernameLabel.innerHTML = `${platformSettings[currentPlatform].usernameLabel} <span class="required">*</span>`;
             
-            const facebookProfile = document.getElementById("facebookProfile");
-            if (facebookProfile) facebookProfile.placeholder = platformSettings[currentPlatform].usernamePlaceholder;
+            const socialProfile = document.getElementById("socialProfile");
+            if (socialProfile) socialProfile.placeholder = platformSettings[currentPlatform].usernamePlaceholder;
+            
+            // Update platform button styling
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                if (btn.dataset.platform === currentPlatform) {
+                    btn.classList.add('active');
+                    if (currentPlatform === 'instagram') {
+                        btn.style.background = 'var(--instagram)';
+                    } else {
+                        btn.style.background = 'var(--primary)';
+                    }
+                } else {
+                    btn.classList.remove('active');
+                    btn.style.background = '';
+                }
+            });
         }
 
         async function fetchOrdersFromSheet() {
@@ -1273,7 +1294,7 @@
                     orders = data.map(row => ({
                         trackingId: row["Tracking ID"] || row.trackingId,
                         service: row.Service || row.service,
-                        platform: row.Service ? row.Service.split(" ")[0] : "Facebook",
+                        platform: row.Platform || (row.Service ? row.Service.split(" ")[0] : "Facebook"),
                         quantity: row.Quantity || row.quantity,
                         price: row["Price (KSh)"] || row.price,
                         customerName: row["Customer Name"] || row.customerName,
@@ -1281,7 +1302,7 @@
                         transactionId: row["Transaction ID"] || row.transactionId,
                         status: row.Status || row.status || "Pending",
                         timestamp: row.Timestamp || row.timestamp,
-                        profile: row["Facebook Profile"] || row.profile,
+                        profile: row["Profile URL"] || row.profile,
                         postLink: row["Post Link"] || row.postLink
                     }));
                     
@@ -1332,15 +1353,13 @@
         function loadDefaultReviews() {
             reviews = [
                 { name: "John M.", rating: 5, review: "Ordered 25,000 Facebook followers and got them in just 30 minutes. My page has grown so much.", date: "2 days ago" },
-                { name: "Sarah W.", rating: 5, review: "Got 10,000 Facebook followers. Delivery was very fast. Will order again!", date: "5 days ago" },
+                { name: "Sarah W.", rating: 5, review: "Got 10,000 Instagram followers. Delivery was very fast. Will order again!", date: "5 days ago" },
                 { name: "David K.", rating: 5, review: "Very reliable service. The 3,000 Facebook likes came in less than 30 minutes.", date: "1 week ago" },
-                { name: "Grace N.", rating: 5, review: "They delivered 50k followers as promised. My Facebook page is now verified!", date: "2 weeks ago" },
+                { name: "Grace N.", rating: 5, review: "They delivered 50k followers as promised. My page is now verified!", date: "2 weeks ago" },
                 { name: "Peter O.", rating: 4, review: "Great service, affordable prices. Got my 5k followers within the promised time.", date: "3 weeks ago" },
-                { name: "Mary A.", rating: 5, review: "Amazing experience! Facebook comments came in super fast. Highly recommend!", date: "1 month ago" },
+                { name: "Mary A.", rating: 5, review: "Amazing experience! Instagram comments came in super fast. Highly recommend!", date: "1 month ago" },
                 { name: "James R.", rating: 4, review: "Good service. Delivery took about 2 hours for 15k followers but quality was great.", date: "1 month ago" },
-                { name: "Lucy M.", rating: 5, review: "Fast delivery and excellent customer support. Will be ordering again soon!", date: "1 month ago" },
-                { name: "Brian T.", rating: 3, review: "Service was okay. Delivery was within the time frame. Would try again.", date: "2 months ago" },
-                { name: "Faith N.", rating: 5, review: "Absolutely love this service! Got 100k Facebook followers and my page is blowing up!", date: "2 months ago" }
+                { name: "Lucy M.", rating: 5, review: "Fast delivery and excellent customer support. Will be ordering again soon!", date: "1 month ago" }
             ];
             localStorage.setItem('getfanskenya_reviews', JSON.stringify(reviews));
             renderReviews();
@@ -1432,7 +1451,7 @@
                 <html>
                 <head>
                     <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Get Fans Kenya - Order Receipt</title>
                     <style>
                         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1452,13 +1471,6 @@
                         .receipt-footer { background: #f8f9fc; padding: 20px; text-align: center; border-top: 1px solid #e5e5e5; }
                         .receipt-footer p { font-size: 0.7rem; color: #666; margin: 4px 0; }
                         hr { margin: 12px 0; border-color: #eee; }
-                        @media (max-width: 480px) {
-                            body { padding: 12px; }
-                            .receipt-header { padding: 20px 16px; }
-                            .receipt-header h1 { font-size: 1.4rem; }
-                            .receipt-body { padding: 20px 16px; }
-                            .info-row { font-size: 0.8rem; padding: 8px 0; }
-                        }
                     </style>
                 </head>
                 <body>
@@ -1549,7 +1561,7 @@
                         <div class="info-row"><span>Service:</span><strong>${escapeHtml(order.service)}</strong></div>
                         <div class="info-row"><span>Quantity:</span><strong>${order.quantity.toLocaleString()}</strong></div>
                         <div class="info-row"><span>Amount:</span><strong>KSh ${order.price.toLocaleString()}</strong></div>
-                        <div class="info-row"><span>Delivery Estimate:</span><strong>${getDeliveryTime(order.quantity)}</strong></div>
+                        <div class="info-row"><span>Delivery Estimate:</span><strong>${getDeliveryTime(order.quantity, order.platform.toLowerCase())}</strong></div>
                         ${currentStatus === 'Delivered' ? `
                             <button class="download-receipt-btn" id="downloadReceiptBtn">
                                 <i class="fas fa-download"></i> Download Receipt
@@ -1586,7 +1598,7 @@
                         if (currentTrackingIdForAutoRefresh) {
                             await displayTrackingResult(currentTrackingIdForAutoRefresh);
                         }
-                    }, 2000);
+                    }, 5000);
                     
                 } catch (error) {
                     console.error("Error tracking order:", error);
@@ -1710,46 +1722,6 @@
         const trackingIdSpan = document.getElementById("trackingId");
         if (trackingIdSpan) trackingIdSpan.innerText = currentTrackingId;
 
-        async function pollPesaPalPayment(trackingId) {
-            let attempts = 0;
-            const maxAttempts = 60;
-            
-            if (paymentPollInterval) clearInterval(paymentPollInterval);
-            
-            paymentPollInterval = setInterval(async () => {
-                attempts++;
-                
-                try {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const paymentStatus = urlParams.get('payment_status');
-                    const ref = urlParams.get('reference');
-                    
-                    if (paymentStatus === 'COMPLETED' && ref === trackingId) {
-                        clearInterval(paymentPollInterval);
-                        paymentPollInterval = null;
-                        
-                        await updateOrderStatus(trackingId, "Processing");
-                        showNotification('✅ Payment Successful!', 'Your order is now being processed');
-                        showSuccessModal(trackingId);
-                        
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        
-                    } else if (paymentStatus === 'FAILED' && ref === trackingId) {
-                        clearInterval(paymentPollInterval);
-                        paymentPollInterval = null;
-                        showNotification('Payment Failed', 'Payment was not completed. Use Till 8941840 instead.', true);
-                        
-                    } else if (attempts >= maxAttempts) {
-                        clearInterval(paymentPollInterval);
-                        paymentPollInterval = null;
-                        showNotification('Payment Timeout', 'If you paid, it will be confirmed soon. Use Tracking ID to check status.', true);
-                    }
-                } catch (error) {
-                    console.error('Polling error:', error);
-                }
-            }, 2000);
-        }
-
         // Modal functions
         const successModal = document.getElementById("successModal");
         let lastPlacedTrackingId = "";
@@ -1764,6 +1736,16 @@
         // ========== ATTACH ALL EVENT LISTENERS ==========
         function attachEventListeners() {
             console.log("Attaching event listeners...");
+            
+            // Platform buttons
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentPlatform = btn.dataset.platform;
+                    currentService = "followers";
+                    updateServiceButtons();
+                    updateUI();
+                });
+            });
             
             // Navigation buttons
             const nextToStep2 = document.getElementById("nextToStep2");
@@ -1816,7 +1798,7 @@
             if (submitOrderBtn) {
                 submitOrderBtn.addEventListener("click", async () => {
                     const name = document.getElementById("customerName")?.value.trim() || "";
-                    const profile = document.getElementById("facebookProfile")?.value.trim() || "";
+                    const profile = document.getElementById("socialProfile")?.value.trim() || "";
                     const phone = document.getElementById("customerPhone")?.value.trim() || "";
                     const link = document.getElementById("postLink")?.value.trim() || "";
                     const mpesaText = document.getElementById("mpesaConfirmation")?.value.trim() || "";
@@ -1825,16 +1807,17 @@
                     if (!profile) { showNotification('Error', `Enter ${platformSettings[currentPlatform].usernameLabel}`, true); showStep(2); return; }
                     if (!phone) { showNotification('Error', 'Enter WhatsApp number', true); showStep(2); return; }
                     if ((currentService === "likes" || currentService === "comments") && !link) { showNotification('Error', `Enter ${platformSettings[currentPlatform].postLabel}`, true); showStep(2); return; }
-                    if (!mpesaText) { showNotification('Error', 'Paste M-Pesa confirmation', true); showStep(3); return; }
+                    if (!mpesaText) { showNotification('Error', 'Paste M-Pesa confirmation message', true); return; }
 
                     let price = calculatePrice(currentPlatform, currentService, currentQuantity);
-                    let deliveryTime = getDeliveryTime(currentQuantity);
+                    let deliveryTime = getDeliveryTime(currentQuantity, currentPlatform);
                     let transactionId = mpesaText.match(/[A-Z0-9]{10,}/i)?.[0] || "Not extracted";
                     let fullServiceName = `${platformSettings[currentPlatform].name} ${serviceNames[currentService]}`;
                     let finalTrackingId = currentTrackingId;
 
                     const orderData = {
                         trackingId: finalTrackingId,
+                        platform: platformSettings[currentPlatform].name,
                         service: fullServiceName,
                         quantity: currentQuantity,
                         price: price,
@@ -1864,13 +1847,13 @@
                         if (trackingIdSpan) trackingIdSpan.innerText = currentTrackingId;
                         
                         const customerNameInput = document.getElementById("customerName");
-                        const facebookProfileInput = document.getElementById("facebookProfile");
+                        const socialProfileInput = document.getElementById("socialProfile");
                         const postLinkInput = document.getElementById("postLink");
                         const customerPhoneInput = document.getElementById("customerPhone");
                         const mpesaConfirmationInput = document.getElementById("mpesaConfirmation");
                         
                         if (customerNameInput) customerNameInput.value = "";
-                        if (facebookProfileInput) facebookProfileInput.value = "";
+                        if (socialProfileInput) socialProfileInput.value = "";
                         if (postLinkInput) postLinkInput.value = "";
                         if (customerPhoneInput) customerPhoneInput.value = "";
                         if (mpesaConfirmationInput) mpesaConfirmationInput.value = "";
@@ -1884,92 +1867,13 @@
                         updateUI();
                         showStep(1);
                         
-                        showNotification('Success', 'Order placed successfully!');
+                        showNotification('Success', 'Order placed successfully! Our team will verify payment.');
                     } else {
                         showNotification('Error', 'Failed to save order. Please try again.', true);
                     }
                     
-                    btn.innerHTML = "Place Order (Manual Payment)";
+                    btn.innerHTML = "Place Order (Verify Payment)";
                     btn.disabled = false;
-                });
-            }
-            
-            // PesaPal payment
-            const payWithPesapalBtn = document.getElementById("payWithPesapalBtn");
-            if (payWithPesapalBtn) {
-                payWithPesapalBtn.addEventListener("click", async () => {
-                    const paymentPhone = document.getElementById("paymentPhone")?.value.trim() || "";
-                    const paymentEmail = document.getElementById("paymentEmail")?.value.trim() || "";
-                    const name = document.getElementById("customerName")?.value.trim() || "";
-                    const profile = document.getElementById("facebookProfile")?.value.trim() || "";
-                    const phone = document.getElementById("customerPhone")?.value.trim() || "";
-                    const link = document.getElementById("postLink")?.value.trim() || "";
-
-                    if (!name) { showNotification('Error', 'Enter your full name', true); showStep(2); return; }
-                    if (!profile) { showNotification('Error', 'Enter Facebook profile URL', true); showStep(2); return; }
-                    if (!phone) { showNotification('Error', 'Enter WhatsApp number', true); showStep(2); return; }
-                    if ((currentService === "likes" || currentService === "comments") && !link) { showNotification('Error', 'Enter post link', true); showStep(2); return; }
-                    if (!paymentPhone) { showNotification('Error', 'Enter M-Pesa phone number', true); return; }
-                    if (!paymentEmail) { showNotification('Error', 'Enter email address', true); return; }
-
-                    let price = calculatePrice(currentPlatform, currentService, currentQuantity);
-                    let deliveryTime = getDeliveryTime(currentQuantity);
-                    let fullServiceName = `${platformSettings[currentPlatform].name} ${serviceNames[currentService]}`;
-                    let finalTrackingId = currentTrackingId;
-
-                    const orderData = {
-                        trackingId: finalTrackingId,
-                        service: fullServiceName,
-                        quantity: currentQuantity,
-                        price: price,
-                        deliveryTime: deliveryTime,
-                        customerName: name,
-                        profile: profile,
-                        postLink: link || "Not provided",
-                        phone: phone,
-                        transactionId: "PesaPal - Pending",
-                        mpesaConfirmation: "Payment via PesaPal STK Push",
-                        status: "Payment Pending",
-                        timestamp: new Date().toLocaleString("en-KE")
-                    };
-
-                    const btn = payWithPesapalBtn;
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = '<span class="loading-spinner"></span> Initializing payment...';
-                    btn.disabled = true;
-
-                    try {
-                        const saved = await saveToGoogleSheets(orderData);
-                        if (!saved) throw new Error("Failed to save order");
-
-                        addOrder(orderData);
-
-                        const response = await fetch('/.netlify/functions/pesapal-initiate', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                amount: price,
-                                email: paymentEmail,
-                                phone: paymentPhone,
-                                reference: finalTrackingId,
-                                customerName: name
-                            })
-                        });
-
-                        const result = await response.json();
-
-                        if (result.success) {
-                            showNotification('STK Push Sent!', 'Check your phone for the M-Pesa prompt', false);
-                            pollPesaPalPayment(finalTrackingId);
-                        } else {
-                            throw new Error(result.message || 'Payment initialization failed');
-                        }
-                    } catch (error) {
-                        console.error('Payment error:', error);
-                        showNotification('Error', error.message || 'Payment failed. Use Till 8941840 instead.', true);
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                    }
                 });
             }
             
@@ -2220,6 +2124,7 @@
         
         // Initialize the app
         async function initialize() {
+            updateServiceButtons();
             await loadReviewsFromSheet();
             updateUI();
             updateProgress();
