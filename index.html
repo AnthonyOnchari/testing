@@ -842,6 +842,22 @@ hello001
             .theme-toggle { padding: 4px 10px; font-size: 0.8rem; }
             .platform-btn { font-size: 0.8rem; padding: 8px; }
         }
+        body, .sticky-header, .container, .main-content, .card, .step, button, .btn-next, .btn-back, .btn-submit, .platform-btn, .service-btn, .track-btn, .admin-small-btn, .theme-toggle {
+    pointer-events: auto !important;
+}
+
+.modal-overlay {
+    pointer-events: none !important;
+}
+
+.modal-overlay.show {
+    pointer-events: auto !important;
+}
+
+button:disabled, .btn-next:disabled, .btn-back:disabled, .btn-submit:disabled {
+    pointer-events: none !important;
+    opacity: 0.6;
+}
     </style>
 </head>
 <body>
