@@ -1,5 +1,3 @@
-hello002
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,6 +49,27 @@ hello002
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
+        }
+
+        /* Fix for buttons not being clickable */
+        .btn-next, .btn-back, .btn-submit, .platform-btn, .service-btn, .track-btn, .admin-small-btn, .theme-toggle, .copy-btn, .track-order-btn, .btn-review, .delete-btn, .refresh-btn, .close-modal {
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        button, .btn-next, .btn-back, .btn-submit, .platform-btn, .service-btn {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .modal-overlay {
+            pointer-events: none;
+        }
+
+        .modal-overlay.show {
+            pointer-events: auto;
         }
 
         .sticky-header {
@@ -842,22 +861,6 @@ hello002
             .theme-toggle { padding: 4px 10px; font-size: 0.8rem; }
             .platform-btn { font-size: 0.8rem; padding: 8px; }
         }
-        body, .sticky-header, .container, .main-content, .card, .step, button, .btn-next, .btn-back, .btn-submit, .platform-btn, .service-btn, .track-btn, .admin-small-btn, .theme-toggle {
-    pointer-events: auto !important;
-}
-
-.modal-overlay {
-    pointer-events: none !important;
-}
-
-.modal-overlay.show {
-    pointer-events: auto !important;
-}
-
-button:disabled, .btn-next:disabled, .btn-back:disabled, .btn-submit:disabled {
-    pointer-events: none !important;
-    opacity: 0.6;
-}
     </style>
 </head>
 <body>
@@ -1114,943 +1117,1118 @@ button:disabled, .btn-next:disabled, .btn-back:disabled, .btn-submit:disabled {
 <a href="https://wa.me/254750600715?text=Hi" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
 
 <script>
-    // ========== YOUR GOOGLE SHEETS WEB APP URL ==========
-    const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyvxgIdpb2UP3A2LpG15em9wzKP951W7zyfJAPBR1KeVjkcrT2j3UFr5vZIh_iQ-6zyUQ/exec";
-    const ADMIN_PASSWORD = "GetFans2024";
+// Wait for DOM to be fully loaded before running any JavaScript
+(function() {
+    'use strict';
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', main);
+    } else {
+        main();
+    }
+    
+    function main() {
+        console.log("DOM fully loaded and parsed - Initializing Get Fans Kenya");
+        
+        // ========== YOUR GOOGLE SHEETS WEB APP URL ==========
+        const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyvxgIdpb2UP3A2LpG15em9wzKP951W7zyfJAPBR1KeVjkcrT2j3UFr5vZIh_iQ-6zyUQ/exec";
+        const ADMIN_PASSWORD = "GetFans2024";
 
-    let orders = [];
-    let reviews = [];
-    let currentPlatform = "facebook";
-    let currentService = "followers";
-    let currentQuantity = 3000;
-    let currentStep = 1;
-    let isAdminLoggedIn = false;
-    let autoRefreshInterval = null;
-    let currentTrackingIdForAutoRefresh = null;
-    let autoStatusTimeout = null;
-    let paymentPollInterval = null;
+        let orders = [];
+        let reviews = [];
+        let currentPlatform = "facebook";
+        let currentService = "followers";
+        let currentQuantity = 3000;
+        let currentStep = 1;
+        let isAdminLoggedIn = false;
+        let autoRefreshInterval = null;
+        let currentTrackingIdForAutoRefresh = null;
+        let autoStatusTimeout = null;
+        let paymentPollInterval = null;
+        let selectedRating = 0;
 
-    const platformSettings = {
-        facebook: { name: "Facebook", usernameLabel: "Facebook Profile URL", usernamePlaceholder: "Profile URL or username", postLabel: "Post Link" }
-    };
-
-    const serviceOptions = {
-        facebook: ["followers", "likes", "comments"]
-    };
-
-    const serviceNames = { followers: "Followers", likes: "Likes", comments: "Comments" };
-
-    function calculatePrice(platform, service, qty) {
-        const basePrices = {
-            facebook: { followers: 0.4, likes: 0.25, comments: 0.3 }
+        const platformSettings = {
+            facebook: { name: "Facebook", usernameLabel: "Facebook Profile URL", usernamePlaceholder: "Profile URL or username", postLabel: "Post Link" }
         };
-        const rate = basePrices[platform]?.[service] || 0.4;
-        let price = Math.round(qty * rate);
-        if (qty >= 10000) price = Math.round(price * 0.9);
-        if (qty >= 50000) price = Math.round(price * 0.8);
-        if (qty >= 100000) price = Math.round(price * 0.7);
-        return Math.max(price, 25);
-    }
 
-    function getDeliveryTime(qty) {
-        if (qty <= 50000) return "30 minutes";
-        if (qty <= 300000) return "3 hours";
-        return "6 hours";
-    }
+        const serviceOptions = {
+            facebook: ["followers", "likes", "comments"]
+        };
 
-    function getDeliveryClass(qty) {
-        if (qty <= 50000) return "delivery-fast";
-        if (qty <= 300000) return "delivery-medium";
-        return "delivery-slow";
-    }
+        const serviceNames = { followers: "Followers", likes: "Likes", comments: "Comments" };
 
-    function updateDeliveryDisplay(qty) {
-        const time = getDeliveryTime(qty);
-        const deliveryClass = getDeliveryClass(qty);
-        const noteDiv = document.getElementById("deliveryTimeNote");
-        noteDiv.className = `delivery-time-note ${deliveryClass}`;
-        document.getElementById("deliveryEstimate").innerText = time;
-    }
+        function calculatePrice(platform, service, qty) {
+            const basePrices = {
+                facebook: { followers: 0.4, likes: 0.25, comments: 0.3 }
+            };
+            const rate = basePrices[platform]?.[service] || 0.4;
+            let price = Math.round(qty * rate);
+            if (qty >= 10000) price = Math.round(price * 0.9);
+            if (qty >= 50000) price = Math.round(price * 0.8);
+            if (qty >= 100000) price = Math.round(price * 0.7);
+            return Math.max(price, 25);
+        }
 
-    function updateProgress() {
-        document.getElementById("progressFill").style.width = `${(currentStep - 1) * 50}%`;
-        document.getElementById("step1Indicator").classList.remove("active", "completed");
-        document.getElementById("step2Indicator").classList.remove("active", "completed");
-        document.getElementById("step3Indicator").classList.remove("active", "completed");
-        if (currentStep >= 1) document.getElementById("step1Indicator").classList.add(currentStep > 1 ? "completed" : "active");
-        if (currentStep >= 2) document.getElementById("step2Indicator").classList.add(currentStep > 2 ? "completed" : "active");
-        if (currentStep >= 3) document.getElementById("step3Indicator").classList.add("active");
-    }
+        function getDeliveryTime(qty) {
+            if (qty <= 50000) return "30 minutes";
+            if (qty <= 300000) return "3 hours";
+            return "6 hours";
+        }
 
-    function showStep(step) {
-        document.getElementById("step1").classList.remove("active");
-        document.getElementById("step2").classList.remove("active");
-        document.getElementById("step3").classList.remove("active");
-        document.getElementById(`step${step}`).classList.add("active");
-        currentStep = step;
-        updateProgress();
-        if (step === 3) {
+        function getDeliveryClass(qty) {
+            if (qty <= 50000) return "delivery-fast";
+            if (qty <= 300000) return "delivery-medium";
+            return "delivery-slow";
+        }
+
+        function updateDeliveryDisplay(qty) {
+            const time = getDeliveryTime(qty);
+            const deliveryClass = getDeliveryClass(qty);
+            const noteDiv = document.getElementById("deliveryTimeNote");
+            if (noteDiv) {
+                noteDiv.className = `delivery-time-note ${deliveryClass}`;
+            }
+            const deliveryEstimate = document.getElementById("deliveryEstimate");
+            if (deliveryEstimate) deliveryEstimate.innerText = time;
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById("progressFill");
+            const step1Indicator = document.getElementById("step1Indicator");
+            const step2Indicator = document.getElementById("step2Indicator");
+            const step3Indicator = document.getElementById("step3Indicator");
+            
+            if (progressFill) progressFill.style.width = `${(currentStep - 1) * 50}%`;
+            
+            if (step1Indicator) {
+                step1Indicator.classList.remove("active", "completed");
+                if (currentStep >= 1) step1Indicator.classList.add(currentStep > 1 ? "completed" : "active");
+            }
+            if (step2Indicator) {
+                step2Indicator.classList.remove("active", "completed");
+                if (currentStep >= 2) step2Indicator.classList.add(currentStep > 2 ? "completed" : "active");
+            }
+            if (step3Indicator) {
+                step3Indicator.classList.remove("active", "completed");
+                if (currentStep >= 3) step3Indicator.classList.add("active");
+            }
+        }
+
+        function showStep(step) {
+            const step1 = document.getElementById("step1");
+            const step2 = document.getElementById("step2");
+            const step3 = document.getElementById("step3");
+            
+            if (step1) step1.classList.remove("active");
+            if (step2) step2.classList.remove("active");
+            if (step3) step3.classList.remove("active");
+            
+            const targetStep = document.getElementById(`step${step}`);
+            if (targetStep) targetStep.classList.add("active");
+            
+            currentStep = step;
+            updateProgress();
+            
+            if (step === 3) {
+                let price = calculatePrice(currentPlatform, currentService, currentQuantity);
+                const summaryPlatform = document.getElementById("summaryPlatform");
+                const summaryService = document.getElementById("summaryService");
+                const summaryQty = document.getElementById("summaryQty");
+                const summaryPrice = document.getElementById("summaryPrice");
+                
+                if (summaryPlatform) summaryPlatform.innerText = platformSettings[currentPlatform].name;
+                if (summaryService) summaryService.innerText = serviceNames[currentService];
+                if (summaryQty) summaryQty.innerText = currentQuantity.toLocaleString();
+                if (summaryPrice) summaryPrice.innerText = `KSh ${price.toLocaleString()}`;
+            }
+        }
+
+        function updateUI() {
             let price = calculatePrice(currentPlatform, currentService, currentQuantity);
-            document.getElementById("summaryPlatform").innerText = platformSettings[currentPlatform].name;
-            document.getElementById("summaryService").innerText = serviceNames[currentService];
-            document.getElementById("summaryQty").innerText = currentQuantity.toLocaleString();
-            document.getElementById("summaryPrice").innerText = `KSh ${price.toLocaleString()}`;
-        }
-    }
-
-    function updateUI() {
-        let price = calculatePrice(currentPlatform, currentService, currentQuantity);
-        document.getElementById("priceDisplay").innerText = `KSh ${price.toLocaleString()}`;
-        document.getElementById("paymentAmountStep").innerText = `KSh ${price.toLocaleString()}`;
-        updateDeliveryDisplay(currentQuantity);
-        let showPostLink = (currentService === "likes" || currentService === "comments");
-        document.getElementById("postLinkGroup").style.display = showPostLink ? "block" : "none";
-        document.getElementById("postLinkLabel").innerHTML = `${platformSettings[currentPlatform].postLabel} <span class="required">*</span>`;
-        document.getElementById("usernameLabel").innerHTML = `${platformSettings[currentPlatform].usernameLabel} <span class="required">*</span>`;
-        document.getElementById("facebookProfile").placeholder = platformSettings[currentPlatform].usernamePlaceholder;
-    }
-
-    const quantityInput = document.getElementById("quantityNumber");
-    const quantitySlider = document.getElementById("quantitySlider");
-    
-    quantityInput.addEventListener("input", function() {
-        let val = parseInt(this.value);
-        if (!isNaN(val) && val >= 100 && val <= 1000000) {
-            currentQuantity = val;
-            quantitySlider.value = val;
-            updateUI();
-        }
-    });
-    
-    quantityInput.addEventListener("blur", function() {
-        let val = parseInt(this.value);
-        if (isNaN(val)) val = 100;
-        val = Math.min(1000000, Math.max(100, val));
-        currentQuantity = val;
-        quantitySlider.value = val;
-        quantityInput.value = val;
-        updateUI();
-    });
-    
-    quantitySlider.addEventListener("input", function() {
-        currentQuantity = parseInt(quantitySlider.value);
-        quantityInput.value = currentQuantity;
-        updateUI();
-    });
-
-    async function fetchOrdersFromSheet() {
-        try {
-            const response = await fetch(`${GOOGLE_SHEET_API_URL}?action=orders`);
-            const data = await response.json();
+            const priceDisplay = document.getElementById("priceDisplay");
+            const paymentAmountStep = document.getElementById("paymentAmountStep");
             
-            if (Array.isArray(data)) {
-                orders = data.map(row => ({
-                    trackingId: row["Tracking ID"] || row.trackingId,
-                    service: row.Service || row.service,
-                    platform: row.Service ? row.Service.split(" ")[0] : "Facebook",
-                    quantity: row.Quantity || row.quantity,
-                    price: row["Price (KSh)"] || row.price,
-                    customerName: row["Customer Name"] || row.customerName,
-                    phone: row["Phone Number"] || row.phone,
-                    transactionId: row["Transaction ID"] || row.transactionId,
-                    status: row.Status || row.status || "Pending",
-                    timestamp: row.Timestamp || row.timestamp,
-                    profile: row["Facebook Profile"] || row.profile,
-                    postLink: row["Post Link"] || row.postLink
-                }));
+            if (priceDisplay) priceDisplay.innerText = `KSh ${price.toLocaleString()}`;
+            if (paymentAmountStep) paymentAmountStep.innerText = `KSh ${price.toLocaleString()}`;
+            
+            updateDeliveryDisplay(currentQuantity);
+            
+            let showPostLink = (currentService === "likes" || currentService === "comments");
+            const postLinkGroup = document.getElementById("postLinkGroup");
+            if (postLinkGroup) postLinkGroup.style.display = showPostLink ? "block" : "none";
+            
+            const usernameLabel = document.getElementById("usernameLabel");
+            if (usernameLabel) usernameLabel.innerHTML = `${platformSettings[currentPlatform].usernameLabel} <span class="required">*</span>`;
+            
+            const facebookProfile = document.getElementById("facebookProfile");
+            if (facebookProfile) facebookProfile.placeholder = platformSettings[currentPlatform].usernamePlaceholder;
+        }
+
+        async function fetchOrdersFromSheet() {
+            try {
+                const response = await fetch(`${GOOGLE_SHEET_API_URL}?action=orders`);
+                const data = await response.json();
                 
-                localStorage.setItem('getfanskenya_orders', JSON.stringify(orders));
+                if (Array.isArray(data)) {
+                    orders = data.map(row => ({
+                        trackingId: row["Tracking ID"] || row.trackingId,
+                        service: row.Service || row.service,
+                        platform: row.Service ? row.Service.split(" ")[0] : "Facebook",
+                        quantity: row.Quantity || row.quantity,
+                        price: row["Price (KSh)"] || row.price,
+                        customerName: row["Customer Name"] || row.customerName,
+                        phone: row["Phone Number"] || row.phone,
+                        transactionId: row["Transaction ID"] || row.transactionId,
+                        status: row.Status || row.status || "Pending",
+                        timestamp: row.Timestamp || row.timestamp,
+                        profile: row["Facebook Profile"] || row.profile,
+                        postLink: row["Post Link"] || row.postLink
+                    }));
+                    
+                    localStorage.setItem('getfanskenya_orders', JSON.stringify(orders));
+                    return orders;
+                } else {
+                    throw new Error("Invalid data format");
+                }
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+                const savedOrders = localStorage.getItem('getfanskenya_orders');
+                if (savedOrders) {
+                    try { orders = JSON.parse(savedOrders); } catch(e) {}
+                }
                 return orders;
-            } else {
-                throw new Error("Invalid data format");
-            }
-        } catch (error) {
-            console.error("Error fetching orders:", error);
-            const savedOrders = localStorage.getItem('getfanskenya_orders');
-            if (savedOrders) {
-                try { orders = JSON.parse(savedOrders); } catch(e) {}
-            }
-            return orders;
-        }
-    }
-
-    async function loadReviewsFromSheet() {
-        try {
-            const response = await fetch(`${GOOGLE_SHEET_API_URL}?action=reviews`);
-            const data = await response.json();
-            
-            if (Array.isArray(data) && data.length > 0) {
-                reviews = data.map(row => ({
-                    name: row.Name || row.name || "Anonymous",
-                    rating: parseInt(row.Rating || row.rating) || 5,
-                    review: row.Review || row.review || "",
-                    date: row.Timestamp || row.timestamp || new Date().toLocaleString()
-                }));
-                localStorage.setItem('getfanskenya_reviews', JSON.stringify(reviews));
-                renderReviews();
-            } else {
-                loadDefaultReviews();
-            }
-        } catch (error) {
-            console.error("Error fetching reviews from sheet:", error);
-            const savedReviews = localStorage.getItem('getfanskenya_reviews');
-            if (savedReviews) {
-                try { reviews = JSON.parse(savedReviews); } catch(e) {}
-                renderReviews();
-            } else {
-                loadDefaultReviews();
             }
         }
-    }
 
-    function loadDefaultReviews() {
-        reviews = [
-            { name: "John M.", rating: 5, review: "Ordered 25,000 Facebook followers and got them in just 30 minutes. My page has grown so much.", date: "2 days ago" },
-            { name: "Sarah W.", rating: 5, review: "Got 10,000 Facebook followers. Delivery was very fast. Will order again!", date: "5 days ago" },
-            { name: "David K.", rating: 5, review: "Very reliable service. The 3,000 Facebook likes came in less than 30 minutes.", date: "1 week ago" },
-            { name: "Grace N.", rating: 5, review: "They delivered 50k followers as promised. My Facebook page is now verified!", date: "2 weeks ago" },
-            { name: "Peter O.", rating: 4, review: "Great service, affordable prices. Got my 5k followers within the promised time.", date: "3 weeks ago" },
-            { name: "Mary A.", rating: 5, review: "Amazing experience! Facebook comments came in super fast. Highly recommend!", date: "1 month ago" },
-            { name: "James R.", rating: 4, review: "Good service. Delivery took about 2 hours for 15k followers but quality was great.", date: "1 month ago" },
-            { name: "Lucy M.", rating: 5, review: "Fast delivery and excellent customer support. Will be ordering again soon!", date: "1 month ago" },
-            { name: "Brian T.", rating: 3, review: "Service was okay. Delivery was within the time frame. Would try again.", date: "2 months ago" },
-            { name: "Faith N.", rating: 5, review: "Absolutely love this service! Got 100k Facebook followers and my page is blowing up!", date: "2 months ago" }
-        ];
-        localStorage.setItem('getfanskenya_reviews', JSON.stringify(reviews));
-        renderReviews();
-    }
-
-    function saveReviews() { localStorage.setItem('getfanskenya_reviews', JSON.stringify(reviews)); }
-
-    function showNotification(title, message, isError = false) {
-        const toast = document.createElement('div');
-        toast.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:${isError ? '#e74c3c' : '#2ecc71'}; color:white; padding:10px 20px; border-radius:30px; z-index:3000; font-size:0.75rem; font-family:'Poppins',sans-serif;`;
-        toast.innerHTML = `<strong>${title}</strong> - ${message}`;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 4000);
-    }
-
-    async function saveToGoogleSheets(data) {
-        try {
-            await fetch(GOOGLE_SHEET_API_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            return true;
-        } catch (error) {
-            console.error("Error saving:", error);
-            return false;
-        }
-    }
-
-    function addOrder(orderData) {
-        orders.unshift({ ...orderData, id: Date.now(), status: orderData.status || "Pending", read: false });
-        localStorage.setItem('getfanskenya_orders', JSON.stringify(orders));
-        showNotification('New Order', `${orderData.customerName} - ${orderData.service}`);
-        if (isAdminLoggedIn) renderAdminOrders();
-    }
-
-    async function updateOrderStatus(trackingId, newStatus) {
-        const selectElement = event?.target;
-        
-        try {
-            if (selectElement) {
-                selectElement.style.opacity = '0.7';
-                selectElement.disabled = true;
-            }
-            
-            await fetch(GOOGLE_SHEET_API_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: "updateStatus",
-                    trackingId: trackingId,
-                    newStatus: newStatus
-                })
-            });
-            
-            const orderIndex = orders.findIndex(o => o.trackingId === trackingId);
-            if (orderIndex !== -1) {
-                orders[orderIndex].status = newStatus;
-                localStorage.setItem('getfanskenya_orders', JSON.stringify(orders));
-            }
-            
-            showNotification("Status Updated", `${trackingId} is now ${newStatus}`);
-            renderAdminOrders();
-            
-            if (currentTrackingIdForAutoRefresh === trackingId) {
-                await displayTrackingResult(trackingId);
-            }
-            
-        } catch (error) {
-            console.error("Error updating status:", error);
-            showNotification("Error", "Could not update status. Please try again.", true);
-            if (selectElement) {
-                const order = orders.find(o => o.trackingId === trackingId);
-                if (order) selectElement.value = order.status;
-            }
-        } finally {
-            if (selectElement) {
-                selectElement.style.opacity = '1';
-                selectElement.disabled = false;
+        async function loadReviewsFromSheet() {
+            try {
+                const response = await fetch(`${GOOGLE_SHEET_API_URL}?action=reviews`);
+                const data = await response.json();
+                
+                if (Array.isArray(data) && data.length > 0) {
+                    reviews = data.map(row => ({
+                        name: row.Name || row.name || "Anonymous",
+                        rating: parseInt(row.Rating || row.rating) || 5,
+                        review: row.Review || row.review || "",
+                        date: row.Timestamp || row.timestamp || new Date().toLocaleString()
+                    }));
+                    localStorage.setItem('getfanskenya_reviews', JSON.stringify(reviews));
+                    renderReviews();
+                } else {
+                    loadDefaultReviews();
+                }
+            } catch (error) {
+                console.error("Error fetching reviews from sheet:", error);
+                const savedReviews = localStorage.getItem('getfanskenya_reviews');
+                if (savedReviews) {
+                    try { reviews = JSON.parse(savedReviews); } catch(e) {}
+                    renderReviews();
+                } else {
+                    loadDefaultReviews();
+                }
             }
         }
-    }
 
-    function generateReceiptHTML(order) {
-        return `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-                <title>Get Fans Kenya - Order Receipt</title>
-                <style>
-                    * { margin: 0; padding: 0; box-sizing: border-box; }
-                    body { font-family: 'Poppins', Arial, sans-serif; padding: 16px; background: #f0f2f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-                    .receipt { max-width: 450px; width: 100%; margin: 0 auto; background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
-                    .receipt-header { background: linear-gradient(135deg, #1877f2, #0d65d9); color: white; padding: 24px 20px; text-align: center; }
-                    .receipt-header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
-                    .receipt-header p { font-size: 0.75rem; opacity: 0.9; }
-                    .receipt-body { padding: 24px 20px; }
-                    .status-badge { display: inline-block; background: #2ecc71; color: white; padding: 6px 16px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; margin-bottom: 16px; }
-                    .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
-                    .info-label { font-weight: 600; color: #555; }
-                    .info-value { font-weight: 500; color: #1a1a2e; text-align: right; }
-                    .total-row { margin-top: 16px; padding-top: 16px; border-top: 2px solid #1877f2; display: flex; justify-content: space-between; font-weight: 700; font-size: 1rem; }
-                    .thankyou { text-align: center; margin: 20px 0; padding: 16px; background: #e8f8f5; border-radius: 16px; }
-                    .thankyou p { color: #2ecc71; font-weight: 600; font-size: 0.9rem; }
-                    .receipt-footer { background: #f8f9fc; padding: 20px; text-align: center; border-top: 1px solid #e5e5e5; }
-                    .receipt-footer p { font-size: 0.7rem; color: #666; margin: 4px 0; }
-                    hr { margin: 12px 0; border-color: #eee; }
-                    @media (max-width: 480px) {
-                        body { padding: 12px; }
-                        .receipt-header { padding: 20px 16px; }
-                        .receipt-header h1 { font-size: 1.4rem; }
-                        .receipt-body { padding: 20px 16px; }
-                        .info-row { font-size: 0.8rem; padding: 8px 0; }
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="receipt">
-                    <div class="receipt-header">
-                        <h1>📱 Get Fans Kenya</h1>
-                        <p>Social Media Growth Services</p>
-                        <p>Till Number: 8941840</p>
-                    </div>
-                    <div class="receipt-body">
-                        <div style="text-align: center;"><span class="status-badge">✓ DELIVERED</span></div>
-                        <div class="info-row"><span class="info-label">Order Receipt</span><span class="info-value">#${escapeHtml(order.trackingId)}</span></div>
-                        <div class="info-row"><span class="info-label">Date</span><span class="info-value">${escapeHtml(order.timestamp)}</span></div>
-                        <hr>
-                        <div class="info-row"><span class="info-label">Customer Name</span><span class="info-value">${escapeHtml(order.customerName)}</span></div>
-                        <div class="info-row"><span class="info-label">WhatsApp</span><span class="info-value">${escapeHtml(order.phone)}</span></div>
-                        <hr>
-                        <div class="info-row"><span class="info-label">Platform</span><span class="info-value">${escapeHtml(order.platform)}</span></div>
-                        <div class="info-row"><span class="info-label">Service</span><span class="info-value">${escapeHtml(order.service)}</span></div>
-                        <div class="info-row"><span class="info-label">Quantity</span><span class="info-value">${order.quantity.toLocaleString()}</span></div>
-                        <div class="total-row"><span class="info-label">Total Paid</span><span class="info-value">KSh ${order.price.toLocaleString()}</span></div>
-                    </div>
-                    <div class="thankyou"><p>🎉 Thank you for choosing Get Fans Kenya! 🎉</p></div>
-                    <div class="receipt-footer">
-                        <p>Need help? WhatsApp: 0750600715</p>
-                        <p>Come back soon for more growth! 🚀</p>
-                        <p>www.getfanskenya.store</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-        `;
-    }
-
-    function downloadReceipt(order) {
-        const receiptHtml = generateReceiptHTML(order);
-        const blob = new Blob([receiptHtml], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `GetFansKenya_Receipt_${order.trackingId}.html`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showNotification('Receipt Downloaded', 'Your receipt has been saved');
-    }
-
-    async function displayTrackingResult(trackingId) {
-        await fetchOrdersFromSheet();
-        const order = orders.find(o => o.trackingId === trackingId);
-        const resultDiv = document.getElementById("trackingResult");
-        
-        if (!order) {
-            resultDiv.innerHTML = `<div style="background: #e74c3c; color: white; padding: 12px; border-radius: 12px; text-align: center;">Order not found. Check your ID.</div>`;
-            resultDiv.classList.add("show");
-            return;
+        function loadDefaultReviews() {
+            reviews = [
+                { name: "John M.", rating: 5, review: "Ordered 25,000 Facebook followers and got them in just 30 minutes. My page has grown so much.", date: "2 days ago" },
+                { name: "Sarah W.", rating: 5, review: "Got 10,000 Facebook followers. Delivery was very fast. Will order again!", date: "5 days ago" },
+                { name: "David K.", rating: 5, review: "Very reliable service. The 3,000 Facebook likes came in less than 30 minutes.", date: "1 week ago" },
+                { name: "Grace N.", rating: 5, review: "They delivered 50k followers as promised. My Facebook page is now verified!", date: "2 weeks ago" },
+                { name: "Peter O.", rating: 4, review: "Great service, affordable prices. Got my 5k followers within the promised time.", date: "3 weeks ago" },
+                { name: "Mary A.", rating: 5, review: "Amazing experience! Facebook comments came in super fast. Highly recommend!", date: "1 month ago" },
+                { name: "James R.", rating: 4, review: "Good service. Delivery took about 2 hours for 15k followers but quality was great.", date: "1 month ago" },
+                { name: "Lucy M.", rating: 5, review: "Fast delivery and excellent customer support. Will be ordering again soon!", date: "1 month ago" },
+                { name: "Brian T.", rating: 3, review: "Service was okay. Delivery was within the time frame. Would try again.", date: "2 months ago" },
+                { name: "Faith N.", rating: 5, review: "Absolutely love this service! Got 100k Facebook followers and my page is blowing up!", date: "2 months ago" }
+            ];
+            localStorage.setItem('getfanskenya_reviews', JSON.stringify(reviews));
+            renderReviews();
         }
-        
-        const currentStatus = order.status;
-        const steps = ["Pending", "Processing", "Completed", "Delivered"];
-        const currentIdx = steps.indexOf(currentStatus);
-        
-        let timelineHtml = '';
-        for (let i = 0; i < steps.length; i++) {
-            const step = steps[i];
-            let stepClass = '';
-            let icon = '○';
-            if (i < currentIdx) {
-                stepClass = 'completed';
-                icon = '✓';
-            } else if (i === currentIdx) {
-                stepClass = 'active';
-                icon = '●';
+
+        function saveReviews() { localStorage.setItem('getfanskenya_reviews', JSON.stringify(reviews)); }
+
+        function showNotification(title, message, isError = false) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:${isError ? '#e74c3c' : '#2ecc71'}; color:white; padding:10px 20px; border-radius:30px; z-index:3000; font-size:0.75rem; font-family:'Poppins',sans-serif;`;
+            toast.innerHTML = `<strong>${title}</strong> - ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        async function saveToGoogleSheets(data) {
+            try {
+                await fetch(GOOGLE_SHEET_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                return true;
+            } catch (error) {
+                console.error("Error saving:", error);
+                return false;
             }
-            timelineHtml += `<div class="status-step ${stepClass}"><div class="status-icon">${icon}</div><div class="status-label">${step}</div></div>`;
         }
-        
-        resultDiv.innerHTML = `
-            <div class="tracking-card">
-                <div class="info-row"><strong>Tracking ID:</strong> ${escapeHtml(order.trackingId)}</div>
-                <div class="info-row"><strong>Status:</strong> <span class="status-badge status-${currentStatus.toLowerCase()}">${currentStatus}</span></div>
-                <div class="status-timeline">${timelineHtml}</div>
-                <div class="info-row"><span>Platform:</span><strong>${escapeHtml(order.platform)}</strong></div>
-                <div class="info-row"><span>Service:</span><strong>${escapeHtml(order.service)}</strong></div>
-                <div class="info-row"><span>Quantity:</span><strong>${order.quantity.toLocaleString()}</strong></div>
-                <div class="info-row"><span>Amount:</span><strong>KSh ${order.price.toLocaleString()}</strong></div>
-                <div class="info-row"><span>Delivery Estimate:</span><strong>${getDeliveryTime(order.quantity)}</strong></div>
-                ${currentStatus === 'Delivered' ? `
-                    <button class="download-receipt-btn" id="downloadReceiptBtn">
-                        <i class="fas fa-download"></i> Download Receipt
-                    </button>
-                ` : ''}
-                ${currentStatus === 'Delivered' ? '<div class="info-row" style="color: #2ecc71; margin-top: 10px;"><span>🎉</span><strong>Order Delivered! Thank you for choosing Get Fans Kenya.</strong></div>' : ''}
-            </div>`;
-        resultDiv.classList.add("show");
-        
-        const downloadBtn = document.getElementById("downloadReceiptBtn");
-        if (downloadBtn) {
-            downloadBtn.addEventListener("click", () => downloadReceipt(order));
-        }
-    }
 
-    async function trackOrder(trackingId, isAutoRefresh = false) {
-        if (!isAutoRefresh) {
-            const trackBtn = document.getElementById("searchTrackBtn");
-            const originalBtnText = trackBtn.innerHTML;
-            trackBtn.innerHTML = '<span class="loading-spinner"></span> Searching...';
-            trackBtn.disabled = true;
+        function addOrder(orderData) {
+            orders.unshift({ ...orderData, id: Date.now(), status: orderData.status || "Pending", read: false });
+            localStorage.setItem('getfanskenya_orders', JSON.stringify(orders));
+            showNotification('New Order', `${orderData.customerName} - ${orderData.service}`);
+            if (isAdminLoggedIn) renderAdminOrders();
+        }
+
+        async function updateOrderStatus(trackingId, newStatus, event) {
+            const selectElement = event?.target;
             
             try {
-                await displayTrackingResult(trackingId);
-                currentTrackingIdForAutoRefresh = trackingId;
-                
-                if (autoRefreshInterval) {
-                    clearInterval(autoRefreshInterval);
+                if (selectElement) {
+                    selectElement.style.opacity = '0.7';
+                    selectElement.disabled = true;
                 }
-                autoRefreshInterval = setInterval(async () => {
-                    if (currentTrackingIdForAutoRefresh) {
-                        await displayTrackingResult(currentTrackingIdForAutoRefresh);
-                    }
-                }, 2000);
+                
+                await fetch(GOOGLE_SHEET_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: "updateStatus",
+                        trackingId: trackingId,
+                        newStatus: newStatus
+                    })
+                });
+                
+                const orderIndex = orders.findIndex(o => o.trackingId === trackingId);
+                if (orderIndex !== -1) {
+                    orders[orderIndex].status = newStatus;
+                    localStorage.setItem('getfanskenya_orders', JSON.stringify(orders));
+                }
+                
+                showNotification("Status Updated", `${trackingId} is now ${newStatus}`);
+                renderAdminOrders();
+                
+                if (currentTrackingIdForAutoRefresh === trackingId) {
+                    await displayTrackingResult(trackingId);
+                }
                 
             } catch (error) {
-                console.error("Error tracking order:", error);
-                const resultDiv = document.getElementById("trackingResult");
-                resultDiv.innerHTML = `<div style="background: #e74c3c; color: white; padding: 12px; border-radius: 12px; text-align: center;">Error tracking order. Please try again.</div>`;
-                resultDiv.classList.add("show");
+                console.error("Error updating status:", error);
+                showNotification("Error", "Could not update status. Please try again.", true);
+                if (selectElement) {
+                    const order = orders.find(o => o.trackingId === trackingId);
+                    if (order) selectElement.value = order.status;
+                }
             } finally {
-                trackBtn.innerHTML = originalBtnText;
-                trackBtn.disabled = false;
+                if (selectElement) {
+                    selectElement.style.opacity = '1';
+                    selectElement.disabled = false;
+                }
             }
-        } else {
-            await displayTrackingResult(trackingId);
         }
-    }
 
-    function renderReviews() {
-        const container = document.getElementById('reviewsItems');
-        if (!container) return;
-        if (reviews.length === 0) {
-            container.innerHTML = '<div style="padding: 20px; text-align: center;">No reviews yet</div>';
-            return;
+        function generateReceiptHTML(order) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+                    <title>Get Fans Kenya - Order Receipt</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body { font-family: 'Poppins', Arial, sans-serif; padding: 16px; background: #f0f2f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+                        .receipt { max-width: 450px; width: 100%; margin: 0 auto; background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+                        .receipt-header { background: linear-gradient(135deg, #1877f2, #0d65d9); color: white; padding: 24px 20px; text-align: center; }
+                        .receipt-header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+                        .receipt-header p { font-size: 0.75rem; opacity: 0.9; }
+                        .receipt-body { padding: 24px 20px; }
+                        .status-badge { display: inline-block; background: #2ecc71; color: white; padding: 6px 16px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; margin-bottom: 16px; }
+                        .info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem; }
+                        .info-label { font-weight: 600; color: #555; }
+                        .info-value { font-weight: 500; color: #1a1a2e; text-align: right; }
+                        .total-row { margin-top: 16px; padding-top: 16px; border-top: 2px solid #1877f2; display: flex; justify-content: space-between; font-weight: 700; font-size: 1rem; }
+                        .thankyou { text-align: center; margin: 20px 0; padding: 16px; background: #e8f8f5; border-radius: 16px; }
+                        .thankyou p { color: #2ecc71; font-weight: 600; font-size: 0.9rem; }
+                        .receipt-footer { background: #f8f9fc; padding: 20px; text-align: center; border-top: 1px solid #e5e5e5; }
+                        .receipt-footer p { font-size: 0.7rem; color: #666; margin: 4px 0; }
+                        hr { margin: 12px 0; border-color: #eee; }
+                        @media (max-width: 480px) {
+                            body { padding: 12px; }
+                            .receipt-header { padding: 20px 16px; }
+                            .receipt-header h1 { font-size: 1.4rem; }
+                            .receipt-body { padding: 20px 16px; }
+                            .info-row { font-size: 0.8rem; padding: 8px 0; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="receipt">
+                        <div class="receipt-header">
+                            <h1>📱 Get Fans Kenya</h1>
+                            <p>Social Media Growth Services</p>
+                            <p>Till Number: 8941840</p>
+                        </div>
+                        <div class="receipt-body">
+                            <div style="text-align: center;"><span class="status-badge">✓ DELIVERED</span></div>
+                            <div class="info-row"><span class="info-label">Order Receipt</span><span class="info-value">#${escapeHtml(order.trackingId)}</span></div>
+                            <div class="info-row"><span class="info-label">Date</span><span class="info-value">${escapeHtml(order.timestamp)}</span></div>
+                            <hr>
+                            <div class="info-row"><span class="info-label">Customer Name</span><span class="info-value">${escapeHtml(order.customerName)}</span></div>
+                            <div class="info-row"><span class="info-label">WhatsApp</span><span class="info-value">${escapeHtml(order.phone)}</span></div>
+                            <hr>
+                            <div class="info-row"><span class="info-label">Platform</span><span class="info-value">${escapeHtml(order.platform)}</span></div>
+                            <div class="info-row"><span class="info-label">Service</span><span class="info-value">${escapeHtml(order.service)}</span></div>
+                            <div class="info-row"><span class="info-label">Quantity</span><span class="info-value">${order.quantity.toLocaleString()}</span></div>
+                            <div class="total-row"><span class="info-label">Total Paid</span><span class="info-value">KSh ${order.price.toLocaleString()}</span></div>
+                        </div>
+                        <div class="thankyou"><p>🎉 Thank you for choosing Get Fans Kenya! 🎉</p></div>
+                        <div class="receipt-footer">
+                            <p>Need help? WhatsApp: 0750600715</p>
+                            <p>Come back soon for more growth! 🚀</p>
+                            <p>www.getfanskenya.store</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
         }
-        container.innerHTML = reviews.map(r => `
-            <div class="review-card">
-                <div class="review-rating">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
-                <div class="review-text">"${escapeHtml(r.review)}"</div>
-                <div class="review-author">— ${escapeHtml(r.name)}</div>
-            </div>
-        `).join('');
-    }
 
-    async function renderAdminOrders() {
-        const container = document.getElementById('ordersList');
-        if (!container) return;
-        
-        container.innerHTML = '<p style="text-align:center; padding:16px;">Loading orders from database...</p>';
-        
-        await fetchOrdersFromSheet();
-        
-        if (orders.length === 0) { 
-            container.innerHTML = '<p style="text-align:center; padding:16px;">No orders yet. Place a test order first.</p>'; 
-            return; 
+        function downloadReceipt(order) {
+            const receiptHtml = generateReceiptHTML(order);
+            const blob = new Blob([receiptHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `GetFansKenya_Receipt_${order.trackingId}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showNotification('Receipt Downloaded', 'Your receipt has been saved');
         }
-        
-        container.innerHTML = orders.map(o => `
-            <div class="order-item">
-                <div><strong>${escapeHtml(o.trackingId)}</strong> <small>${escapeHtml(o.timestamp)}</small></div>
-                <div>${escapeHtml(o.customerName)} • ${escapeHtml(o.service)}<br>📊 ${o.quantity.toLocaleString()} • 💰 KSh ${o.price.toLocaleString()}</div>
-                <select class="order-status-select" data-tracking="${escapeHtml(o.trackingId)}">
-                    <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>⏳ Pending</option>
-                    <option value="Processing" ${o.status === "Processing" ? "selected" : ""}>🔄 Processing</option>
-                    <option value="Completed" ${o.status === "Completed" ? "selected" : ""}>✅ Completed</option>
-                    <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>🚀 Delivered</option>
-                </select>
-            </div>
-        `).join('');
-        
-        document.querySelectorAll('.order-status-select').forEach(select => {
-            select.addEventListener('change', function(e) {
-                const trackingId = this.dataset.tracking;
-                const newStatus = this.value;
-                updateOrderStatus(trackingId, newStatus);
-            });
-        });
-    }
 
-    function renderAdminReviews() {
-        const container = document.getElementById('adminReviewsList');
-        if (!container) return;
-        if (reviews.length === 0) { 
-            container.innerHTML = '<p style="text-align:center; padding:16px;">No reviews yet.</p>'; 
-            return; 
-        }
-        container.innerHTML = reviews.map((r, i) => `
-            <div class="review-item">
-                <div><strong>${escapeHtml(r.name)}</strong> (${'★'.repeat(r.rating)})<br><small>"${escapeHtml(r.review.substring(0, 40))}${r.review.length > 40 ? '...' : ''}"</small></div>
-                <button class="delete-btn" data-index="${i}">Delete</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.delete-btn').forEach(btn => { 
-            btn.addEventListener('click', (e) => { 
-                const idx = parseInt(btn.dataset.index); 
-                if (confirm('Delete this review?')) { 
-                    reviews.splice(idx, 1); 
-                    saveReviews(); 
-                    renderReviews(); 
-                    renderAdminReviews(); 
-                    showNotification('Deleted', 'Review removed');
-                } 
-            }); 
-        });
-    }
-
-    function escapeHtml(text) { 
-        if (!text) return '';
-        const div = document.createElement('div'); 
-        div.textContent = text; 
-        return div.innerHTML; 
-    }
-
-    function updateServiceButtons() {
-        const container = document.getElementById('serviceButtons');
-        container.innerHTML = serviceOptions[currentPlatform].map(s => `<div class="service-btn ${s === currentService ? 'active' : ''}" data-service="${s}">${serviceNames[s]}</div>`).join('');
-        document.querySelectorAll('.service-btn').forEach(btn => { 
-            btn.addEventListener('click', () => { 
-                document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('active')); 
-                btn.classList.add('active'); 
-                currentService = btn.dataset.service; 
-                updateUI(); 
-            }); 
-        });
-    }
-
-    currentPlatform = "facebook";
-    updateServiceButtons();
-
-    function generateTrackingId() { return 'GFK' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 4).toUpperCase(); }
-    let currentTrackingId = generateTrackingId();
-    document.getElementById("trackingId").innerText = currentTrackingId;
-
-    document.getElementById("nextToStep2").addEventListener("click", () => showStep(2));
-    document.getElementById("backToStep1").addEventListener("click", () => showStep(1));
-    document.getElementById("nextToStep3").addEventListener("click", () => showStep(3));
-    document.getElementById("backToStep2").addEventListener("click", () => showStep(2));
-    
-    const backToStep2Manual = document.getElementById("backToStep2Manual");
-    if (backToStep2Manual) {
-        backToStep2Manual.addEventListener("click", () => showStep(2));
-    }
-
-    // Success Modal
-    const successModal = document.getElementById("successModal");
-    let lastPlacedTrackingId = "";
-    
-    function showSuccessModal(id) {
-        lastPlacedTrackingId = id;
-        document.getElementById("successTrackingId").innerText = id;
-        successModal.classList.add("show");
-    }
-    
-    document.getElementById("copyTrackingBtn").addEventListener("click", () => { 
-        navigator.clipboard.writeText(document.getElementById("successTrackingId").innerText); 
-        showNotification('Copied', 'Tracking ID copied to clipboard');
-    });
-    
-    document.getElementById("trackFromSuccessBtn").addEventListener("click", () => {
-        successModal.classList.remove("show");
-        const trackModal = document.getElementById("trackModal");
-        document.getElementById("trackingInput").value = lastPlacedTrackingId;
-        trackModal.classList.add("show");
-        setTimeout(() => {
-            trackOrder(lastPlacedTrackingId);
-        }, 500);
-    });
-
-    document.getElementById("closeSuccessModal").addEventListener("click", () => successModal.classList.remove("show"));
-    successModal.addEventListener("click", (e) => { if (e.target === successModal) successModal.classList.remove("show"); });
-
-    // Manual Place Order (Till Method)
-    document.getElementById("submitOrder").addEventListener("click", async () => {
-        const name = document.getElementById("customerName").value.trim();
-        const profile = document.getElementById("facebookProfile").value.trim();
-        const phone = document.getElementById("customerPhone").value.trim();
-        const link = document.getElementById("postLink").value.trim();
-        const mpesaText = document.getElementById("mpesaConfirmation").value.trim();
-
-        if (!name) { showNotification('Error', 'Enter your name', true); showStep(2); return; }
-        if (!profile) { showNotification('Error', `Enter ${platformSettings[currentPlatform].usernameLabel}`, true); showStep(2); return; }
-        if (!phone) { showNotification('Error', 'Enter WhatsApp number', true); showStep(2); return; }
-        if ((currentService === "likes" || currentService === "comments") && !link) { showNotification('Error', `Enter ${platformSettings[currentPlatform].postLabel}`, true); showStep(2); return; }
-        if (!mpesaText) { showNotification('Error', 'Paste M-Pesa confirmation', true); showStep(3); return; }
-
-        let price = calculatePrice(currentPlatform, currentService, currentQuantity);
-        let deliveryTime = getDeliveryTime(currentQuantity);
-        let transactionId = mpesaText.match(/[A-Z0-9]{10,}/i)?.[0] || "Not extracted";
-        let fullServiceName = `${platformSettings[currentPlatform].name} ${serviceNames[currentService]}`;
-        let finalTrackingId = currentTrackingId;
-
-        const orderData = {
-            trackingId: finalTrackingId,
-            service: fullServiceName,
-            quantity: currentQuantity,
-            price: price,
-            deliveryTime: deliveryTime,
-            customerName: name,
-            profile: profile,
-            postLink: link || "Not provided",
-            phone: phone,
-            transactionId: transactionId,
-            mpesaConfirmation: mpesaText.substring(0, 500),
-            status: "Pending",
-            timestamp: new Date().toLocaleString("en-KE")
-        };
-
-        const btn = document.getElementById("submitOrder");
-        btn.innerHTML = '<span class="loading-spinner"></span> Processing...';
-        btn.disabled = true;
-        
-        const saved = await saveToGoogleSheets(orderData);
-        
-        if (saved) {
-            addOrder(orderData);
-            showSuccessModal(finalTrackingId);
+        async function displayTrackingResult(trackingId) {
+            await fetchOrdersFromSheet();
+            const order = orders.find(o => o.trackingId === trackingId);
+            const resultDiv = document.getElementById("trackingResult");
             
-            currentTrackingId = generateTrackingId();
-            document.getElementById("trackingId").innerText = currentTrackingId;
-            document.getElementById("customerName").value = "";
-            document.getElementById("facebookProfile").value = "";
-            document.getElementById("postLink").value = "";
-            document.getElementById("customerPhone").value = "";
-            document.getElementById("mpesaConfirmation").value = "";
-            currentPlatform = "facebook";
-            currentService = "followers";
-            currentQuantity = 3000;
-            quantitySlider.value = 3000;
-            quantityInput.value = 3000;
-            updateServiceButtons();
-            updateUI();
-            showStep(1);
+            if (!order) {
+                if (resultDiv) {
+                    resultDiv.innerHTML = `<div style="background: #e74c3c; color: white; padding: 12px; border-radius: 12px; text-align: center;">Order not found. Check your ID.</div>`;
+                    resultDiv.classList.add("show");
+                }
+                return;
+            }
             
-            showNotification('Success', 'Order placed successfully!');
-        } else {
-            showNotification('Error', 'Failed to save order. Please try again.', true);
+            const currentStatus = order.status;
+            const steps = ["Pending", "Processing", "Completed", "Delivered"];
+            const currentIdx = steps.indexOf(currentStatus);
+            
+            let timelineHtml = '';
+            for (let i = 0; i < steps.length; i++) {
+                const step = steps[i];
+                let stepClass = '';
+                let icon = '○';
+                if (i < currentIdx) {
+                    stepClass = 'completed';
+                    icon = '✓';
+                } else if (i === currentIdx) {
+                    stepClass = 'active';
+                    icon = '●';
+                }
+                timelineHtml += `<div class="status-step ${stepClass}"><div class="status-icon">${icon}</div><div class="status-label">${step}</div></div>`;
+            }
+            
+            if (resultDiv) {
+                resultDiv.innerHTML = `
+                    <div class="tracking-card">
+                        <div class="info-row"><strong>Tracking ID:</strong> ${escapeHtml(order.trackingId)}</div>
+                        <div class="info-row"><strong>Status:</strong> <span class="status-badge status-${currentStatus.toLowerCase()}">${currentStatus}</span></div>
+                        <div class="status-timeline">${timelineHtml}</div>
+                        <div class="info-row"><span>Platform:</span><strong>${escapeHtml(order.platform)}</strong></div>
+                        <div class="info-row"><span>Service:</span><strong>${escapeHtml(order.service)}</strong></div>
+                        <div class="info-row"><span>Quantity:</span><strong>${order.quantity.toLocaleString()}</strong></div>
+                        <div class="info-row"><span>Amount:</span><strong>KSh ${order.price.toLocaleString()}</strong></div>
+                        <div class="info-row"><span>Delivery Estimate:</span><strong>${getDeliveryTime(order.quantity)}</strong></div>
+                        ${currentStatus === 'Delivered' ? `
+                            <button class="download-receipt-btn" id="downloadReceiptBtn">
+                                <i class="fas fa-download"></i> Download Receipt
+                            </button>
+                        ` : ''}
+                        ${currentStatus === 'Delivered' ? '<div class="info-row" style="color: #2ecc71; margin-top: 10px;"><span>🎉</span><strong>Order Delivered! Thank you for choosing Get Fans Kenya.</strong></div>' : ''}
+                    </div>`;
+                resultDiv.classList.add("show");
+            }
+            
+            const downloadBtn = document.getElementById("downloadReceiptBtn");
+            if (downloadBtn) {
+                downloadBtn.addEventListener("click", () => downloadReceipt(order));
+            }
         }
-        
-        btn.innerHTML = "Place Order (Manual Payment)";
-        btn.disabled = false;
-    });
 
-    // ========== PESAPAL PAYMENT INTEGRATION (UPDATED FOR NETLIFY) ==========
-    async function pollPesaPalPayment(trackingId) {
-        let attempts = 0;
-        const maxAttempts = 60; // 2 minutes
-        
-        if (paymentPollInterval) clearInterval(paymentPollInterval);
-        
-        paymentPollInterval = setInterval(async () => {
-            attempts++;
-            
-            try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const paymentStatus = urlParams.get('payment_status');
-                const ref = urlParams.get('reference');
+        async function trackOrder(trackingId, isAutoRefresh = false) {
+            if (!isAutoRefresh) {
+                const trackBtn = document.getElementById("searchTrackBtn");
+                const originalBtnText = trackBtn ? trackBtn.innerHTML : "Track";
+                if (trackBtn) {
+                    trackBtn.innerHTML = '<span class="loading-spinner"></span> Searching...';
+                    trackBtn.disabled = true;
+                }
                 
-                if (paymentStatus === 'COMPLETED' && ref === trackingId) {
-                    clearInterval(paymentPollInterval);
-                    paymentPollInterval = null;
+                try {
+                    await displayTrackingResult(trackingId);
+                    currentTrackingIdForAutoRefresh = trackingId;
                     
-                    await updateOrderStatus(trackingId, "Processing");
-                    showNotification('✅ Payment Successful!', 'Your order is now being processed');
-                    showSuccessModal(trackingId);
+                    if (autoRefreshInterval) {
+                        clearInterval(autoRefreshInterval);
+                    }
+                    autoRefreshInterval = setInterval(async () => {
+                        if (currentTrackingIdForAutoRefresh) {
+                            await displayTrackingResult(currentTrackingIdForAutoRefresh);
+                        }
+                    }, 2000);
                     
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                    
-                } else if (paymentStatus === 'FAILED' && ref === trackingId) {
-                    clearInterval(paymentPollInterval);
-                    paymentPollInterval = null;
-                    showNotification('Payment Failed', 'Payment was not completed. Use Till 8941840 instead.', true);
-                    
-                } else if (attempts >= maxAttempts) {
-                    clearInterval(paymentPollInterval);
-                    paymentPollInterval = null;
-                    showNotification('Payment Timeout', 'If you paid, it will be confirmed soon. Use Tracking ID to check status.', true);
+                } catch (error) {
+                    console.error("Error tracking order:", error);
+                    const resultDiv = document.getElementById("trackingResult");
+                    if (resultDiv) {
+                        resultDiv.innerHTML = `<div style="background: #e74c3c; color: white; padding: 12px; border-radius: 12px; text-align: center;">Error tracking order. Please try again.</div>`;
+                        resultDiv.classList.add("show");
+                    }
+                } finally {
+                    if (trackBtn) {
+                        trackBtn.innerHTML = originalBtnText;
+                        trackBtn.disabled = false;
+                    }
                 }
-            } catch (error) {
-                console.error('Polling error:', error);
-            }
-        }, 2000);
-    }
-
-    // PesaPal Payment Handler - UPDATED URL FOR NETLIFY
-    document.getElementById("payWithPesapalBtn")?.addEventListener("click", async function() {
-        const paymentPhone = document.getElementById("paymentPhone").value.trim();
-        const paymentEmail = document.getElementById("paymentEmail").value.trim();
-        const name = document.getElementById("customerName").value.trim();
-        const profile = document.getElementById("facebookProfile").value.trim();
-        const phone = document.getElementById("customerPhone").value.trim();
-        const link = document.getElementById("postLink").value.trim();
-
-        if (!name) { showNotification('Error', 'Enter your full name', true); showStep(2); return; }
-        if (!profile) { showNotification('Error', 'Enter Facebook profile URL', true); showStep(2); return; }
-        if (!phone) { showNotification('Error', 'Enter WhatsApp number', true); showStep(2); return; }
-        if ((currentService === "likes" || currentService === "comments") && !link) { showNotification('Error', 'Enter post link', true); showStep(2); return; }
-        if (!paymentPhone) { showNotification('Error', 'Enter M-Pesa phone number', true); return; }
-        if (!paymentEmail) { showNotification('Error', 'Enter email address', true); return; }
-
-        let price = calculatePrice(currentPlatform, currentService, currentQuantity);
-        let deliveryTime = getDeliveryTime(currentQuantity);
-        let fullServiceName = `${platformSettings[currentPlatform].name} ${serviceNames[currentService]}`;
-        let finalTrackingId = currentTrackingId;
-
-        const orderData = {
-            trackingId: finalTrackingId,
-            service: fullServiceName,
-            quantity: currentQuantity,
-            price: price,
-            deliveryTime: deliveryTime,
-            customerName: name,
-            profile: profile,
-            postLink: link || "Not provided",
-            phone: phone,
-            transactionId: "PesaPal - Pending",
-            mpesaConfirmation: "Payment via PesaPal STK Push",
-            status: "Payment Pending",
-            timestamp: new Date().toLocaleString("en-KE")
-        };
-
-        const btn = this;
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<span class="loading-spinner"></span> Initializing payment...';
-        btn.disabled = true;
-
-        try {
-            const saved = await saveToGoogleSheets(orderData);
-            if (!saved) throw new Error("Failed to save order");
-
-            addOrder(orderData);
-
-            // UPDATED: Netlify function URL
-            const response = await fetch('/.netlify/functions/pesapal-initiate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    amount: price,
-                    email: paymentEmail,
-                    phone: paymentPhone,
-                    reference: finalTrackingId,
-                    customerName: name
-                })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                showNotification('STK Push Sent!', 'Check your phone for the M-Pesa prompt', false);
-                pollPesaPalPayment(finalTrackingId);
             } else {
-                throw new Error(result.message || 'Payment initialization failed');
+                await displayTrackingResult(trackingId);
             }
-        } catch (error) {
-            console.error('Payment error:', error);
-            showNotification('Error', error.message || 'Payment failed. Use Till 8941840 instead.', true);
-            btn.innerHTML = originalText;
-            btn.disabled = false;
         }
-    });
 
-    // Track Modal
-    const trackModal = document.getElementById("trackModal");
-    document.getElementById("trackOrderBtn").addEventListener("click", () => { 
-        trackModal.classList.add("show"); 
-        document.getElementById("trackingResult").classList.remove("show"); 
-        document.getElementById("trackingInput").value = ""; 
-    });
-    document.getElementById("closeModalBtn").addEventListener("click", () => trackModal.classList.remove("show"));
-    document.getElementById("searchTrackBtn").addEventListener("click", () => { 
-        if (document.getElementById("trackingInput").value.trim()) {
-            trackOrder(document.getElementById("trackingInput").value.trim().toUpperCase());
-        } else {
-            showNotification('Error', 'Enter Tracking ID', true);
+        function renderReviews() {
+            const container = document.getElementById('reviewsItems');
+            if (!container) return;
+            if (reviews.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center;">No reviews yet</div>';
+                return;
+            }
+            container.innerHTML = reviews.map(r => `
+                <div class="review-card">
+                    <div class="review-rating">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+                    <div class="review-text">"${escapeHtml(r.review)}"</div>
+                    <div class="review-author">— ${escapeHtml(r.name)}</div>
+                </div>
+            `).join('');
         }
-    });
-    document.getElementById("trackingInput").addEventListener("keypress", (e) => { if (e.key === "Enter") document.getElementById("searchTrackBtn").click(); });
-    trackModal.addEventListener("click", (e) => { if (e.target === trackModal) trackModal.classList.remove("show"); });
 
-    // Admin Modal
-    const adminModal = document.getElementById("adminModal");
-    const passwordModalEl = document.getElementById("passwordModal");
-    
-    document.getElementById("adminSmallBtn").addEventListener("click", () => {
-        if (isAdminLoggedIn) {
-            renderAdminOrders();
-            renderAdminReviews();
-            adminModal.classList.add("show");
-        } else {
-            passwordModalEl.classList.add("show");
+        async function renderAdminOrders() {
+            const container = document.getElementById('ordersList');
+            if (!container) return;
+            
+            container.innerHTML = '<p style="text-align:center; padding:16px;">Loading orders from database...</p>';
+            
+            await fetchOrdersFromSheet();
+            
+            if (orders.length === 0) { 
+                container.innerHTML = '<p style="text-align:center; padding:16px;">No orders yet. Place a test order first.</p>'; 
+                return; 
+            }
+            
+            container.innerHTML = orders.map(o => `
+                <div class="order-item">
+                    <div><strong>${escapeHtml(o.trackingId)}</strong> <small>${escapeHtml(o.timestamp)}</small></div>
+                    <div>${escapeHtml(o.customerName)} • ${escapeHtml(o.service)}<br>📊 ${o.quantity.toLocaleString()} • 💰 KSh ${o.price.toLocaleString()}</div>
+                    <select class="order-status-select" data-tracking="${escapeHtml(o.trackingId)}">
+                        <option value="Pending" ${o.status === "Pending" ? "selected" : ""}>⏳ Pending</option>
+                        <option value="Processing" ${o.status === "Processing" ? "selected" : ""}>🔄 Processing</option>
+                        <option value="Completed" ${o.status === "Completed" ? "selected" : ""}>✅ Completed</option>
+                        <option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>🚀 Delivered</option>
+                    </select>
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.order-status-select').forEach(select => {
+                select.addEventListener('change', function(e) {
+                    const trackingId = this.dataset.tracking;
+                    const newStatus = this.value;
+                    updateOrderStatus(trackingId, newStatus, e);
+                });
+            });
         }
-    });
-    
-    document.getElementById("closeAdminModal").addEventListener("click", () => adminModal.classList.remove("show"));
-    document.getElementById("closePasswordModal").addEventListener("click", () => passwordModalEl.classList.remove("show"));
-    
-    document.getElementById("submitPassword").addEventListener("click", () => {
-        const enteredPassword = document.getElementById("adminPassword").value;
-        if (enteredPassword === ADMIN_PASSWORD) {
-            isAdminLoggedIn = true;
-            passwordModalEl.classList.remove("show");
-            renderAdminOrders();
-            renderAdminReviews();
-            adminModal.classList.add("show");
-            showNotification('Access Granted', 'Welcome to Admin Panel');
-        } else {
-            showNotification('Access Denied', 'Wrong password', true);
+
+        function renderAdminReviews() {
+            const container = document.getElementById('adminReviewsList');
+            if (!container) return;
+            if (reviews.length === 0) { 
+                container.innerHTML = '<p style="text-align:center; padding:16px;">No reviews yet.</p>'; 
+                return; 
+            }
+            container.innerHTML = reviews.map((r, i) => `
+                <div class="review-item">
+                    <div><strong>${escapeHtml(r.name)}</strong> (${'★'.repeat(r.rating)})<br><small>"${escapeHtml(r.review.substring(0, 40))}${r.review.length > 40 ? '...' : ''}"</small></div>
+                    <button class="delete-btn" data-index="${i}">Delete</button>
+                </div>
+            `).join('');
+            document.querySelectorAll('.delete-btn').forEach(btn => { 
+                btn.addEventListener('click', (e) => { 
+                    const idx = parseInt(btn.dataset.index); 
+                    if (confirm('Delete this review?')) { 
+                        reviews.splice(idx, 1); 
+                        saveReviews(); 
+                        renderReviews(); 
+                        renderAdminReviews(); 
+                        showNotification('Deleted', 'Review removed');
+                    } 
+                }); 
+            });
         }
-    });
-    document.getElementById("adminPassword").addEventListener("keypress", (e) => { if (e.key === "Enter") document.getElementById("submitPassword").click(); });
-    passwordModalEl.addEventListener("click", (e) => { if (e.target === passwordModalEl) passwordModalEl.classList.remove("show"); });
-    
-    document.getElementById("refreshOrdersBtn").addEventListener("click", async () => {
-        const btn = document.getElementById("refreshOrdersBtn");
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<span class="loading-spinner"></span> Syncing...';
-        btn.disabled = true;
-        
-        await fetchOrdersFromSheet();
-        renderAdminOrders();
-        
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-        showNotification('Refreshed', 'Orders reloaded from database');
-    });
-    
-    document.querySelectorAll('.admin-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            const tn = tab.dataset.tab;
-            document.getElementById('adminOrdersSection').classList.toggle('active', tn === 'orders');
-            document.getElementById('adminReviewsSection').classList.toggle('active', tn === 'reviews');
-            if (tn === 'orders') renderAdminOrders();
-            if (tn === 'reviews') renderAdminReviews();
-        });
-    });
 
-    // Reviews stars
-    let selectedRating = 0;
-    document.querySelectorAll('.star-rating').forEach(star => {
-        star.addEventListener('click', () => {
-            selectedRating = parseInt(star.dataset.rating);
-            document.querySelectorAll('.star-rating').forEach(s => parseInt(s.dataset.rating) <= selectedRating ? s.classList.add('active') : s.classList.remove('active'));
-        });
-    });
-    document.getElementById("submitReview").addEventListener("click", async () => {
-        const name = document.getElementById("reviewerName").value.trim();
-        const review = document.getElementById("reviewText").value.trim();
-        if (!name) { showNotification('Error', 'Enter your name', true); return; }
-        if (!review) { showNotification('Error', 'Write your review', true); return; }
-        if (selectedRating === 0) { showNotification('Error', 'Select a rating', true); return; }
-        
-        const btn = document.getElementById("submitReview");
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<span class="loading-spinner"></span> Submitting...';
-        btn.disabled = true;
-        
-        const reviewData = { 
-            type: "review", 
-            name: name, 
-            rating: selectedRating, 
-            review: review, 
-            timestamp: new Date().toLocaleString("en-KE") 
-        };
-        
-        await saveToGoogleSheets(reviewData);
-        await loadReviewsFromSheet();
-        
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-        showNotification('Thank You', 'Your review has been posted');
-        document.getElementById("reviewerName").value = ""; 
-        document.getElementById("reviewText").value = ""; 
-        selectedRating = 0;
-        document.querySelectorAll('.star-rating').forEach(s => s.classList.remove('active'));
-    });
+        function escapeHtml(text) { 
+            if (!text) return '';
+            const div = document.createElement('div'); 
+            div.textContent = text; 
+            return div.innerHTML; 
+        }
 
-    // Auto-scroll reviews
-    const revCarousel = document.getElementById('reviewsCarousel');
-    if (revCarousel) {
-        let scrolling = false, pos = 0;
-        const scrollInterval = setInterval(() => {
-            if (!scrolling && revCarousel && revCarousel.scrollWidth > revCarousel.clientWidth) {
-                const max = revCarousel.scrollWidth - revCarousel.clientWidth;
-                if (max > 0) {
-                    pos += 0.5;
-                    if (pos >= max) pos = 0;
-                    revCarousel.scrollTo({ left: pos, behavior: 'smooth' });
+        function updateServiceButtons() {
+            const container = document.getElementById('serviceButtons');
+            if (!container) return;
+            container.innerHTML = serviceOptions[currentPlatform].map(s => `<div class="service-btn ${s === currentService ? 'active' : ''}" data-service="${s}">${serviceNames[s]}</div>`).join('');
+            document.querySelectorAll('.service-btn').forEach(btn => { 
+                btn.addEventListener('click', () => { 
+                    document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('active')); 
+                    btn.classList.add('active'); 
+                    currentService = btn.dataset.service; 
+                    updateUI(); 
+                }); 
+            });
+        }
+
+        function generateTrackingId() { return 'GFK' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 4).toUpperCase(); }
+        let currentTrackingId = generateTrackingId();
+        const trackingIdSpan = document.getElementById("trackingId");
+        if (trackingIdSpan) trackingIdSpan.innerText = currentTrackingId;
+
+        async function pollPesaPalPayment(trackingId) {
+            let attempts = 0;
+            const maxAttempts = 60;
+            
+            if (paymentPollInterval) clearInterval(paymentPollInterval);
+            
+            paymentPollInterval = setInterval(async () => {
+                attempts++;
+                
+                try {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const paymentStatus = urlParams.get('payment_status');
+                    const ref = urlParams.get('reference');
+                    
+                    if (paymentStatus === 'COMPLETED' && ref === trackingId) {
+                        clearInterval(paymentPollInterval);
+                        paymentPollInterval = null;
+                        
+                        await updateOrderStatus(trackingId, "Processing");
+                        showNotification('✅ Payment Successful!', 'Your order is now being processed');
+                        showSuccessModal(trackingId);
+                        
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        
+                    } else if (paymentStatus === 'FAILED' && ref === trackingId) {
+                        clearInterval(paymentPollInterval);
+                        paymentPollInterval = null;
+                        showNotification('Payment Failed', 'Payment was not completed. Use Till 8941840 instead.', true);
+                        
+                    } else if (attempts >= maxAttempts) {
+                        clearInterval(paymentPollInterval);
+                        paymentPollInterval = null;
+                        showNotification('Payment Timeout', 'If you paid, it will be confirmed soon. Use Tracking ID to check status.', true);
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
                 }
+            }, 2000);
+        }
+
+        // Modal functions
+        const successModal = document.getElementById("successModal");
+        let lastPlacedTrackingId = "";
+        
+        function showSuccessModal(id) {
+            lastPlacedTrackingId = id;
+            const successTrackingId = document.getElementById("successTrackingId");
+            if (successTrackingId) successTrackingId.innerText = id;
+            if (successModal) successModal.classList.add("show");
+        }
+
+        // ========== ATTACH ALL EVENT LISTENERS ==========
+        function attachEventListeners() {
+            console.log("Attaching event listeners...");
+            
+            // Navigation buttons
+            const nextToStep2 = document.getElementById("nextToStep2");
+            const backToStep1 = document.getElementById("backToStep1");
+            const nextToStep3 = document.getElementById("nextToStep3");
+            const backToStep2 = document.getElementById("backToStep2");
+            const backToStep2Manual = document.getElementById("backToStep2Manual");
+            
+            if (nextToStep2) nextToStep2.addEventListener("click", () => showStep(2));
+            if (backToStep1) backToStep1.addEventListener("click", () => showStep(1));
+            if (nextToStep3) nextToStep3.addEventListener("click", () => showStep(3));
+            if (backToStep2) backToStep2.addEventListener("click", () => showStep(2));
+            if (backToStep2Manual) backToStep2Manual.addEventListener("click", () => showStep(2));
+            
+            // Quantity inputs
+            const quantityInput = document.getElementById("quantityNumber");
+            const quantitySlider = document.getElementById("quantitySlider");
+            
+            if (quantityInput) {
+                quantityInput.addEventListener("input", function() {
+                    let val = parseInt(this.value);
+                    if (!isNaN(val) && val >= 100 && val <= 1000000) {
+                        currentQuantity = val;
+                        if (quantitySlider) quantitySlider.value = val;
+                        updateUI();
+                    }
+                });
+                
+                quantityInput.addEventListener("blur", function() {
+                    let val = parseInt(this.value);
+                    if (isNaN(val)) val = 100;
+                    val = Math.min(1000000, Math.max(100, val));
+                    currentQuantity = val;
+                    if (quantitySlider) quantitySlider.value = val;
+                    if (quantityInput) quantityInput.value = val;
+                    updateUI();
+                });
             }
-        }, 50);
-        revCarousel.addEventListener('mouseenter', () => { scrolling = true; });
-        revCarousel.addEventListener('mouseleave', () => { scrolling = false; });
-    }
+            
+            if (quantitySlider) {
+                quantitySlider.addEventListener("input", function() {
+                    currentQuantity = parseInt(quantitySlider.value);
+                    if (quantityInput) quantityInput.value = currentQuantity;
+                    updateUI();
+                });
+            }
+            
+            // Manual order submission
+            const submitOrderBtn = document.getElementById("submitOrder");
+            if (submitOrderBtn) {
+                submitOrderBtn.addEventListener("click", async () => {
+                    const name = document.getElementById("customerName")?.value.trim() || "";
+                    const profile = document.getElementById("facebookProfile")?.value.trim() || "";
+                    const phone = document.getElementById("customerPhone")?.value.trim() || "";
+                    const link = document.getElementById("postLink")?.value.trim() || "";
+                    const mpesaText = document.getElementById("mpesaConfirmation")?.value.trim() || "";
 
-    // Dark mode
-    const themeToggle = document.getElementById("themeToggle");
-    if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
-    themeToggle.addEventListener("click", () => { 
-        document.body.classList.toggle("dark"); 
-        localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light"); 
-    });
+                    if (!name) { showNotification('Error', 'Enter your name', true); showStep(2); return; }
+                    if (!profile) { showNotification('Error', `Enter ${platformSettings[currentPlatform].usernameLabel}`, true); showStep(2); return; }
+                    if (!phone) { showNotification('Error', 'Enter WhatsApp number', true); showStep(2); return; }
+                    if ((currentService === "likes" || currentService === "comments") && !link) { showNotification('Error', `Enter ${platformSettings[currentPlatform].postLabel}`, true); showStep(2); return; }
+                    if (!mpesaText) { showNotification('Error', 'Paste M-Pesa confirmation', true); showStep(3); return; }
 
-    async function initialize() {
-        await loadReviewsFromSheet();
-        updateUI();
-        updateProgress();
+                    let price = calculatePrice(currentPlatform, currentService, currentQuantity);
+                    let deliveryTime = getDeliveryTime(currentQuantity);
+                    let transactionId = mpesaText.match(/[A-Z0-9]{10,}/i)?.[0] || "Not extracted";
+                    let fullServiceName = `${platformSettings[currentPlatform].name} ${serviceNames[currentService]}`;
+                    let finalTrackingId = currentTrackingId;
+
+                    const orderData = {
+                        trackingId: finalTrackingId,
+                        service: fullServiceName,
+                        quantity: currentQuantity,
+                        price: price,
+                        deliveryTime: deliveryTime,
+                        customerName: name,
+                        profile: profile,
+                        postLink: link || "Not provided",
+                        phone: phone,
+                        transactionId: transactionId,
+                        mpesaConfirmation: mpesaText.substring(0, 500),
+                        status: "Pending",
+                        timestamp: new Date().toLocaleString("en-KE")
+                    };
+
+                    const btn = submitOrderBtn;
+                    btn.innerHTML = '<span class="loading-spinner"></span> Processing...';
+                    btn.disabled = true;
+                    
+                    const saved = await saveToGoogleSheets(orderData);
+                    
+                    if (saved) {
+                        addOrder(orderData);
+                        showSuccessModal(finalTrackingId);
+                        
+                        currentTrackingId = generateTrackingId();
+                        const trackingIdSpan = document.getElementById("trackingId");
+                        if (trackingIdSpan) trackingIdSpan.innerText = currentTrackingId;
+                        
+                        const customerNameInput = document.getElementById("customerName");
+                        const facebookProfileInput = document.getElementById("facebookProfile");
+                        const postLinkInput = document.getElementById("postLink");
+                        const customerPhoneInput = document.getElementById("customerPhone");
+                        const mpesaConfirmationInput = document.getElementById("mpesaConfirmation");
+                        
+                        if (customerNameInput) customerNameInput.value = "";
+                        if (facebookProfileInput) facebookProfileInput.value = "";
+                        if (postLinkInput) postLinkInput.value = "";
+                        if (customerPhoneInput) customerPhoneInput.value = "";
+                        if (mpesaConfirmationInput) mpesaConfirmationInput.value = "";
+                        
+                        currentPlatform = "facebook";
+                        currentService = "followers";
+                        currentQuantity = 3000;
+                        if (quantitySlider) quantitySlider.value = 3000;
+                        if (quantityInput) quantityInput.value = 3000;
+                        updateServiceButtons();
+                        updateUI();
+                        showStep(1);
+                        
+                        showNotification('Success', 'Order placed successfully!');
+                    } else {
+                        showNotification('Error', 'Failed to save order. Please try again.', true);
+                    }
+                    
+                    btn.innerHTML = "Place Order (Manual Payment)";
+                    btn.disabled = false;
+                });
+            }
+            
+            // PesaPal payment
+            const payWithPesapalBtn = document.getElementById("payWithPesapalBtn");
+            if (payWithPesapalBtn) {
+                payWithPesapalBtn.addEventListener("click", async () => {
+                    const paymentPhone = document.getElementById("paymentPhone")?.value.trim() || "";
+                    const paymentEmail = document.getElementById("paymentEmail")?.value.trim() || "";
+                    const name = document.getElementById("customerName")?.value.trim() || "";
+                    const profile = document.getElementById("facebookProfile")?.value.trim() || "";
+                    const phone = document.getElementById("customerPhone")?.value.trim() || "";
+                    const link = document.getElementById("postLink")?.value.trim() || "";
+
+                    if (!name) { showNotification('Error', 'Enter your full name', true); showStep(2); return; }
+                    if (!profile) { showNotification('Error', 'Enter Facebook profile URL', true); showStep(2); return; }
+                    if (!phone) { showNotification('Error', 'Enter WhatsApp number', true); showStep(2); return; }
+                    if ((currentService === "likes" || currentService === "comments") && !link) { showNotification('Error', 'Enter post link', true); showStep(2); return; }
+                    if (!paymentPhone) { showNotification('Error', 'Enter M-Pesa phone number', true); return; }
+                    if (!paymentEmail) { showNotification('Error', 'Enter email address', true); return; }
+
+                    let price = calculatePrice(currentPlatform, currentService, currentQuantity);
+                    let deliveryTime = getDeliveryTime(currentQuantity);
+                    let fullServiceName = `${platformSettings[currentPlatform].name} ${serviceNames[currentService]}`;
+                    let finalTrackingId = currentTrackingId;
+
+                    const orderData = {
+                        trackingId: finalTrackingId,
+                        service: fullServiceName,
+                        quantity: currentQuantity,
+                        price: price,
+                        deliveryTime: deliveryTime,
+                        customerName: name,
+                        profile: profile,
+                        postLink: link || "Not provided",
+                        phone: phone,
+                        transactionId: "PesaPal - Pending",
+                        mpesaConfirmation: "Payment via PesaPal STK Push",
+                        status: "Payment Pending",
+                        timestamp: new Date().toLocaleString("en-KE")
+                    };
+
+                    const btn = payWithPesapalBtn;
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<span class="loading-spinner"></span> Initializing payment...';
+                    btn.disabled = true;
+
+                    try {
+                        const saved = await saveToGoogleSheets(orderData);
+                        if (!saved) throw new Error("Failed to save order");
+
+                        addOrder(orderData);
+
+                        const response = await fetch('/.netlify/functions/pesapal-initiate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                amount: price,
+                                email: paymentEmail,
+                                phone: paymentPhone,
+                                reference: finalTrackingId,
+                                customerName: name
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            showNotification('STK Push Sent!', 'Check your phone for the M-Pesa prompt', false);
+                            pollPesaPalPayment(finalTrackingId);
+                        } else {
+                            throw new Error(result.message || 'Payment initialization failed');
+                        }
+                    } catch (error) {
+                        console.error('Payment error:', error);
+                        showNotification('Error', error.message || 'Payment failed. Use Till 8941840 instead.', true);
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }
+                });
+            }
+            
+            // Track button
+            const trackOrderBtn = document.getElementById("trackOrderBtn");
+            const trackModalEl = document.getElementById("trackModal");
+            if (trackOrderBtn && trackModalEl) {
+                trackOrderBtn.addEventListener("click", () => { 
+                    trackModalEl.classList.add("show"); 
+                    const trackingResult = document.getElementById("trackingResult");
+                    if (trackingResult) trackingResult.classList.remove("show"); 
+                    const trackingInput = document.getElementById("trackingInput");
+                    if (trackingInput) trackingInput.value = ""; 
+                });
+            }
+            
+            // Search track button
+            const searchTrackBtn = document.getElementById("searchTrackBtn");
+            if (searchTrackBtn) {
+                searchTrackBtn.addEventListener("click", () => { 
+                    const trackingInput = document.getElementById("trackingInput");
+                    if (trackingInput && trackingInput.value.trim()) {
+                        trackOrder(trackingInput.value.trim().toUpperCase());
+                    } else {
+                        showNotification('Error', 'Enter Tracking ID', true);
+                    }
+                });
+            }
+            
+            // Tracking input enter key
+            const trackingInput = document.getElementById("trackingInput");
+            if (trackingInput) {
+                trackingInput.addEventListener("keypress", (e) => { 
+                    if (e.key === "Enter") {
+                        const searchBtn = document.getElementById("searchTrackBtn");
+                        if (searchBtn) searchBtn.click();
+                    }
+                });
+            }
+            
+            // Admin button
+            const adminSmallBtn = document.getElementById("adminSmallBtn");
+            const adminModalEl = document.getElementById("adminModal");
+            const passwordModalEl = document.getElementById("passwordModal");
+            
+            if (adminSmallBtn) {
+                adminSmallBtn.addEventListener("click", () => {
+                    if (isAdminLoggedIn) {
+                        renderAdminOrders();
+                        renderAdminReviews();
+                        if (adminModalEl) adminModalEl.classList.add("show");
+                    } else {
+                        if (passwordModalEl) passwordModalEl.classList.add("show");
+                    }
+                });
+            }
+            
+            // Close modals
+            const closeSuccessModal = document.getElementById("closeSuccessModal");
+            const closeModalBtn = document.getElementById("closeModalBtn");
+            const closeAdminModal = document.getElementById("closeAdminModal");
+            const closePasswordModal = document.getElementById("closePasswordModal");
+            
+            if (closeSuccessModal) closeSuccessModal.addEventListener("click", () => { if (successModal) successModal.classList.remove("show"); });
+            if (closeModalBtn) closeModalBtn.addEventListener("click", () => { if (trackModalEl) trackModalEl.classList.remove("show"); });
+            if (closeAdminModal) closeAdminModal.addEventListener("click", () => { if (adminModalEl) adminModalEl.classList.remove("show"); });
+            if (closePasswordModal) closePasswordModal.addEventListener("click", () => { if (passwordModalEl) passwordModalEl.classList.remove("show"); });
+            
+            // Modal click outside to close
+            if (successModal) successModal.addEventListener("click", (e) => { if (e.target === successModal) successModal.classList.remove("show"); });
+            if (trackModalEl) trackModalEl.addEventListener("click", (e) => { if (e.target === trackModalEl) trackModalEl.classList.remove("show"); });
+            if (adminModalEl) adminModalEl.addEventListener("click", (e) => { if (e.target === adminModalEl) adminModalEl.classList.remove("show"); });
+            if (passwordModalEl) passwordModalEl.addEventListener("click", (e) => { if (e.target === passwordModalEl) passwordModalEl.classList.remove("show"); });
+            
+            // Copy tracking button
+            const copyTrackingBtn = document.getElementById("copyTrackingBtn");
+            if (copyTrackingBtn) {
+                copyTrackingBtn.addEventListener("click", () => { 
+                    const successTrackingId = document.getElementById("successTrackingId");
+                    if (successTrackingId) {
+                        navigator.clipboard.writeText(successTrackingId.innerText); 
+                        showNotification('Copied', 'Tracking ID copied to clipboard');
+                    }
+                });
+            }
+            
+            // Track from success button
+            const trackFromSuccessBtn = document.getElementById("trackFromSuccessBtn");
+            if (trackFromSuccessBtn && trackModalEl) {
+                trackFromSuccessBtn.addEventListener("click", () => {
+                    if (successModal) successModal.classList.remove("show");
+                    if (trackModalEl) {
+                        const trackingInputField = document.getElementById("trackingInput");
+                        if (trackingInputField) trackingInputField.value = lastPlacedTrackingId;
+                        trackModalEl.classList.add("show");
+                        setTimeout(() => {
+                            trackOrder(lastPlacedTrackingId);
+                        }, 500);
+                    }
+                });
+            }
+            
+            // Admin password
+            const submitPassword = document.getElementById("submitPassword");
+            if (submitPassword) {
+                submitPassword.addEventListener("click", () => {
+                    const adminPassword = document.getElementById("adminPassword");
+                    const enteredPassword = adminPassword ? adminPassword.value : "";
+                    if (enteredPassword === ADMIN_PASSWORD) {
+                        isAdminLoggedIn = true;
+                        if (passwordModalEl) passwordModalEl.classList.remove("show");
+                        renderAdminOrders();
+                        renderAdminReviews();
+                        if (adminModalEl) adminModalEl.classList.add("show");
+                        showNotification('Access Granted', 'Welcome to Admin Panel');
+                    } else {
+                        showNotification('Access Denied', 'Wrong password', true);
+                    }
+                });
+            }
+            
+            const adminPasswordInput = document.getElementById("adminPassword");
+            if (adminPasswordInput) {
+                adminPasswordInput.addEventListener("keypress", (e) => { 
+                    if (e.key === "Enter") {
+                        const submitPass = document.getElementById("submitPassword");
+                        if (submitPass) submitPass.click();
+                    }
+                });
+            }
+            
+            // Refresh orders button
+            const refreshOrdersBtn = document.getElementById("refreshOrdersBtn");
+            if (refreshOrdersBtn) {
+                refreshOrdersBtn.addEventListener("click", async () => {
+                    const btn = refreshOrdersBtn;
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<span class="loading-spinner"></span> Syncing...';
+                    btn.disabled = true;
+                    
+                    await fetchOrdersFromSheet();
+                    renderAdminOrders();
+                    
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    showNotification('Refreshed', 'Orders reloaded from database');
+                });
+            }
+            
+            // Admin tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const tn = tab.dataset.tab;
+                    const adminOrdersSection = document.getElementById('adminOrdersSection');
+                    const adminReviewsSection = document.getElementById('adminReviewsSection');
+                    if (adminOrdersSection) adminOrdersSection.classList.toggle('active', tn === 'orders');
+                    if (adminReviewsSection) adminReviewsSection.classList.toggle('active', tn === 'reviews');
+                    if (tn === 'orders') renderAdminOrders();
+                    if (tn === 'reviews') renderAdminReviews();
+                });
+            });
+            
+            // Review stars
+            document.querySelectorAll('.star-rating').forEach(star => {
+                star.addEventListener('click', () => {
+                    selectedRating = parseInt(star.dataset.rating);
+                    document.querySelectorAll('.star-rating').forEach(s => {
+                        if (parseInt(s.dataset.rating) <= selectedRating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+            
+            // Submit review
+            const submitReviewBtn = document.getElementById("submitReview");
+            if (submitReviewBtn) {
+                submitReviewBtn.addEventListener("click", async () => {
+                    const name = document.getElementById("reviewerName")?.value.trim() || "";
+                    const review = document.getElementById("reviewText")?.value.trim() || "";
+                    if (!name) { showNotification('Error', 'Enter your name', true); return; }
+                    if (!review) { showNotification('Error', 'Write your review', true); return; }
+                    if (selectedRating === 0) { showNotification('Error', 'Select a rating', true); return; }
+                    
+                    const btn = submitReviewBtn;
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<span class="loading-spinner"></span> Submitting...';
+                    btn.disabled = true;
+                    
+                    const reviewData = { 
+                        type: "review", 
+                        name: name, 
+                        rating: selectedRating, 
+                        review: review, 
+                        timestamp: new Date().toLocaleString("en-KE") 
+                    };
+                    
+                    await saveToGoogleSheets(reviewData);
+                    await loadReviewsFromSheet();
+                    
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    showNotification('Thank You', 'Your review has been posted');
+                    
+                    const reviewerName = document.getElementById("reviewerName");
+                    const reviewText = document.getElementById("reviewText");
+                    if (reviewerName) reviewerName.value = ""; 
+                    if (reviewText) reviewText.value = ""; 
+                    selectedRating = 0;
+                    document.querySelectorAll('.star-rating').forEach(s => s.classList.remove('active'));
+                });
+            }
+            
+            // Theme toggle
+            const themeToggle = document.getElementById("themeToggle");
+            if (themeToggle) {
+                if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
+                themeToggle.addEventListener("click", () => { 
+                    document.body.classList.toggle("dark"); 
+                    localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light"); 
+                });
+            }
+            
+            console.log("All event listeners attached successfully!");
+        }
+        
+        // Auto-scroll reviews
+        const revCarousel = document.getElementById('reviewsCarousel');
+        if (revCarousel) {
+            let scrolling = false, pos = 0;
+            const scrollInterval = setInterval(() => {
+                if (!scrolling && revCarousel && revCarousel.scrollWidth > revCarousel.clientWidth) {
+                    const max = revCarousel.scrollWidth - revCarousel.clientWidth;
+                    if (max > 0) {
+                        pos += 0.5;
+                        if (pos >= max) pos = 0;
+                        revCarousel.scrollTo({ left: pos, behavior: 'smooth' });
+                    }
+                }
+            }, 50);
+            revCarousel.addEventListener('mouseenter', () => { scrolling = true; });
+            revCarousel.addEventListener('mouseleave', () => { scrolling = false; });
+        }
+        
+        // Initialize the app
+        async function initialize() {
+            await loadReviewsFromSheet();
+            updateUI();
+            updateProgress();
+            attachEventListeners();
+        }
+        
+        initialize();
     }
-    initialize();
+})();
 </script>
 </body>
 </html>
