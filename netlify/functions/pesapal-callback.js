@@ -1,29 +1,21 @@
 // netlify/functions/pesapal-callback.js
 exports.handler = async (event, context) => {
-    if (event.httpMethod === 'GET') {
-        const { reference, status } = event.queryStringParameters || {};
-        
-        if (reference && global.pendingPayments) {
-            if (status === 'COMPLETED') {
-                global.pendingPayments[reference] = {
-                    ...global.pendingPayments[reference],
-                    status: 'COMPLETED',
-                    paid_at: Date.now()
-                };
-            }
-        }
-        
-        return {
-            statusCode: 302,
-            headers: {
-                Location: `/?payment_status=${status || 'PENDING'}&reference=${reference}`
-            },
-            body: ''
-        };
-    }
+    const params = event.queryStringParameters;
+    const orderTrackingId = params.OrderTrackingId || params.order_tracking_id;
+    const orderMerchantReference = params.OrderMerchantReference;
+    
+    // Get the site URL from environment
+    const siteUrl = process.env.URL || 'https://your-site.netlify.app';
+    
+    // Redirect back to your site with payment status
+    const redirectUrl = `${siteUrl}?payment_status=COMPLETED&reference=${orderMerchantReference}`;
     
     return {
-        statusCode: 200,
-        body: 'OK'
+        statusCode: 302,
+        headers: {
+            'Location': redirectUrl,
+            'Cache-Control': 'no-cache'
+        },
+        body: ''
     };
 };
