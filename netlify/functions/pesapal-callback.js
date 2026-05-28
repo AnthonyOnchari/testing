@@ -1,24 +1,11 @@
-// netlify/functions/pesapal-callback.js
-exports.handler = async (event, context) => {
-    const headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json'
-    };
-    
+exports.handler = async (event) => {
     const params = event.queryStringParameters || {};
-    const orderMerchantReference = params.OrderMerchantReference || params.reference;
-    
-    console.log("Callback received:", params);
-    
+    const reference = params.OrderMerchantReference || params.reference || 'UNKNOWN';
     const siteUrl = 'https://loquacious-kitten-73b278.netlify.app';
-    const redirectUrl = `${siteUrl}?payment_status=COMPLETED&reference=${orderMerchantReference}`;
     
     return {
         statusCode: 302,
-        headers: {
-            'Location': redirectUrl,
-            'Cache-Control': 'no-cache'
-        },
+        headers: { 'Location': `${siteUrl}?payment_status=COMPLETED&reference=${reference}` },
         body: ''
     };
 };
