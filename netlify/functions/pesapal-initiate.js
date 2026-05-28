@@ -26,10 +26,9 @@ exports.handler = async (event) => {
             const PESAPAL_ENDPOINT = "https://pay.pesapal.com/v3";
             const siteUrl = 'https://loquacious-kitten-73b278.netlify.app';
             
-            // YOUR IPN ID FROM PESAPAL - REPLACE THIS!
-            const IPN_ID = "YOUR_IPN_ID_HERE";  // <-- PUT YOUR IPN ID HERE
+            console.log("Processing payment:", { amount, reference, customerName });
             
-            // Format phone
+            // Format phone number
             let formattedPhone = phone.replace(/\s/g, '');
             if (formattedPhone.startsWith('0')) formattedPhone = '254' + formattedPhone.substring(1);
             if (formattedPhone.startsWith('+')) formattedPhone = formattedPhone.substring(1);
@@ -48,12 +47,16 @@ exports.handler = async (event) => {
             });
             
             const tokenData = await tokenRes.json();
+            console.log("Token response status:", tokenRes.status);
             
             if (!tokenData.token) {
-                throw new Error('Token failed: ' + JSON.stringify(tokenData));
+                console.error("Token error:", tokenData);
+                throw new Error('Authentication failed: ' + JSON.stringify(tokenData));
             }
             
-            // Submit order with IPN
+            console.log("✅ Token obtained:", tokenData.token.substring(0, 20) + "...");
+            
+            // Submit order
             const orderRes = await fetch(`${PESAPAL_ENDPOINT}/api/Transactions/SubmitOrderRequest`, {
                 method: 'POST',
                 headers: {
@@ -67,7 +70,7 @@ exports.handler = async (event) => {
                     amount: parseFloat(amount),
                     description: `Get Fans Kenya - ${customerName}`,
                     callback_url: `${siteUrl}/.netlify/functions/pesapal-callback`,
-                    notification_id: IPN_ID,
+                    notification_id: null,
                     branch_name: "Get Fans Kenya",
                     billing_address: {
                         email_address: email,
@@ -81,25 +84,25 @@ exports.handler = async (event) => {
             });
             
             const orderData = await orderRes.json();
+            console.log("Order response:", orderData);
             
             if (orderData.order_tracking_id) {
                 response.body = JSON.stringify({
                     success: true,
                     redirect_url: orderData.redirect_url,
                     order_tracking_id: orderData.order_tracking_id,
-                    message: "STK Push sent! Check your M-Pesa phone."
+                    message: "✅ STK Push sent! Check your M-Pesa phone for the prompt."
                 });
             } else {
-                throw new Error('Order failed: ' + JSON.stringify(orderData));
+                throw new Error(orderData.error?.message || 'Order submission failed');
             }
             
         } catch (error) {
-            console.error("Error:", error);
+            console.error("❌ Error:", error.message);
             response.body = JSON.stringify({
                 success: false,
                 error: error.message,
-                simulation: true,
-                message: "Payment failed. Please use Manual M-Pesa (Till 8941840)"
+                message: "❌ Payment failed. Please use Manual M-Pesa (Till 8941840) instead."
             });
         }
         return response;
