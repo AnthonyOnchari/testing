@@ -1006,36 +1006,13 @@
         </div>
 
         <!-- STEP 3 -->
-        <div class="step" id="step3">
-            <div class="card">
-                <div class="step-title">Complete Payment</div>
-                <div class="mpesa-container" style="margin-top: 0;">
-                    <div class="till-number">8941840</div>
-                    <div class="payment-steps">
-                        <div>1. M-Pesa > Lipa Na M-Pesa > Buy Goods</div>
-                        <div>2. Enter Till: 8941840</div>
-                        <div>3. Amount: <strong id="paymentAmountStep">KSh 3,399</strong></div>
-                        <div>4. Enter PIN and confirm</div>
-                    </div>
-                    <div class="mpesa-field">
-                        <label>Paste M-Pesa Confirmation</label>
-                        <textarea id="mpesaConfirmation" rows="2" placeholder="Paste the M-Pesa message here"></textarea>
-                    </div>
-                </div>
-                <div class="summary-card">
-                    <div class="info-row"><strong>Tracking ID:</strong><span id="trackingId">Loading...</span></div>
-                    <hr>
-                    <div class="info-row"><span>Platform:</span><strong id="summaryPlatform">Facebook</strong></div>
-                    <div class="info-row"><span>Service:</span><strong id="summaryService">Followers</strong></div>
-                    <div class="info-row"><span>Quantity:</span><strong id="summaryQty">10,000</strong></div>
-                    <div class="info-row"><span>Total:</span><strong id="summaryPrice">KSh 3,399</strong></div>
-                </div>
-                <div class="button-group">
-                    <button class="btn-back" id="backToStep2">Back</button>
-                    <button class="btn-submit" id="submitOrder">Place Order</button>
-                </div>
-            </div>
-        </div>
+<div class="step" id="step3">
+    <div class="mpesa-container">
+        <div class="till-number">8941840</div>
+        <textarea id="mpesaConfirmation" placeholder="Paste M-Pesa message"></textarea>
+    </div>
+    <button class="btn-submit" id="submitOrder">Place Order</button>
+</div>
 
         <!-- REVIEWS CAROUSEL SECTION -->
         <div class="reviews-section">
@@ -1151,6 +1128,354 @@
 <a href="https://wa.me/254750600715?text=Hi" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
 
 <script>
+    // Python Backend URL - UPDATE THIS with your public URL from Step 9
+const BACKEND_URL = 'https://super-couscous-q7xggp4vqp56h6xwj-8000.app.github.dev/';
+console.log('Backend URL:', BACKEND_URL);
+
+// Test connection
+async function testBackend() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/health`);
+        const data = await response.json();
+        console.log('✅ Backend connected:', data);
+        return true;
+    } catch (error) {
+        console.error('❌ Backend not reachable:', error);
+        alert('Payment system is connecting. Please wait...');
+        return false;
+    }
+}
+testBackend();
+
+
+
+// Remove old submit button handler
+const oldSubmitBtn = document.getElementById("submitOrder");
+const newSubmitBtn = oldSubmitBtn.cloneNode(true);
+oldSubmitBtn.parentNode.replaceChild(newSubmitBtn, oldSubmitBtn);
+
+// Add new handler
+newSubmitBtn.addEventListener("click", async () => {
+    // Get form values
+    const name = document.getElementById("customerName").value.trim();
+    const profile = document.getElementById("profileUrl").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const link = document.getElementById("postLink").value.trim();
+    
+    // Validation
+    if (!name) { showNotification('Error', 'Enter your name', true); showStep(2); return; }
+    if (!profile) { showNotification('Error', 'Enter profile URL', true); showStep(2); return; }
+    if (!phone) { showNotification('Error', 'Enter WhatsApp number', true); showStep(2); return; }
+    
+    const price = calculatePrice(currentPlatform, currentService, currentQuantity);
+    
+    const orderData = {
+        customerName: name,
+        phone: phone,
+        platform: platformSettings[currentPlatform].name,
+        service: serviceNames[currentService],
+        quantity: currentQuantity,
+        price: price,
+        profile: profile,
+        postLink: link || "Not provided",
+        timestamp: new Date().toLocaleString()
+    };
+    
+    // Show loading
+    const btn = newSubmitBtn;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="loading-spinner"></span> Sending to M-Pesa...';
+    btn.disabled = true;
+    
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/mpesa/stkpush`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                phone: phone,
+                amount: price,
+                orderData: orderData
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showNotification('✅ M-Pesa Prompt Sent!', 'Check your phone and enter PIN');
+            
+            // Show waiting modal
+            showWaitingModal(result.checkoutRequestId);
+            
+            // Poll for payment status
+            pollPaymentStatus(result.checkoutRequestId, orderData);
+        } else {
+            showNotification('❌ Error', result.error, true);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('❌ Error', 'Cannot connect to payment system', true);
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
+
+function showWaitingModal(checkoutId) {
+    const modalHtml = `
+        <div id="paymentModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center;">
+            <div style="background:white; border-radius:20px; padding:30px; text-align:center; max-width:350px;">
+                <div style="font-size:50px;">📱</div>
+                <h3>Check Your Phone</h3>
+                <p>Enter your M-Pesa PIN when prompted</p>
+                <div class="loading-spinner" style="margin:20px auto;"></div>
+                <p id="statusMsg" style="font-size:12px; color:#666;">Waiting for payment confirmation...</p>
+                <button onclick="document.getElementById('paymentModal').remove()" style="margin-top:20px; padding:8px 20px; background:#e0e0e0; border:none; border-radius:20px;">Close</button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function pollPaymentStatus(checkoutId, orderData) {
+    let attempts = 0;
+    const maxAttempts = 60; // 2 minutes
+    
+    const interval = setInterval(async () => {
+        attempts++;
+        
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/order-status/${checkoutId}`);
+            const result = await response.json();
+            
+            const statusMsg = document.getElementById('statusMsg');
+            
+            if (result.status === 'COMPLETED') {
+                clearInterval(interval);
+                document.getElementById('paymentModal')?.remove();
+                
+                const trackingId = `GFK${Date.now().toString(36).toUpperCase()}`;
+                showSuccessModal(trackingId);
+                showNotification('✅ Payment Successful!', 'Your order is confirmed');
+                
+                // Reset form
+                document.getElementById("customerName").value = "";
+                document.getElementById("profileUrl").value = "";
+                document.getElementById("customerPhone").value = "";
+                showStep(1);
+                
+            } else if (result.status === 'FAILED') {
+                clearInterval(interval);
+                document.getElementById('paymentModal')?.remove();
+                showNotification('❌ Payment Failed', 'Please try again', true);
+                
+            } else if (attempts >= maxAttempts) {
+                clearInterval(interval);
+                document.getElementById('paymentModal')?.remove();
+                showNotification('⏰ Timeout', 'Payment not confirmed. Contact support', true);
+                
+            } else if (statusMsg) {
+                statusMsg.innerText = `Waiting... ${attempts * 2}s`;
+            }
+        } catch (error) {
+            console.error('Polling error:', error);
+        }
+    }, 2000);
+
+}
+
+
+//TOMS
+// ========== STK PUSH PAYMENT HANDLER ==========
+
+// Make sure BACKEND_URL is set correctly (use port 8000 for Python)
+const BACKEND_URL = 'http://localhost:8000';  // Change if using public URL
+
+document.getElementById("submitOrder").addEventListener("click", async () => {
+    console.log("🟢 Order button clicked - STK Push mode");
+    
+    // Get customer details from STEP 2
+    const name = document.getElementById("customerName").value.trim();
+    const profile = document.getElementById("profileUrl").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const link = document.getElementById("postLink").value.trim();
+    
+    // Validate
+    if (!name) {
+        showNotification('Error', 'Enter your name', true);
+        showStep(2);
+        return;
+    }
+    if (!profile) {
+        showNotification('Error', 'Enter profile URL', true);
+        showStep(2);
+        return;
+    }
+    if (!phone) {
+        showNotification('Error', 'Enter WhatsApp number', true);
+        showStep(2);
+        return;
+    }
+    
+    // Validate Kenyan phone number
+    const phoneRegex = /^(07|01|\+254|254)\d{8}$/;
+    if (!phoneRegex.test(phone)) {
+        showNotification('Error', 'Enter valid Kenyan phone (e.g., 0712345678)', true);
+        return;
+    }
+    
+    // Calculate price
+    const price = calculatePrice(currentPlatform, currentService, currentQuantity);
+    const fullServiceName = `${platformSettings[currentPlatform].name} ${serviceNames[currentService]}`;
+    
+    const orderData = {
+        customerName: name,
+        phone: phone,
+        platform: platformSettings[currentPlatform].name,
+        service: fullServiceName,
+        quantity: currentQuantity,
+        price: price,
+        profile: profile,
+        postLink: link || "Not provided",
+        timestamp: new Date().toLocaleString()
+    };
+    
+    // Show loading state
+    const btn = document.getElementById("submitOrder");
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="loading-spinner"></span> Sending to M-Pesa...';
+    btn.disabled = true;
+    
+    try {
+        // Call Python backend to initiate STK Push
+        const response = await fetch(`${BACKEND_URL}/api/mpesa/stkpush`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                phone: phone,
+                amount: price,
+                orderData: orderData
+            })
+        });
+        
+        const result = await response.json();
+        console.log("Backend response:", result);
+        
+        if (result.success) {
+            // Show success and waiting modal
+            showNotification('✅ M-Pesa Prompt Sent!', 'Check your phone and enter PIN');
+            showWaitingModal(result.checkoutRequestId);
+            
+            // Start polling for payment status
+            pollPaymentStatus(result.checkoutRequestId, orderData);
+        } else {
+            showNotification('❌ Payment Error', result.error || 'Failed to initiate payment', true);
+        }
+        
+    } catch (error) {
+        console.error("Error:", error);
+        showNotification('❌ Connection Error', 'Cannot reach payment server. Make sure backend is running on port 8000', true);
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
+
+// Show waiting modal while customer enters PIN
+function showWaitingModal(checkoutId) {
+    // Remove existing modal
+    const existing = document.getElementById('paymentModal');
+    if (existing) existing.remove();
+    
+    const modalHtml = `
+        <div id="paymentModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center;">
+            <div style="background:var(--card-bg); border-radius:24px; padding:30px; text-align:center; max-width:350px; width:90%;">
+                <div style="font-size:60px;">📱</div>
+                <h3 style="margin:15px 0;">Check Your Phone</h3>
+                <p style="margin:10px 0; font-size:14px;">Enter your M-Pesa PIN when prompted on your phone</p>
+                <div style="margin:20px auto;">
+                    <div class="loading-spinner" style="width:30px; height:30px;"></div>
+                </div>
+                <p id="statusMsg" style="font-size:12px; color:var(--text-light);">Waiting for payment confirmation...</p>
+                <button onclick="document.getElementById('paymentModal').remove()" style="margin-top:20px; padding:8px 25px; background:var(--border); border:none; border-radius:30px; cursor:pointer; font-family:'Poppins',sans-serif;">Close</button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+// Poll for payment status (check if customer paid)
+function pollPaymentStatus(checkoutId, orderData) {
+    let attempts = 0;
+    const maxAttempts = 60; // 2 minutes max
+    
+    if (window.pollingInterval) clearInterval(window.pollingInterval);
+    
+    window.pollingInterval = setInterval(async () => {
+        attempts++;
+        
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/order-status/${checkoutId}`);
+            const result = await response.json();
+            
+            const statusMsg = document.getElementById('statusMsg');
+            
+            if (result.status === 'COMPLETED') {
+                clearInterval(window.pollingInterval);
+                document.getElementById('paymentModal')?.remove();
+                
+                // Payment successful!
+                const trackingId = `GFK${Date.now().toString(36).toUpperCase()}`;
+                
+                showNotification('✅ Payment Successful!', `Receipt: ${result.transactionDetails?.receiptNumber || 'Confirmed'}`);
+                showSuccessModal(trackingId);
+                
+                // Reset form
+                document.getElementById("customerName").value = "";
+                document.getElementById("profileUrl").value = "";
+                document.getElementById("postLink").value = "";
+                document.getElementById("customerPhone").value = "";
+                showStep(1);
+                
+            } else if (result.status === 'FAILED') {
+                clearInterval(window.pollingInterval);
+                document.getElementById('paymentModal')?.remove();
+                showNotification('❌ Payment Failed', result.failureReason || 'Please try again', true);
+                
+            } else if (attempts >= maxAttempts) {
+                clearInterval(window.pollingInterval);
+                document.getElementById('paymentModal')?.remove();
+                showNotification('⏰ Payment Timeout', 'Please contact support', true);
+                
+            } else if (statusMsg) {
+                statusMsg.innerText = `Waiting for confirmation... ${Math.floor(attempts * 2)}s`;
+            }
+            
+        } catch (error) {
+            console.error("Polling error:", error);
+        }
+    }, 2000);
+}
+
+// Show success modal with tracking ID
+function showSuccessModal(trackingId) {
+    const existing = document.getElementById('customSuccessModal');
+    if (existing) existing.remove();
+    
+    const modalHtml = `
+        <div id="customSuccessModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10000; display:flex; align-items:center; justify-content:center;">
+            <div style="background:var(--card-bg); border-radius:24px; padding:30px; text-align:center; max-width:350px; width:90%;">
+                <div style="font-size:60px; color:#2ecc71;">✓</div>
+                <h3 style="margin:15px 0;">Order Placed Successfully!</h3>
+                <p>Your Tracking ID:</p>
+                <div style="background:var(--bg); padding:12px; border-radius:12px; font-family:monospace; font-weight:bold; font-size:1.2rem; margin:10px 0;">${trackingId}</div>
+                <button onclick="document.getElementById('customSuccessModal').remove()" style="margin-top:15px; padding:10px 25px; background:var(--primary); color:white; border:none; border-radius:30px; cursor:pointer;">Continue</button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+
     // ========== GOOGLE SHEETS API URL ==========
     const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyvxgIdpb2UP3A2LpG15em9wzKP951W7zyfJAPBR1KeVjkcrT2j3UFr5vZIh_iQ-6zyUQ/exec";
     const ADMIN_PASSWORD = "GetFans2024";
