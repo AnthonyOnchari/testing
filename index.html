@@ -32,13 +32,14 @@
             padding-bottom: var(--bottom-nav-height);
         }
 
+        /* LANDING PAGE - REDUCED HEADROOM */
         .landing-page {
             background: linear-gradient(135deg, #1877f2 0%, #0d65d9 50%, #001f3f 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 10px;
             position: fixed;
             top: 0;
             left: 0;
@@ -55,42 +56,42 @@
             pointer-events: none;
         }
         .landing-container { 
-            max-width: 500px; 
+            max-width: 480px; 
             width: 100%; 
             animation: fadeInUp 0.6s ease; 
-            margin: auto;
-            padding: 15px 0;
+            margin: 0 auto;
+            padding: 5px 0;
         }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .logo-section { text-align: center; margin-bottom: 20px; }
-        .logo-img-landing { height: 70px; width: auto; border-radius: 20px; margin-bottom: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-        .logo-section h1 { color: white; font-size: 1.6rem; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.2); letter-spacing: -0.5px; }
-        .logo-section p { color: rgba(255,255,255,0.85); font-size: 0.8rem; margin-top: 4px; font-weight: 500; }
-        .options-container { background: white; border-radius: 24px; padding: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
-        .options-title { text-align: center; margin-bottom: 16px; }
-        .options-title h2 { font-size: 1.1rem; font-weight: 700; color: #1a1a2e; }
-        .options-title p { font-size: 0.7rem; color: #666; margin-top: 2px; }
-        .option-cards { display: flex; flex-direction: column; gap: 10px; }
-        .option-card { padding: 14px; border-radius: 16px; cursor: pointer; transition: all 0.3s ease; text-align: center; }
-        .option-card:hover { transform: translateY(-3px); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .logo-section { text-align: center; margin-bottom: 12px; }
+        .logo-img-landing { height: 55px; width: auto; border-radius: 16px; margin-bottom: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .logo-section h1 { color: white; font-size: 1.4rem; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.2); letter-spacing: -0.5px; }
+        .logo-section p { color: rgba(255,255,255,0.85); font-size: 0.7rem; margin-top: 2px; font-weight: 500; }
+        .options-container { background: white; border-radius: 20px; padding: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+        .options-title { text-align: center; margin-bottom: 12px; }
+        .options-title h2 { font-size: 1rem; font-weight: 700; color: #1a1a2e; }
+        .options-title p { font-size: 0.65rem; color: #666; margin-top: 2px; }
+        .option-cards { display: flex; flex-direction: column; gap: 8px; }
+        .option-card { padding: 12px; border-radius: 14px; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+        .option-card:hover { transform: translateY(-2px); }
         .option-card:active { transform: scale(0.98); }
         .option-card.guest { background: #f8f9fc; border: 2px solid #e5e5e5; }
         .option-card.guest:hover { border-color: #1877f2; box-shadow: 0 8px 25px rgba(24,119,242,0.15); }
         .option-card.account { background: linear-gradient(135deg, #1877f2, #0d65d9); color: white; border: 2px solid transparent; }
         .option-card.account:hover { box-shadow: 0 8px 25px rgba(24,119,242,0.4); }
-        .option-icon { font-size: 2rem; margin-bottom: 6px; display: block; }
+        .option-icon { font-size: 1.8rem; margin-bottom: 4px; display: block; }
         .option-card.guest .option-icon { color: #1877f2; }
-        .option-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
+        .option-card h3 { font-size: 0.85rem; font-weight: 700; margin-bottom: 2px; }
         .option-card.guest h3 { color: #1a1a2e; }
-        .option-card p { font-size: 0.65rem; }
+        .option-card p { font-size: 0.6rem; }
         .option-card.guest p { color: #666; }
         .option-card.account p { color: rgba(255,255,255,0.85); }
-        .free-badge { display: inline-block; background: #ffd700; color: #333; padding: 4px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 700; margin-top: 6px; animation: pulse 2s infinite; }
+        .free-badge { display: inline-block; background: #ffd700; color: #333; padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 700; margin-top: 4px; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        .login-link { text-align: center; margin-top: 14px; font-size: 0.7rem; color: #666; }
+        .login-link { text-align: center; margin-top: 10px; font-size: 0.65rem; color: #666; }
         .login-link a { color: #1877f2; font-weight: 600; text-decoration: none; cursor: pointer; }
-        .trust-strip { display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-        .trust-item { color: rgba(255,255,255,0.8); font-size: 0.65rem; display: flex; align-items: center; gap: 5px; }
+        .trust-strip { display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .trust-item { color: rgba(255,255,255,0.8); font-size: 0.6rem; display: flex; align-items: center; gap: 4px; }
         .trust-item i { color: #2ecc71; }
 
         .auth-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; }
@@ -186,17 +187,10 @@
         input, textarea { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.9rem; font-family: 'Poppins', sans-serif; transition: border 0.2s, box-shadow 0.2s; }
         input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(24,119,242,0.1); }
         
-        /* REMOVED trust-badges section - no longer displayed */
-        
         .delivery-time-note { padding: 10px; border-radius: 12px; font-size: 0.75rem; text-align: center; margin-bottom: 12px; font-weight: 600; transition: all 0.3s ease; }
         .delivery-fast { background: var(--delivery-fast); color: white; }
         .delivery-medium { background: var(--delivery-medium); color: white; }
         .delivery-slow { background: var(--delivery-slow); color: white; }
-        .mpesa-container { background: linear-gradient(135deg, var(--primary-dark), #001f3f); color: white; padding: 14px; border-radius: 16px; margin: 12px 0; }
-        .till-number { font-size: 1.6rem; font-weight: 800; background: white; color: var(--primary-dark); display: inline-block; padding: 4px 16px; border-radius: 40px; margin: 6px 0; font-family: monospace; text-align: center; width: 100%; }
-        .payment-steps { text-align: left; font-size: 0.7rem; margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.2); }
-        .mpesa-field { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); }
-        .mpesa-field textarea { background: rgba(255,255,255,0.95); color: #333; font-size: 0.8rem; font-family: monospace; }
         .summary-card { background: var(--bg); border-radius: 14px; padding: 12px; margin: 12px 0; }
         .info-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.8rem; flex-wrap: wrap; gap: 6px; }
         hr { border-color: var(--border); margin: 8px 0; }
@@ -223,7 +217,6 @@
         .reviews-section { margin-top: 16px; overflow: hidden; position: relative; width: 100%; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
         .section-header h3 { font-size: 0.9rem; font-weight: 600; font-family: 'Poppins', sans-serif; }
-        /* REMOVED the span with "infinite scroll" text */
         .infinite-carousel { overflow: hidden; position: relative; width: 100%; }
         .carousel-track { display: flex; gap: 16px; animation: scrollInfinite 40s linear infinite; width: max-content; }
         .carousel-track:hover { animation-play-state: paused; }
@@ -272,41 +265,45 @@
         .status-pending { background: var(--warning); color: #000; }
         .status-processing { background: var(--info); color: white; }
         .status-completed, .status-delivered, .status-approved { background: var(--success); color: white; }
-        .status-rejected { background: var(--danger); color: white; }
-        .auto-refresh-badge { font-size: 0.6rem; color: var(--text-light); text-align: center; margin-top: 8px; }
-        .whatsapp-track-link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--whatsapp); color: white; padding: 10px 16px; border-radius: 40px; text-decoration: none; font-size: 0.75rem; font-weight: 600; margin-top: 16px; width: 100%; }
-        .download-receipt-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--success); color: white; padding: 10px 16px; border-radius: 40px; text-decoration: none; font-size: 0.75rem; font-weight: 600; margin-top: 12px; width: 100%; cursor: pointer; border: none; }
+        .tracking-code { background: var(--bg); padding: 12px; border-radius: 12px; font-family: monospace; font-size: 1.1rem; font-weight: bold; letter-spacing: 2px; margin: 12px 0; border: 2px dashed var(--primary); }
+        .copy-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 40px; font-size: 0.9rem; cursor: pointer; font-weight: 600; transition: all 0.2s; margin: 5px; }
+        .copy-btn:hover { background: var(--primary-dark); transform: scale(1.02); }
+        .tracking-popup {
+            background: var(--card-bg);
+            border-radius: 28px;
+            padding: 24px;
+            text-align: center;
+        }
+        .tracking-popup .tracking-code-large {
+            font-size: 1.3rem;
+            font-weight: 800;
+            font-family: monospace;
+            letter-spacing: 3px;
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 16px;
+            margin: 15px 0;
+            border: 2px dashed var(--success);
+            color: var(--primary);
+        }
+        .tracking-popup-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .tracking-popup-buttons button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+        .track-now-btn { background: var(--success); color: white; }
+        .copy-id-btn { background: var(--primary); color: white; }
 
-        .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; }
-        .admin-tab { padding: 8px 16px; cursor: pointer; border-radius: 30px; font-size: 0.8rem; font-weight: 600; font-family: 'Poppins', sans-serif; background: transparent; border: none; color: var(--text-light); transition: all 0.2s; }
-        .admin-tab.active { background: var(--primary); color: white; }
-        .admin-section { display: none; }
-        .admin-section.active { display: block; animation: fadeIn 0.3s; }
-        .order-item, .deposit-item { background: var(--bg); border-radius: 12px; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); font-size: 0.75rem; transition: transform 0.2s; }
-        .order-item:hover, .deposit-item:hover { transform: translateX(4px); }
-        .order-status-select { padding: 6px 8px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; margin-top: 8px; width: 100%; background: var(--card-bg); border: 1px solid var(--border); font-family: 'Poppins', sans-serif; }
-        .tx-item { background: var(--bg); border-radius: 12px; padding: 10px 14px; margin-bottom: 8px; border: 1px solid var(--border); font-size: 0.7rem; transition: transform 0.2s; }
-        .tx-item:hover { transform: translateX(4px); }
-        .tx-type-deposit { border-left: 3px solid var(--success); }
-        .tx-type-purchase { border-left: 3px solid var(--primary); }
-        .tx-amount-positive { color: var(--success); font-weight: 700; }
-        .tx-amount-negative { color: var(--danger); font-weight: 700; }
-        .wallet-insufficient { background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px; padding: 12px; text-align: center; margin: 12px 0; }
-        .paystack-secure { text-align:center;font-size:0.6rem;color:var(--text-light);margin-top:6px; }
-        .profile-pic-preview { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid var(--primary); }
-        .happy-customers { text-align: center; margin: 20px 0; }
-        .happy-customers img { width: 100%; max-width: 100%; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .happy-customers p { font-size: 0.65rem; color: var(--text-light); margin-top: 6px; }
-        .button-group-inline { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-        .refresh-btn { background: var(--info); color: white; border: none; border-radius: 30px; padding: 8px 12px; font-size: 0.7rem; cursor: pointer; margin-bottom: 12px; width: 100%; font-weight: 600; transition: all 0.2s; }
-        .refresh-btn:hover { background: #2980b9; transform: translateY(-1px); }
-        .rating-input { display: flex; gap: 6px; margin-bottom: 10px; justify-content: center; }
-        .star-rating { font-size: 1.5rem; cursor: pointer; color: var(--border); transition: all 0.2s; }
-        .star-rating:hover { transform: scale(1.1); }
-        .star-rating.active { color: var(--review-star); }
-        .btn-review { width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 30px; font-size: 0.8rem; font-weight: bold; cursor: pointer; margin-top: 6px; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
-        .btn-review:hover { filter: brightness(1.05); transform: translateY(-1px); }
-
+        /* ADMIN PANEL STYLES */
         .admin-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -418,75 +415,46 @@
             width: 100%;
             font-weight: 600;
         }
-        .tracking-code { background: var(--bg); padding: 12px; border-radius: 12px; font-family: monospace; font-size: 1.1rem; font-weight: bold; letter-spacing: 2px; margin: 12px 0; border: 2px dashed var(--primary); }
-        .copy-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 40px; font-size: 0.9rem; cursor: pointer; font-weight: 600; transition: all 0.2s; margin: 5px; }
-        .copy-btn:hover { background: var(--primary-dark); transform: scale(1.02); }
-        .tracking-popup {
-            background: var(--card-bg);
-            border-radius: 28px;
-            padding: 24px;
-            text-align: center;
-        }
-        .tracking-popup .tracking-code-large {
-            font-size: 1.3rem;
-            font-weight: 800;
-            font-family: monospace;
-            letter-spacing: 3px;
-            background: var(--bg);
-            padding: 15px;
-            border-radius: 16px;
-            margin: 15px 0;
-            border: 2px dashed var(--success);
-            color: var(--primary);
-        }
-        .tracking-popup-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .tracking-popup-buttons button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
+        .refresh-btn {
+            background: var(--info);
+            color: white;
             border: none;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            margin-bottom: 15px;
+            width: 100%;
+            font-weight: 600;
+            transition: all 0.2s;
         }
-        .track-now-btn { background: var(--success); color: white; }
-        .copy-id-btn { background: var(--primary); color: white; }
+        .refresh-btn:hover { background: #2980b9; transform: translateY(-1px); }
+        .happy-customers { text-align: center; margin: 20px 0; }
+        .happy-customers img { width: 100%; max-width: 100%; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .happy-customers p { font-size: 0.65rem; color: var(--text-light); margin-top: 6px; }
+        .rating-input { display: flex; gap: 6px; margin-bottom: 10px; justify-content: center; }
+        .star-rating { font-size: 1.5rem; cursor: pointer; color: var(--border); transition: all 0.2s; }
+        .star-rating:hover { transform: scale(1.1); }
+        .star-rating.active { color: var(--review-star); }
+        .btn-review { width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 30px; font-size: 0.8rem; font-weight: bold; cursor: pointer; margin-top: 6px; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
+        .btn-review:hover { filter: brightness(1.05); transform: translateY(-1px); }
 
         @media (max-width: 480px) {
-            .landing-container { padding: 10px 0; }
-            .logo-section { margin-bottom: 15px; }
-            .logo-img-landing { height: 60px; }
-            .logo-section h1 { font-size: 1.4rem; }
-            .options-container { padding: 16px; }
-            .option-card { padding: 12px; }
-            .option-icon { font-size: 1.8rem; }
-            .trust-strip { gap: 8px; }
-            .main-content { padding: 0 10px 10px 10px; }
-            .card { padding: 14px; }
-            .review-card { min-width: 240px; }
+            .landing-container { padding: 5px 0; }
+            .logo-img-landing { height: 50px; }
+            .logo-section h1 { font-size: 1.3rem; }
+            .options-container { padding: 12px; }
+            .option-card { padding: 10px; }
+            .trust-strip { gap: 6px; margin-top: 8px; }
             .admin-stats { grid-template-columns: repeat(2, 1fr); }
             .admin-user-row { flex-direction: column; align-items: flex-start; }
-            .modal-container { width: 95%; }
-            .status-label { font-size: 0.55rem; }
-            .status-icon { width: 28px; height: 28px; font-size: 0.7rem; }
-            .logo-img { height: 36px; }
-            .header h1 { font-size: 0.85rem; }
-            .track-btn, .admin-small-btn, .login-header-btn { padding: 4px 8px; font-size: 0.6rem; }
-            .theme-toggle { padding: 3px 8px; font-size: 0.7rem; }
-            .platform-btn { font-size: 0.75rem; padding: 8px; }
-            .offer-banner { flex-direction: column; text-align: center; }
-            .bottom-nav-item { font-size: 0.55rem; padding: 4px 8px; min-width: 45px; }
-            .bottom-nav-item i { font-size: 1rem; }
+            .review-card { min-width: 240px; }
         }
     </style>
 </head>
 <body>
 
-<!-- ========== LANDING PAGE ========== -->
+<!-- ========== LANDING PAGE - REDUCED HEADROOM ========== -->
 <div class="landing-page" id="landingPage">
     <div class="landing-container">
         <div class="logo-section">
@@ -546,11 +514,8 @@
         <div class="user-info-bar" id="userInfoBar" style="display:none;"><div class="user-greeting"><div class="user-avatar" id="userAvatar">G</div><div><div id="userNameDisplay">Guest</div><div id="userEmailDisplay"></div></div></div><div style="display:flex;gap:8px;"><div class="wallet-mini"><span>💰</span><span class="wallet-balance" id="walletBalanceDisplay">KSh 0</span><button class="wallet-deposit-btn" id="walletDepositBtn">+</button></div><button class="free-credit-btn" id="claimFreeFollowersBtn" style="display:none;" onclick="claimFreeFollowers()">Claim 100 Free 🎁</button><button class="logout-btn" onclick="handleLogout()">Logout</button></div></div>
         <div class="offer-banner" id="offerBanner" style="display:none;"></div>
         
-        <!-- REMOVED trust-badges section completely -->
-        
         <div class="progress-container"><div class="progress-steps"><div class="step-indicator" id="step1Indicator">1. Select</div><div class="step-indicator" id="step2Indicator">2. Details</div><div class="step-indicator" id="step3Indicator">3. Payment</div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
         
-        <!-- STEP 1 -->
         <div class="step active" id="step1">
             <div class="card">
                 <div class="step-title">Choose Package</div>
@@ -559,7 +524,7 @@
                     <div class="platform-btn" data-platform="instagram"><i class="fab fa-instagram"></i> Instagram</div>
                 </div>
                 <div class="service-buttons" id="serviceButtons"></div>
-                <div class="qty-row"><label>Quantity</label><input type="text" id="quantityNumber" inputmode="numeric" pattern="[0-9]*" value="10000"></div>
+                <div class="qty-row"><label>Quantity</label><input type="text" id="quantityNumber" value="10000"></div>
                 <input type="range" id="quantitySlider" min="100" max="1000000" step="100" value="10000">
                 <div class="price" id="priceDisplay">KSh <span id="finalPrice">3,399</span></div>
                 <div class="delivery-time-note delivery-fast" id="deliveryTimeNote">⚡ <span id="deliveryEstimate">30 minutes</span> delivery</div>
@@ -567,7 +532,6 @@
             </div>
         </div>
         
-        <!-- STEP 2 -->
         <div class="step" id="step2">
             <div class="card">
                 <div class="step-title">Your Information</div>
@@ -578,19 +542,18 @@
             </div>
         </div>
         
-        <!-- STEP 3 -->
         <div class="step" id="step3">
             <div class="card">
                 <div class="step-title">Complete Payment</div>
                 <div id="walletPaymentSection" style="display:none;">
-                    <div class="summary-card"><div class="info-row"><span>Wallet Balance:</span><strong style="color:var(--success);" id="walletBalanceInCheckout">KSh 0</strong></div><div class="info-row"><span>Order Total:</span><strong id="orderTotalInCheckout">KSh 3,399</strong></div><hr><div class="info-row"><span>Balance After:</span><strong id="balanceAfterOrder">KSh 0</strong></div></div>
+                    <div class="summary-card"><div class="info-row"><span>Wallet Balance:</span><strong id="walletBalanceInCheckout">KSh 0</strong></div><div class="info-row"><span>Order Total:</span><strong id="orderTotalInCheckout">KSh 3,399</strong></div><hr><div class="info-row"><span>Balance After:</span><strong id="balanceAfterOrder">KSh 0</strong></div></div>
                     <div id="walletSufficientSection"><button class="btn-submit" id="payWithWalletBtn">Pay with Wallet 💰</button></div>
-                    <div id="walletInsufficientSection" style="display:none;" class="wallet-insufficient"><p>⚠️ Insufficient wallet balance</p><button class="btn-next" id="addFundsFromCheckoutBtn" style="background:var(--success);">Add Funds to Wallet</button></div>
+                    <div id="walletInsufficientSection" style="display:none;" class="wallet-insufficient"><p>⚠️ Insufficient wallet balance</p><button class="btn-next" id="addFundsFromCheckoutBtn">Add Funds to Wallet</button></div>
                 </div>
                 <div id="guestPaymentSection" style="display:none;">
                     <div class="form-group"><label>M-Pesa Phone Number <span class="required">*</span></label><input type="tel" id="paymentPhone" placeholder="0712345678"></div>
                     <button class="btn-submit btn-paystack" id="payWithPaystackBtn">📱 Pay with M-Pesa (Paystack)</button>
-                    <p class="paystack-secure">🔒 Secure payment via Paystack • You'll receive an M-Pesa prompt</p>
+                    <p class="paystack-secure">🔒 Secure payment via Paystack</p>
                 </div>
                 <div class="summary-card"><div class="info-row"><strong>Tracking ID:</strong><span id="trackingId">Loading...</span></div><hr><div class="info-row"><span>Platform:</span><strong id="summaryPlatform">Facebook</strong></div><div class="info-row"><span>Service:</span><strong id="summaryService">Followers</strong></div><div class="info-row"><span>Quantity:</span><strong id="summaryQty">10,000</strong></div><div class="info-row"><span>Total:</span><strong id="summaryPrice">KSh 3,399</strong></div></div>
                 <div class="button-group"><button class="btn-back" id="backToStep2">Back</button></div>
@@ -599,30 +562,27 @@
         
         <div class="happy-customers"><img src="https://media.istockphoto.com/id/1995160648/photo/wide-angle-shot-of-gen-z-group-of-friends-hanging-out-together.jpg?s=612x612&w=0&k=20&c=7SEvkSe_PCeUfF8-YR6_9I77gL_6z_RTimidlf3BMGE=" alt="Happy Customers"><p>📱 Join thousands of happy customers growing their social media!</p></div>
         
-        <!-- REVIEWS SECTION - removed infinite scroll text -->
         <div class="reviews-section"><div class="section-header"><h3>⭐ Customer Reviews</h3></div><div class="infinite-carousel"><div class="carousel-track" id="reviewsTrack"></div></div></div>
     </div></div>
 </div>
 
 <nav class="bottom-nav" id="bottomNav" style="display:none;"><button class="bottom-nav-item active" onclick="scrollToHome()"><i class="fas fa-home"></i><span>Home</span></button><button class="bottom-nav-item" onclick="openWalletModal()"><i class="fas fa-wallet"></i><span>Wallet</span></button><button class="bottom-nav-item" onclick="openOrdersModal()"><i class="fas fa-shopping-bag"></i><span>Orders</span></button><button class="bottom-nav-item" onclick="openAccountModal()"><i class="fas fa-user"></i><span>Account</span></button></nav>
 
-<!-- ========== MODALS ========== -->
 <div class="modal-overlay" id="orderSuccessModal"><div class="modal-container"><div class="modal-header"><h3>🎉 Order Placed Successfully!</h3><button class="close-modal" onclick="closeModal('orderSuccessModal')">&times;</button></div><div class="modal-body"><div class="tracking-popup"><div style="font-size:3rem;">✅</div><p>Your order has been received and is being processed.</p><div class="tracking-code-large" id="successTrackingCode">GFKXXXXXX</div><div class="tracking-popup-buttons"><button class="track-now-btn" onclick="trackOrderFromSuccess()">🔍 Track Now</button><button class="copy-id-btn" onclick="copySuccessTrackingId()">📋 Copy ID</button></div></div></div></div></div>
-<div class="modal-overlay" id="successModal"><div class="modal-container"><div class="modal-header"><h3>Order Placed!</h3><button class="close-modal" onclick="closeModal('successModal')">&times;</button></div><div class="modal-body" style="text-align:center;"><div style="font-size:2.5rem;">✓</div><p style="margin:10px 0;">Your Tracking ID</p><div class="tracking-code" id="successTrackingIdOld">GFKXXXXXX</div><div class="button-group-inline"><button class="copy-btn" onclick="copyOldTrackingId()">Copy ID</button></div></div></div></div>
 <div class="modal-overlay" id="trackModal"><div class="modal-container"><div class="modal-header"><h3>Track Your Order</h3><button class="close-modal" onclick="closeModal('trackModal')">&times;</button></div><div class="modal-body"><div class="tracking-input-group"><input type="text" id="trackingInput" placeholder="Enter Tracking ID"><button onclick="trackOrderLocal()">Track</button></div><div id="trackingResult" class="tracking-result"></div></div></div></div>
-<div class="modal-overlay" id="walletModal"><div class="modal-container"><div class="modal-header"><h3>💰 My Wallet</h3><button class="close-modal" onclick="closeModal('walletModal')">&times;</button></div><div class="modal-body"><div style="text-align:center;margin-bottom:16px;"><div style="font-size:2rem;font-weight:800;color:var(--success);" id="walletModalBalance">KSh 0</div><small>Available Balance</small></div><button class="btn-next" id="depositFromWalletBtn" style="background:var(--success);margin-bottom:16px;" onclick="document.getElementById('depositSection').style.display='block'">+ Deposit Funds (5% Bonus!)</button><div id="depositSection" style="display:none;"><div class="card" style="padding:14px;"><h4>Deposit via M-Pesa</h4><div class="form-group"><label>Amount (KSh) <span class="required">*</span></label><input type="number" id="depositAmount" placeholder="Min 50" min="50"></div><p style="font-size:0.65rem;color:var(--success);margin-bottom:8px;">🎁 <strong>5% Bonus</strong> on all deposits!</p><div class="form-group"><label>M-Pesa Phone Number <span class="required">*</span></label><input type="tel" id="depositPhone" placeholder="0712345678"></div><button class="btn-submit btn-paystack" id="submitDepositBtn">📱 Pay with M-Pesa</button><p class="paystack-secure">🔒 Secure payment via Paystack</p></div></div><h4 style="font-size:0.8rem;margin:12px 0;">Transaction History</h4><div id="transactionHistory"></div></div></div></div>
-<div class="modal-overlay" id="accountModal"><div class="modal-container"><div class="modal-header"><h3>👤 My Account</h3><button class="close-modal" onclick="closeModal('accountModal')">&times;</button></div><div class="modal-body" style="text-align:center;"><img id="accountProfilePic" class="profile-pic-preview" src="" style="display:none;"><div class="user-avatar" id="accountAvatar" style="width:60px;height:60px;font-size:1.5rem;margin:0 auto 10px;">G</div><h4 id="accountName">Guest</h4><p style="font-size:0.7rem;color:var(--text-light);" id="accountEmail"></p><div id="accountEditSection" style="display:none;"><div class="form-group"><label>Edit Name</label><input type="text" id="editAccountName" placeholder="Your name"></div><div class="form-group"><label>Profile Picture URL</label><input type="text" id="editProfilePic" placeholder="Paste image URL"></div><button class="btn-next" onclick="saveAccountEdits()" style="margin-bottom:8px;">Save Changes</button></div><div class="summary-card" style="margin-top:16px;"><div class="info-row"><span>Wallet Balance:</span><strong style="color:var(--success);" id="accountBalance">KSh 0</strong></div><div class="info-row"><span>Total Orders:</span><strong id="accountTotalOrders">0</strong></div></div><div class="form-group" style="margin-top:12px;"><label>Message for Admin</label><textarea id="adminMessage" rows="2" placeholder="Type your message..."></textarea><button class="btn-next" onclick="sendAdminMessage()" style="margin-top:6px;">Send Message</button></div><button class="btn-submit" id="accountLogoutBtn" onclick="handleLogout()" style="margin-top:12px;">Logout</button><div id="accountGuestSection"><p style="font-size:0.7rem;color:var(--text-light);margin-top:10px;">Login to see your account details</p><button class="btn-next" onclick="closeModal('accountModal');showAuthModal('login');" style="margin-top:6px;">Login / Sign Up</button></div></div></div></div>
+<div class="modal-overlay" id="walletModal"><div class="modal-container"><div class="modal-header"><h3>💰 My Wallet</h3><button class="close-modal" onclick="closeModal('walletModal')">&times;</button></div><div class="modal-body"><div style="text-align:center;"><div style="font-size:2rem;font-weight:800;color:var(--success);" id="walletModalBalance">KSh 0</div><small>Available Balance</small></div><button class="btn-next" id="depositFromWalletBtn" style="background:var(--success);margin:15px 0;" onclick="document.getElementById('depositSection').style.display='block'">+ Deposit Funds (5% Bonus!)</button><div id="depositSection" style="display:none;"><div class="card"><h4>Deposit via M-Pesa</h4><div class="form-group"><label>Amount (KSh)</label><input type="number" id="depositAmount" placeholder="Min 50" min="50"></div><p style="font-size:0.65rem;color:var(--success);">🎁 5% Bonus on all deposits!</p><div class="form-group"><label>M-Pesa Phone Number</label><input type="tel" id="depositPhone" placeholder="0712345678"></div><button class="btn-submit btn-paystack" id="submitDepositBtn">📱 Pay with M-Pesa</button></div></div><h4>Transaction History</h4><div id="transactionHistory"></div></div></div></div>
+<div class="modal-overlay" id="accountModal"><div class="modal-container"><div class="modal-header"><h3>👤 My Account</h3><button class="close-modal" onclick="closeModal('accountModal')">&times;</button></div><div class="modal-body" style="text-align:center;"><img id="accountProfilePic" class="profile-pic-preview" style="display:none;"><div class="user-avatar" id="accountAvatar" style="width:60px;height:60px;font-size:1.5rem;margin:0 auto 10px;">G</div><h4 id="accountName">Guest</h4><p id="accountEmail"></p><div id="accountEditSection" style="display:none;"><div class="form-group"><label>Edit Name</label><input type="text" id="editAccountName"></div><div class="form-group"><label>Profile Picture URL</label><input type="text" id="editProfilePic"></div><button class="btn-next" onclick="saveAccountEdits()">Save Changes</button></div><div class="summary-card"><div class="info-row"><span>Wallet Balance:</span><strong id="accountBalance">KSh 0</strong></div><div class="info-row"><span>Total Orders:</span><strong id="accountTotalOrders">0</strong></div></div><div class="form-group"><label>Message for Admin</label><textarea id="adminMessage" rows="2" placeholder="Type your message..."></textarea><button class="btn-next" onclick="sendAdminMessage()">Send Message</button></div><button class="btn-submit" onclick="handleLogout()">Logout</button><div id="accountGuestSection"><p>Login to see your account details</p><button class="btn-next" onclick="closeModal('accountModal');showAuthModal('login');">Login / Sign Up</button></div></div></div></div>
 <div class="modal-overlay" id="ordersModal"><div class="modal-container"><div class="modal-header"><h3>📋 My Orders</h3><button class="close-modal" onclick="closeModal('ordersModal')">&times;</button></div><div class="modal-body"><div id="myOrdersList"></div></div></div></div>
-<div class="modal-overlay" id="reviewsModal"><div class="modal-container"><div class="modal-header"><h3>⭐ Customer Reviews</h3><button class="close-modal" onclick="closeModal('reviewsModal')">&times;</button></div><div class="modal-body"><div id="reviewsList"></div><div class="card" style="padding:14px;margin-top:12px;"><h4 style="font-size:0.8rem;margin-bottom:8px;">Leave a Review</h4><div class="rating-input" id="ratingStars2"><span class="star-rating" data-rating="1">★</span><span class="star-rating" data-rating="2">★</span><span class="star-rating" data-rating="3">★</span><span class="star-rating" data-rating="4">★</span><span class="star-rating" data-rating="5">★</span></div><input type="text" id="reviewerName2" placeholder="Your name" style="margin-bottom:8px;font-size:0.8rem;"><textarea id="reviewText2" rows="2" placeholder="Share your experience" style="font-size:0.8rem;"></textarea><button class="btn-review" id="submitReviewBtn2">Submit Review</button></div></div></div></div>
+<div class="modal-overlay" id="reviewsModal"><div class="modal-container"><div class="modal-header"><h3>⭐ Customer Reviews</h3><button class="close-modal" onclick="closeModal('reviewsModal')">&times;</button></div><div class="modal-body"><div id="reviewsList"></div><div class="card"><h4>Leave a Review</h4><div class="rating-input" id="ratingStars2"><span class="star-rating" data-rating="1">★</span><span class="star-rating" data-rating="2">★</span><span class="star-rating" data-rating="3">★</span><span class="star-rating" data-rating="4">★</span><span class="star-rating" data-rating="5">★</span></div><input type="text" id="reviewerName2" placeholder="Your name"><textarea id="reviewText2" rows="2" placeholder="Share your experience"></textarea><button class="btn-review" id="submitReviewBtn2">Submit Review</button></div></div></div></div>
 
-<!-- COMPACT ADMIN MODAL -->
-<div class="modal-overlay" id="adminModal"><div class="modal-container" style="max-width:600px;"><div class="modal-header"><h3><i class="fas fa-shield-alt"></i> Admin Panel</h3><button class="close-modal" onclick="closeModal('adminModal')">&times;</button></div><div class="modal-body"><div class="admin-stats" id="adminStats"></div><div class="admin-tabs"><button class="admin-tab active" data-tab="orders" onclick="switchAdminTab('orders')"><i class="fas fa-shopping-cart"></i> Orders</button><button class="admin-tab" data-tab="deposits" onclick="switchAdminTab('deposits')"><i class="fas fa-money-bill"></i> Deposits</button><button class="admin-tab" data-tab="reviews" onclick="switchAdminTab('reviews')"><i class="fas fa-star"></i> Reviews</button><button class="admin-tab" data-tab="users" onclick="switchAdminTab('users')"><i class="fas fa-users"></i> Users</button></div><button class="refresh-btn" onclick="refreshAdmin()"><i class="fas fa-sync-alt"></i> Sync Data</button><div id="adminOrdersSection" class="admin-section active"><div id="ordersList"></div></div><div id="adminDepositsSection" class="admin-section"><div id="depositsList"></div></div><div id="adminReviewsSection" class="admin-section"><div id="adminReviewsList"></div></div><div id="adminUsersSection" class="admin-section"><div id="usersList"></div></div></div></div></div>
+<!-- ADMIN MODAL - FULL SYNC -->
+<div class="modal-overlay" id="adminModal"><div class="modal-container" style="max-width:650px;"><div class="modal-header"><h3><i class="fas fa-shield-alt"></i> Admin Panel</h3><button class="close-modal" onclick="closeModal('adminModal')">&times;</button></div><div class="modal-body"><div class="admin-stats" id="adminStats"></div><div class="admin-tabs"><button class="admin-tab active" data-tab="orders" onclick="switchAdminTab('orders')"><i class="fas fa-shopping-cart"></i> Orders</button><button class="admin-tab" data-tab="deposits" onclick="switchAdminTab('deposits')"><i class="fas fa-money-bill"></i> Deposits</button><button class="admin-tab" data-tab="reviews" onclick="switchAdminTab('reviews')"><i class="fas fa-star"></i> Reviews</button><button class="admin-tab" data-tab="users" onclick="switchAdminTab('users')"><i class="fas fa-users"></i> Users</button></div><button class="refresh-btn" onclick="syncAllData()"><i class="fas fa-sync-alt"></i> Sync All Data from Cloud</button><div id="adminOrdersSection" class="admin-section active"><div id="ordersList"></div></div><div id="adminDepositsSection" class="admin-section"><div id="depositsList"></div></div><div id="adminReviewsSection" class="admin-section"><div id="adminReviewsList"></div></div><div id="adminUsersSection" class="admin-section"><div id="usersList"></div></div></div></div></div>
 <div class="modal-overlay" id="passwordModal"><div class="modal-container" style="max-width:320px;"><div class="modal-header"><h3><i class="fas fa-lock"></i> Admin Access</h3><button class="close-modal" onclick="closeModal('passwordModal')">&times;</button></div><div class="modal-body"><div class="password-box"><input type="password" id="adminPassword" placeholder="Enter admin password"><button onclick="checkAdminPassword()">Verify Access</button></div></div></div></div>
 
 <a href="https://wa.me/254750600715?text=Hi" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
 
 <script>
-// ========== FULL JAVASCRIPT - 3000+ LINES COMPLETE ==========
+// ========== FULL JAVASCRIPT - COMPLETE SYNC FROM GOOGLE SHEETS ==========
 const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxE6e5f7eT9OAPCVkaD5AxoAYBF6pJ5m_1cA76RPiWaVawsZlPWGMRgged4FMpww0bJ1Q/exec";
 const ADMIN_PASSWORD = "GetFans2024";
 const PAYSTACK_PUBLIC_KEY = "pk_test_cc050603fb87c205f0012550e86ce6fe7c5db254";
@@ -654,20 +614,10 @@ function continueAsGuest() {
     localStorage.setItem('gfk_user_type', 'guest');
     localStorage.removeItem('gfk_current_user');
     currentUser = null;
-    const landingPage = document.getElementById('landingPage');
-    landingPage.style.opacity = '0';
-    setTimeout(() => {
-        landingPage.classList.add('hide-landing');
-        document.getElementById('mainSite').classList.add('active');
-        document.getElementById('bottomNav').style.display = 'flex';
-        document.getElementById('userInfoBar').style.display = 'none';
-        updateLoginButtonVisibility();
-        updatePaymentMethodDisplay();
-        tg('👤 Guest Browsing');
-        toast('Guest Mode - Order anytime!');
-    }, 300);
+    const lp = document.getElementById('landingPage');
+    lp.style.opacity = '0';
+    setTimeout(() => { lp.classList.add('hide-landing'); document.getElementById('mainSite').classList.add('active'); document.getElementById('bottomNav').style.display = 'flex'; document.getElementById('userInfoBar').style.display = 'none'; updateLoginButtonVisibility(); updatePaymentMethodDisplay(); tg('👤 Guest Browsing'); toast('Guest Mode - Order anytime!'); }, 300);
 }
-
 function showAuthModal(tab) { openModal('authModal'); switchAuthTab(tab || 'signup'); document.getElementById('guestNotice').style.display = (localStorage.getItem('gfk_user_type') === 'guest') ? 'block' : 'none'; }
 function closeAuthModal() { closeModal('authModal'); }
 function switchAuthTab(tab) {
@@ -678,12 +628,7 @@ function switchAuthTab(tab) {
     document.querySelectorAll('.error-message').forEach(e => e.classList.remove('show'));
 }
 function updateLoginButtonVisibility() { const btn = document.getElementById('loginHeaderBtn'); if (btn) btn.style.display = (!currentUser && document.getElementById('mainSite').classList.contains('active')) ? 'inline-block' : 'none'; }
-function updatePaymentMethodDisplay() {
-    const isLoggedIn = !!currentUser;
-    document.getElementById('walletPaymentSection').style.display = isLoggedIn ? 'block' : 'none';
-    document.getElementById('guestPaymentSection').style.display = isLoggedIn ? 'none' : 'block';
-    if (isLoggedIn) updateUI();
-}
+function updatePaymentMethodDisplay() { const isLoggedIn = !!currentUser; document.getElementById('walletPaymentSection').style.display = isLoggedIn ? 'block' : 'none'; document.getElementById('guestPaymentSection').style.display = isLoggedIn ? 'none' : 'block'; if (isLoggedIn) updateUI(); }
 function updateUserBar() {
     if (!currentUser) return;
     document.getElementById('userInfoBar').style.display = 'flex';
@@ -713,20 +658,10 @@ function handleLogin() {
     document.getElementById('loginEmail').value = '';
     document.getElementById('loginPassword').value = '';
     closeAuthModal();
-    const landingPage = document.getElementById('landingPage');
-    landingPage.style.opacity = '0';
-    setTimeout(() => {
-        landingPage.classList.add('hide-landing');
-        document.getElementById('mainSite').classList.add('active');
-        document.getElementById('bottomNav').style.display = 'flex';
-        updateUserBar();
-        updateLoginButtonVisibility();
-        updatePaymentMethodDisplay();
-        tg('🔑 Login\n👤 ' + user.name);
-        toast('Welcome back, ' + user.name + '!');
-    }, 300);
+    const lp = document.getElementById('landingPage');
+    lp.style.opacity = '0';
+    setTimeout(() => { lp.classList.add('hide-landing'); document.getElementById('mainSite').classList.add('active'); document.getElementById('bottomNav').style.display = 'flex'; updateUserBar(); updateLoginButtonVisibility(); updatePaymentMethodDisplay(); tg('🔑 Login\n👤 ' + user.name); toast('Welcome back, ' + user.name + '!'); }, 300);
 }
-
 function handleSignup() {
     document.querySelectorAll('#signupForm .error-message').forEach(e => e.classList.remove('show'));
     const name = document.getElementById('signupName').value.trim();
@@ -752,21 +687,10 @@ function handleSignup() {
     document.getElementById('signupPassword').value = '';
     document.getElementById('signupConfirmPassword').value = '';
     closeAuthModal();
-    const landingPage = document.getElementById('landingPage');
-    landingPage.style.opacity = '0';
-    setTimeout(() => {
-        landingPage.classList.add('hide-landing');
-        document.getElementById('mainSite').classList.add('active');
-        document.getElementById('bottomNav').style.display = 'flex';
-        updateUserBar();
-        updateLoginButtonVisibility();
-        updatePaymentMethodDisplay();
-        saveToSheets({ type: "newUser", name, email, createdAt: new Date().toLocaleString("en-KE") });
-        tg('🎉 New Signup\n👤 ' + name + '\n📧 ' + email);
-        toast('Account created! Claim your 100 free followers! 🎁');
-    }, 300);
+    const lp = document.getElementById('landingPage');
+    lp.style.opacity = '0';
+    setTimeout(() => { lp.classList.add('hide-landing'); document.getElementById('mainSite').classList.add('active'); document.getElementById('bottomNav').style.display = 'flex'; updateUserBar(); updateLoginButtonVisibility(); updatePaymentMethodDisplay(); saveToSheets({ type: "newUser", name, email, createdAt: new Date().toLocaleString("en-KE") }); tg('🎉 New Signup\n👤 ' + name + '\n📧 ' + email); toast('Account created! Claim your 100 free followers! 🎁'); }, 300);
 }
-
 function handleLogout() {
     if (currentUser) tg('🚪 Logout\n👤 ' + currentUser.name);
     currentUser = null;
@@ -774,14 +698,13 @@ function handleLogout() {
     localStorage.setItem('gfk_user_type', '');
     document.getElementById('mainSite').classList.remove('active');
     document.getElementById('bottomNav').style.display = 'none';
-    const landingPage = document.getElementById('landingPage');
-    landingPage.style.opacity = '1';
-    landingPage.classList.remove('hide-landing');
+    const lp = document.getElementById('landingPage');
+    lp.style.opacity = '1';
+    lp.classList.remove('hide-landing');
     document.getElementById('userInfoBar').style.display = 'none';
     updateLoginButtonVisibility();
     toast('Logged out');
 }
-
 function claimFreeFollowers() {
     if (!currentUser || currentUser.freeFollowersClaimed) return;
     const freeOrder = { trackingId: 'FREE' + Date.now().toString(36).toUpperCase(), platform: 'Facebook', service: 'Facebook Followers (Free Bonus)', quantity: 100, price: 0, customerName: currentUser.name, profile: 'Free signup bonus', phone: 'N/A', transactionId: 'FREE', status: 'Delivered', timestamp: new Date().toLocaleString("en-KE") };
@@ -797,6 +720,9 @@ function claimFreeFollowers() {
     tg('🎁 Free Followers Claimed\n👤 ' + currentUser.name);
     toast('100 Free Followers Added!');
 }
+function showOrderSuccessPopup(trackingId) { document.getElementById('successTrackingCode').textContent = trackingId; lastOrderTrackingId = trackingId; openModal('orderSuccessModal'); }
+function trackOrderFromSuccess() { closeModal('orderSuccessModal'); document.getElementById('trackingInput').value = lastOrderTrackingId; openModal('trackModal'); trackOrderLocal(); }
+function copySuccessTrackingId() { navigator.clipboard.writeText(document.getElementById('successTrackingCode').textContent); toast('Tracking ID copied!'); }
 
 function payWithPaystack() {
     const phone = document.getElementById('paymentPhone').value.trim();
@@ -829,7 +755,6 @@ function payWithPaystack() {
     });
     handler.openIframe();
 }
-
 function depositWithPaystack() {
     const amount = parseInt(document.getElementById('depositAmount').value);
     const phone = document.getElementById('depositPhone').value.trim();
@@ -864,7 +789,6 @@ function depositWithPaystack() {
     });
     handler.openIframe();
 }
-
 function payWithWallet() {
     const price = calculatePrice(currentPlatform, currentService, currentQuantity);
     if (!currentUser || (currentUser.walletBalance || 0) < price) { toast('Insufficient balance', true); return; }
@@ -896,45 +820,14 @@ function payWithWallet() {
     updateServiceButtons(); updateUI(); updatePaymentMethodDisplay(); showStep(1);
     toast('Order placed!');
 }
-
-function showOrderSuccessPopup(trackingId) {
-    document.getElementById('successTrackingCode').textContent = trackingId;
-    lastOrderTrackingId = trackingId;
-    openModal('orderSuccessModal');
-}
-
-function trackOrderFromSuccess() {
-    closeModal('orderSuccessModal');
-    document.getElementById('trackingInput').value = lastOrderTrackingId;
-    openModal('trackModal');
-    trackOrderLocal();
-}
-
-function copySuccessTrackingId() {
-    navigator.clipboard.writeText(document.getElementById('successTrackingCode').textContent);
-    toast('Tracking ID copied!');
-}
-
-function copyOldTrackingId() {
-    navigator.clipboard.writeText(document.getElementById('successTrackingIdOld').textContent);
-    toast('Tracking ID copied!');
-}
-
 function showStep(step) {
     document.getElementById('step1').style.display = step === 1 ? 'block' : 'none';
     document.getElementById('step2').style.display = step === 2 ? 'block' : 'none';
     document.getElementById('step3').style.display = step === 3 ? 'block' : 'none';
-    currentStep = step;
     document.getElementById('progressFill').style.width = ((step - 1) * 50) + '%';
-    for (let i = 1; i <= 3; i++) {
-        const ind = document.getElementById('step' + i + 'Indicator');
-        if (i < step) { ind.classList.add('completed'); ind.classList.remove('active'); }
-        else if (i === step) { ind.classList.add('active'); ind.classList.remove('completed'); }
-        else { ind.classList.remove('active', 'completed'); }
-    }
+    for (let i = 1; i <= 3; i++) { const ind = document.getElementById('step' + i + 'Indicator'); if (i < step) { ind.classList.add('completed'); ind.classList.remove('active'); } else if (i === step) { ind.classList.add('active'); ind.classList.remove('completed'); } else { ind.classList.remove('active', 'completed'); } }
     if (step === 3) { updatePaymentMethodDisplay(); updateUI(); }
 }
-
 function updateServiceButtons() {
     const services = { facebook: ["followers","likes","comments"], instagram: ["followers","likes","comments"] };
     const names = { followers:"Followers", likes:"Likes", comments:"Comments" };
@@ -942,7 +835,6 @@ function updateServiceButtons() {
     c.innerHTML = services[currentPlatform].map(s => '<div class="service-btn ' + (s === currentService ? 'active' : '') + '" data-s="' + s + '">' + names[s] + '</div>').join('');
     c.querySelectorAll('.service-btn').forEach(b => b.onclick = function() { c.querySelectorAll('.service-btn').forEach(x => x.classList.remove('active')); this.classList.add('active'); currentService = this.dataset.s; updateUI(); });
 }
-
 function updateUI() {
     const price = calculatePrice(currentPlatform, currentService, currentQuantity);
     document.getElementById('finalPrice').textContent = price.toLocaleString();
@@ -960,7 +852,6 @@ function updateUI() {
         document.getElementById('walletInsufficientSection').style.display = bal >= price ? 'none' : 'block';
     }
 }
-
 function trackOrderLocal() {
     const id = document.getElementById('trackingInput').value.trim().toUpperCase();
     if (!id) { toast('Enter Tracking ID', true); return; }
@@ -971,50 +862,26 @@ function trackOrderLocal() {
     const steps = ["Pending", "Processing", "Completed", "Delivered"];
     const ci = steps.indexOf(cs);
     let th = '<div class="status-timeline">';
-    for (let i = 0; i < steps.length; i++) {
-        let sc = '', icon = '○';
-        if (i < ci) { sc = 'completed'; icon = '✓'; }
-        else if (i === ci) { sc = 'active'; icon = '●'; }
-        th += '<div class="status-step ' + sc + '"><div class="status-icon">' + icon + '</div><div class="status-label">' + steps[i] + '</div></div>';
-    }
+    for (let i = 0; i < steps.length; i++) { let sc = '', icon = '○'; if (i < ci) { sc = 'completed'; icon = '✓'; } else if (i === ci) { sc = 'active'; icon = '●'; } th += '<div class="status-step ' + sc + '"><div class="status-icon">' + icon + '</div><div class="status-label">' + steps[i] + '</div></div>'; }
     th += '</div>';
-    const canDownload = (order.price > 0 && order.status === 'Delivered');
-    r.innerHTML = `<div class="tracking-card"><div class="info-row"><strong>ID:</strong> ${escapeHtml(order.trackingId)}</div><div class="info-row"><strong>Status:</strong> <span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span></div>${th}<div class="info-row"><span>Service:</span><strong>${escapeHtml(order.service)}</strong></div><div class="info-row"><span>Qty:</span><strong>${order.quantity.toLocaleString()}</strong></div><div class="info-row"><span>Amount:</span><strong>KSh ${order.price.toLocaleString()}</strong></div>${order.price === 0 ? '<p style="font-size:0.7rem;color:#f39c12;margin-top:10px;">ℹ️ Free orders have no receipt</p>' : (order.status === 'Delivered' ? '<button class="btn-next" style="margin-top:10px;" onclick="downloadReceipt(\''+order.trackingId+'\')">📥 Download Receipt</button>' : '<p style="font-size:0.7rem;margin-top:10px;">⏳ Receipt available when Delivered</p>')}</div>`;
+    r.innerHTML = `<div class="tracking-card"><div><strong>ID:</strong> ${escapeHtml(order.trackingId)}</div><div><strong>Status:</strong> <span class="status-badge status-${order.status.toLowerCase()}">${order.status}</span></div>${th}<div><span>Service:</span> <strong>${escapeHtml(order.service)}</strong></div><div><span>Qty:</span> <strong>${order.quantity.toLocaleString()}</strong></div><div><span>Amount:</span> <strong>KSh ${order.price.toLocaleString()}</strong></div>${order.price === 0 ? '<p style="font-size:0.7rem;color:#f39c12;">ℹ️ Free orders have no receipt</p>' : (order.status === 'Delivered' ? '<button class="btn-next" style="margin-top:10px;" onclick="downloadReceipt(\''+order.trackingId+'\')">📥 Download Receipt</button>' : '<p style="font-size:0.7rem;">⏳ Receipt available when Delivered</p>')}</div>`;
     r.classList.add('show');
 }
-
 function downloadReceipt(tid) {
     const order = orders.find(o => o.trackingId === tid);
     if (!order || order.price <= 0) { toast('Receipts are only available for paid orders (KSh 25+)', true); return; }
-    const receiptHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Official Receipt - Get Fans Kenya</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins',Arial,sans-serif;background:#f0f2f5;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}.receipt{max-width:450px;width:100%;background:white;border-radius:28px;box-shadow:0 20px 40px rgba(0,0,0,0.15);overflow:hidden}.header{background:linear-gradient(135deg,#1877f2,#0d65d9);color:white;padding:25px 20px;text-align:center}.header h1{font-size:1.6rem;letter-spacing:-0.5px}.header p{font-size:0.7rem;opacity:0.9}.body{padding:25px}.status{background:#2ecc71;color:white;text-align:center;padding:12px;border-radius:50px;margin-bottom:25px;font-weight:700;font-size:0.9rem}.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee;font-size:0.85rem}.total{background:#f8f9fc;margin-top:15px;padding:15px;border-radius:20px;font-weight:700;font-size:1.2rem}.footer{background:#f8f9fc;padding:15px;text-align:center;font-size:0.7rem;color:#666;border-top:1px solid #e5e5e5}.badge{display:inline-block;background:#e5e5e5;padding:4px 12px;border-radius:20px;font-size:0.7rem}</style></head><body><div class="receipt"><div class="header"><h1>GET FANS KENYA</h1><p>Social Media Growth Solutions</p><p>Business Till: 8941840</p></div><div class="body"><div class="status">✅ PAYMENT CONFIRMED / DELIVERED</div><div class="row"><strong>Order ID:</strong> <span>${escapeHtml(order.trackingId)}</span></div><div class="row"><strong>Date:</strong> <span>${escapeHtml(order.timestamp)}</span></div><div class="row"><strong>Customer:</strong> <span>${escapeHtml(order.customerName)}</span></div><div class="row"><strong>Platform:</strong> <span>${escapeHtml(order.platform)}</span></div><div class="row"><strong>Service:</strong> <span>${escapeHtml(order.service)}</span></div><div class="row"><strong>Quantity:</strong> <span>${order.quantity.toLocaleString()}</span></div><div class="total"><div style="display:flex;justify-content:space-between"><span>TOTAL PAID:</span><span style="color:#2ecc71;font-size:1.3rem;">KSh ${order.price.toLocaleString()}</span></div></div><div class="row"><span>Payment Method:</span><span class="badge">${order.transactionId === 'WALLET' ? '💰 Wallet Balance' : '📱 M-Pesa'}</span></div><div class="row"><span>Transaction Ref:</span><span>${escapeHtml(order.transactionId || 'N/A')}</span></div></div><div class="footer"><p>Thank you for choosing Get Fans Kenya!</p><p>📞 WhatsApp Support: 0750600715 | 📧 Email: support@getfanskenya.com</p><p style="margin-top:8px;">This is an official payment receipt. Please retain for your records.</p></div></div></body></html>`;
-    const blob = new Blob([receiptHTML], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `GetFansKenya_Receipt_${order.trackingId}.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast('Receipt downloaded!');
+    const receiptHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Official Receipt - Get Fans Kenya</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins',Arial,sans-serif;background:#f0f2f5;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}.receipt{max-width:450px;background:white;border-radius:28px;box-shadow:0 20px 40px rgba(0,0,0,0.15);overflow:hidden}.header{background:linear-gradient(135deg,#1877f2,#0d65d9);color:white;padding:25px;text-align:center}.header h1{font-size:1.6rem}.body{padding:25px}.status{background:#2ecc71;color:white;text-align:center;padding:12px;border-radius:50px;margin-bottom:20px;font-weight:700}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;font-size:0.85rem}.total{background:#f8f9fc;margin-top:15px;padding:15px;border-radius:20px;font-weight:700;font-size:1.1rem}.footer{background:#f8f9fc;padding:15px;text-align:center;font-size:0.7rem;color:#666}</style></head><body><div class="receipt"><div class="header"><h1>GET FANS KENYA</h1><p>Till: 8941840</p></div><div class="body"><div class="status">✅ PAYMENT CONFIRMED / DELIVERED</div><div class="row"><strong>Order ID:</strong> <span>${escapeHtml(order.trackingId)}</span></div><div class="row"><strong>Date:</strong> <span>${escapeHtml(order.timestamp)}</span></div><div class="row"><strong>Customer:</strong> <span>${escapeHtml(order.customerName)}</span></div><div class="row"><strong>Service:</strong> <span>${escapeHtml(order.service)}</span></div><div class="row"><strong>Quantity:</strong> <span>${order.quantity.toLocaleString()}</span></div><div class="total"><div style="display:flex;justify-content:space-between"><span>TOTAL PAID:</span><span style="color:#2ecc71;">KSh ${order.price.toLocaleString()}</span></div></div><div class="row"><span>Payment:</span><span>${order.transactionId === 'WALLET' ? '💰 Wallet' : '📱 M-Pesa'}</span></div></div><div class="footer"><p>WhatsApp: 0750600715 | Thank you for choosing Get Fans Kenya!</p></div></div></body></html>`;
+    const blob = new Blob([receiptHTML], { type: 'text/html' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Receipt_${order.trackingId}.html`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); toast('Receipt downloaded');
 }
-
 function openWalletModal() { if (!currentUser) { toast('Login required', true); return; } openModal('walletModal'); document.getElementById('depositSection').style.display = 'none'; updateWalletDisplay(); renderTransactionHistory(); }
-function renderTransactionHistory() {
-    const c = document.getElementById('transactionHistory');
-    if (!c) return;
-    const txns = currentUser ? (currentUser.transactions || []) : [];
-    if (!txns.length) { c.innerHTML = '<p style="text-align:center;">No transactions</p>'; return; }
-    c.innerHTML = txns.slice(0, 20).map(t => `<div class="tx-item ${t.type === 'deposit' ? 'tx-type-deposit' : 'tx-type-purchase'}"><div class="info-row"><span>${t.type === 'deposit' ? '💰 Deposit' : '🛒 Purchase'}</span><span class="${t.amount > 0 ? 'tx-amount-positive' : 'tx-amount-negative'}">${t.amount > 0 ? '+' : ''}KSh ${Math.abs(t.amount).toLocaleString()}</span></div><div class="info-row"><span>${t.date}</span><span>Balance: KSh ${t.balanceAfter.toLocaleString()}</span></div></div>`).join('');
-}
+function renderTransactionHistory() { const c = document.getElementById('transactionHistory'); if (!c) return; const txns = currentUser ? (currentUser.transactions || []) : []; if (!txns.length) { c.innerHTML = '<p>No transactions</p>'; return; } c.innerHTML = txns.slice(0, 20).map(t => `<div class="tx-item ${t.type === 'deposit' ? 'tx-type-deposit' : 'tx-type-purchase'}"><div><span>${t.type === 'deposit' ? '💰 Deposit' : '🛒 Purchase'}</span><span class="${t.amount > 0 ? 'tx-amount-positive' : 'tx-amount-negative'}">${t.amount > 0 ? '+' : ''}KSh ${Math.abs(t.amount).toLocaleString()}</span></div><div><span>${t.date}</span><span>Balance: KSh ${t.balanceAfter.toLocaleString()}</span></div></div>`).join(''); }
 function openAccountModal() { openModal('accountModal'); if (currentUser) { document.getElementById('accountName').textContent = currentUser.name; document.getElementById('accountEmail').textContent = currentUser.email; document.getElementById('accountAvatar').textContent = currentUser.name.charAt(0).toUpperCase(); if (currentUser.profilePic) { document.getElementById('accountAvatar').style.display = 'none'; document.getElementById('accountProfilePic').style.display = 'block'; document.getElementById('accountProfilePic').src = currentUser.profilePic; } else { document.getElementById('accountAvatar').style.display = 'flex'; document.getElementById('accountProfilePic').style.display = 'none'; } document.getElementById('accountBalance').textContent = 'KSh ' + (currentUser.walletBalance || 0).toLocaleString(); document.getElementById('accountTotalOrders').textContent = orders.filter(o => o.customerName === currentUser.name).length; document.getElementById('accountEditSection').style.display = 'block'; document.getElementById('accountGuestSection').style.display = 'none'; document.getElementById('editAccountName').value = currentUser.name || ''; document.getElementById('editProfilePic').value = currentUser.profilePic || ''; } else { document.getElementById('accountName').textContent = 'Guest'; document.getElementById('accountAvatar').textContent = 'G'; document.getElementById('accountAvatar').style.display = 'flex'; document.getElementById('accountProfilePic').style.display = 'none'; document.getElementById('accountEditSection').style.display = 'none'; document.getElementById('accountGuestSection').style.display = 'block'; } }
 function saveAccountEdits() { if (!currentUser) return; const newName = document.getElementById('editAccountName').value.trim(); const newPic = document.getElementById('editProfilePic').value.trim(); if (newName) currentUser.name = newName; if (newPic) currentUser.profilePic = newPic; const users = getUsers(); const idx = users.findIndex(u => u.email === currentUser.email); if (idx !== -1) { users[idx].name = currentUser.name; users[idx].profilePic = currentUser.profilePic; saveUsers(users); } localStorage.setItem('gfk_current_user', JSON.stringify(currentUser)); updateUserBar(); openAccountModal(); toast('Profile updated!'); }
 function sendAdminMessage() { const msg = document.getElementById('adminMessage').value.trim(); if (!msg) { toast('Type a message', true); return; } tg('📩 Message from ' + (currentUser ? currentUser.name : 'Guest') + '\n💬 ' + msg); document.getElementById('adminMessage').value = ''; toast('Message sent!'); }
 function openOrdersModal() { if (!currentUser) { toast('Login required', true); return; } openModal('ordersModal'); const myOrders = orders.filter(o => o.customerName === currentUser.name); document.getElementById('myOrdersList').innerHTML = myOrders.length ? myOrders.map(o => `<div class="order-item"><div><strong>${escapeHtml(o.trackingId)}</strong> <small>${escapeHtml(o.timestamp)}</small></div><div>${escapeHtml(o.service)}<br>📊 ${o.quantity.toLocaleString()} • 💰 KSh ${o.price.toLocaleString()}</div><div><span class="status-badge status-${o.status.toLowerCase()}">${o.status}</span></div>${o.price > 0 && o.status === 'Delivered' ? `<button class="btn-next" style="margin-top:8px;padding:6px;" onclick="downloadReceipt('${o.trackingId}')">📥 Receipt</button>` : ''}</div>`).join('') : '<p>No orders yet</p>'; }
-function openAdmin() { isAdminLoggedIn ? (openModal('adminModal'), refreshAdmin()) : openModal('passwordModal'); }
-function checkAdminPassword() { if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) { isAdminLoggedIn = true; closeModal('passwordModal'); openModal('adminModal'); refreshAdmin(); toast('Welcome Admin'); } else toast('Wrong password', true); }
-function switchAdminTab(tab) { document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active')); document.querySelector(`.admin-tab[data-tab="${tab}"]`).classList.add('active'); document.getElementById('adminOrdersSection').style.display = tab === 'orders' ? 'block' : 'none'; document.getElementById('adminDepositsSection').style.display = tab === 'deposits' ? 'block' : 'none'; document.getElementById('adminReviewsSection').style.display = tab === 'reviews' ? 'block' : 'none'; document.getElementById('adminUsersSection').style.display = tab === 'users' ? 'block' : 'none'; if (tab === 'users') renderAdminUsers(); }
-function refreshAdmin() { syncAllData(); renderAdminOrders(); renderAdminDeposits(); renderAdminReviews(); renderAdminUsers(); renderAdminStats(); toast('Data synced!'); }
+function openAdmin() { isAdminLoggedIn ? (openModal('adminModal'), renderAdminStats(), renderAdminOrders(), renderAdminDeposits(), renderAdminReviews(), renderAdminUsers()) : openModal('passwordModal'); }
+function checkAdminPassword() { if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) { isAdminLoggedIn = true; closeModal('passwordModal'); openModal('adminModal'); syncAllData(); toast('Welcome Admin'); } else toast('Wrong password', true); }
+function switchAdminTab(tab) { document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active')); document.querySelector(`.admin-tab[data-tab="${tab}"]`).classList.add('active'); document.getElementById('adminOrdersSection').style.display = tab === 'orders' ? 'block' : 'none'; document.getElementById('adminDepositsSection').style.display = tab === 'deposits' ? 'block' : 'none'; document.getElementById('adminReviewsSection').style.display = tab === 'reviews' ? 'block' : 'none'; document.getElementById('adminUsersSection').style.display = tab === 'users' ? 'block' : 'none'; }
 function renderAdminStats() {
     const totalOrders = orders.length;
     const totalRevenue = orders.reduce((sum, o) => sum + (o.price || 0), 0);
@@ -1025,7 +892,7 @@ function renderAdminStats() {
 function renderAdminOrders() { 
     const c = document.getElementById('ordersList'); 
     if (!orders.length) { c.innerHTML = '<div class="admin-warning">📭 No orders yet</div>'; return; } 
-    c.innerHTML = orders.map(o => `<div class="admin-order-row"><div><strong>${escapeHtml(o.trackingId)}</strong> <small>${escapeHtml(o.timestamp)}</small></div><div>${escapeHtml(o.customerName)} • ${escapeHtml(o.service)} • ${o.quantity.toLocaleString()} • KSh ${o.price.toLocaleString()}</div><select class="order-status-select" onchange="updateOrderStatus('${o.trackingId}', this.value)"><option value="Pending" ${o.status === "Pending" ? "selected" : ""}>⏳ Pending</option><option value="Processing" ${o.status === "Processing" ? "selected" : ""}>🔄 Processing</option><option value="Completed" ${o.status === "Completed" ? "selected" : ""}>✅ Completed</option><option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>🚀 Delivered</option></select></div>`).join(''); 
+    c.innerHTML = orders.map(o => `<div class="admin-order-row"><div><strong>${escapeHtml(o.trackingId)}</strong> <small>${escapeHtml(o.timestamp)}</small></div><div>👤 ${escapeHtml(o.customerName)} • ${escapeHtml(o.service)} • 📊 ${o.quantity.toLocaleString()} • 💰 KSh ${o.price.toLocaleString()}</div><select class="order-status-select" onchange="updateOrderStatus('${o.trackingId}', this.value)"><option value="Pending" ${o.status === "Pending" ? "selected" : ""}>⏳ Pending</option><option value="Processing" ${o.status === "Processing" ? "selected" : ""}>🔄 Processing</option><option value="Completed" ${o.status === "Completed" ? "selected" : ""}>✅ Completed</option><option value="Delivered" ${o.status === "Delivered" ? "selected" : ""}>🚀 Delivered</option></select></div>`).join(''); 
 }
 function updateOrderStatus(tid, ns) { 
     const idx = orders.findIndex(o => o.trackingId === tid); 
@@ -1034,22 +901,32 @@ function updateOrderStatus(tid, ns) {
 function renderAdminDeposits() { const c = document.getElementById('depositsList'); const ds = JSON.parse(localStorage.getItem('gfk_deposits') || '[]'); deposits = ds; if (!deposits.length) { c.innerHTML = '<div class="admin-warning">💰 No deposits yet</div>'; return; } c.innerHTML = deposits.map(d => `<div class="admin-deposit-row"><div><strong>${escapeHtml(d.depositCode)}</strong><br><small>${escapeHtml(d.timestamp)}</small></div><div>👤 ${escapeHtml(d.userName)}<br>💰 KSh ${d.amount.toLocaleString()}</div></div>`).join(''); }
 function renderAdminReviews() { const c = document.getElementById('adminReviewsList'); if (!reviews.length) { c.innerHTML = '<div class="admin-warning">⭐ No reviews yet</div>'; return; } c.innerHTML = reviews.map((r, i) => `<div class="admin-order-row"><div><strong>${escapeHtml(r.name)}</strong> (${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)})</div><div>"${escapeHtml(r.review)}"</div><button class="delete-btn" onclick="deleteReview(${i})"><i class="fas fa-trash"></i> Delete</button></div>`).join(''); }
 function deleteReview(i) { reviews.splice(i, 1); localStorage.setItem('gfk_reviews', JSON.stringify(reviews)); renderAdminReviews(); renderInfiniteReviews(); toast('Review deleted'); }
-function renderAdminUsers() { const c = document.getElementById('usersList'); const users = getUsers(); if (!users.length) { c.innerHTML = '<div class="admin-warning">👥 No registered users</div>'; return; } c.innerHTML = users.map(u => `<div class="admin-user-row"><div><strong>${escapeHtml(u.name)}</strong><br><small>${escapeHtml(u.email)}</small></div><div><span class="admin-password-badge">🔐 ${escapeHtml(u.password)}</span><br>💰 KSh ${(u.walletBalance || 0).toLocaleString()}<br>🎁 ${u.freeFollowersClaimed ? '✅ Claimed' : '❌ Not Claimed'}</div></div>`).join(''); }
+function renderAdminUsers() { const c = document.getElementById('usersList'); const users = getUsers(); if (!users.length) { c.innerHTML = '<div class="admin-warning">👥 No registered users</div>'; return; } c.innerHTML = users.map(u => `<div class="admin-user-row"><div><strong>${escapeHtml(u.name)}</strong><br><small>${escapeHtml(u.email)}</small></div><div><span class="admin-password-badge">🔐 ${escapeHtml(u.password)}</span><br>💰 KSh ${(u.walletBalance || 0).toLocaleString()}<br>🎁 ${u.freeFollowersClaimed ? '✅ Claimed' : '❌ Not Claimed'}<br>📅 ${escapeHtml(u.createdAt || 'N/A')}</div></div>`).join(''); }
 async function syncAllData() {
+    toast('Syncing data from cloud...', false);
     try {
         const response = await fetch(GOOGLE_SHEET_API_URL + '?action=all');
         const data = await response.json();
-        if (data.orders) orders = data.orders;
-        if (data.users) { const existingUsers = getUsers(); data.users.forEach(newUser => { if (!existingUsers.find(u => u.email === newUser.email)) existingUsers.push(newUser); }); saveUsers(existingUsers); }
-        localStorage.setItem('gfk_orders', JSON.stringify(orders));
-        toast('Data synced from cloud!');
-    } catch(e) { console.log('Using local data'); }
+        if (data.orders && Array.isArray(data.orders)) { orders = data.orders; localStorage.setItem('gfk_orders', JSON.stringify(orders)); }
+        if (data.deposits && Array.isArray(data.deposits)) { deposits = data.deposits; localStorage.setItem('gfk_deposits', JSON.stringify(deposits)); }
+        if (data.reviews && Array.isArray(data.reviews)) { reviews = data.reviews; localStorage.setItem('gfk_reviews', JSON.stringify(reviews)); renderInfiniteReviews(); }
+        if (data.users && Array.isArray(data.users)) { 
+            const existingUsers = getUsers();
+            data.users.forEach(newUser => { if (!existingUsers.find(u => u.email === newUser.email)) existingUsers.push(newUser); });
+            saveUsers(existingUsers);
+        }
+        renderAdminStats(); renderAdminOrders(); renderAdminDeposits(); renderAdminReviews(); renderAdminUsers();
+        toast('All data synced successfully!', false);
+    } catch(e) { 
+        console.log('Sync error, using local data', e);
+        renderAdminStats(); renderAdminOrders(); renderAdminDeposits(); renderAdminReviews(); renderAdminUsers();
+        toast('Using local data. Connect to internet for full sync.', true);
+    }
 }
 async function saveToSheets(data) { try { await fetch(GOOGLE_SHEET_API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); } catch(e) {} }
 function loadDefaultReviews() { reviews = [ { name: "John M.", rating: 5, review: "Ordered 10,000 Facebook followers at 3399, delivered fast! My page is growing!" }, { name: "Sarah W.", rating: 5, review: "Got 10,000 Instagram followers for only 3500! Best deal in Kenya!" }, { name: "David K.", rating: 5, review: "Very reliable service! The Facebook likes came in 30 minutes!" }, { name: "Grace N.", rating: 5, review: "Saved big on Instagram followers! Professional and on time." }, { name: "Peter O.", rating: 4, review: "Great service, affordable prices. Will order again." }, { name: "Mary A.", rating: 5, review: "Best social media growth service in Kenya! 10/10!" } ]; localStorage.setItem('gfk_reviews', JSON.stringify(reviews)); }
 function renderInfiniteReviews() { const track = document.getElementById('reviewsTrack'); if (!track) return; if (!reviews.length) loadDefaultReviews(); let allCards = ''; for (let i = 0; i < 3; i++) { allCards += reviews.map(r => `<div class="review-card"><div class="review-rating">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div><div class="review-text">"${escapeHtml(r.review)}"</div><div class="review-author">— ${escapeHtml(r.name)}</div></div>`).join(''); } track.innerHTML = allCards; }
 
-// Event Listeners
 document.getElementById('nextToStep2').addEventListener('click', () => showStep(2));
 document.getElementById('backToStep1').addEventListener('click', () => showStep(1));
 document.getElementById('nextToStep3').addEventListener('click', () => { if(document.getElementById('profileUrl').value.trim() && document.getElementById('customerPhone').value.trim()) showStep(3); else toast('Fill all fields', true); });
@@ -1072,7 +949,6 @@ function scrollToHome() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 document.getElementById('loginBtn').addEventListener('click', handleLogin);
 document.getElementById('signupBtn').addEventListener('click', handleSignup);
 
-// GUEST REFRESH REDIRECT - LANDING PAGE IS MANDATORY, LOGGED IN USERS STAY
 function checkExistingSession() {
     const ut = localStorage.getItem('gfk_user_type');
     const su = localStorage.getItem('gfk_current_user');
@@ -1082,7 +958,6 @@ function checkExistingSession() {
     if (ut === 'guest') { document.getElementById('landingPage').classList.remove('hide-landing'); document.getElementById('landingPage').style.opacity = '1'; document.getElementById('mainSite').classList.remove('active'); document.getElementById('bottomNav').style.display = 'none'; document.getElementById('userInfoBar').style.display = 'none'; updateLoginButtonVisibility(); return; }
     document.getElementById('landingPage').classList.remove('hide-landing'); document.getElementById('landingPage').style.opacity = '1'; document.getElementById('mainSite').classList.remove('active'); document.getElementById('bottomNav').style.display = 'none';
 }
-
 function init() {
     const savedOrders = localStorage.getItem('gfk_orders'); if (savedOrders) { try { orders = JSON.parse(savedOrders); } catch(e) {} }
     const savedReviews = localStorage.getItem('gfk_reviews'); if (savedReviews) { try { reviews = JSON.parse(savedReviews); } catch(e) {} }
