@@ -185,8 +185,9 @@
         label .required { color: #e74c3c; }
         input, textarea { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.9rem; font-family: 'Poppins', sans-serif; transition: border 0.2s, box-shadow 0.2s; }
         input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(24,119,242,0.1); }
-        .trust-badges { display: flex; justify-content: center; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
-        .badge { background: var(--bg); border: 1px solid var(--border); border-radius: 30px; padding: 4px 10px; font-size: 0.65rem; font-weight: 500; font-family: 'Poppins', sans-serif; }
+        
+        /* REMOVED trust-badges section - no longer displayed */
+        
         .delivery-time-note { padding: 10px; border-radius: 12px; font-size: 0.75rem; text-align: center; margin-bottom: 12px; font-weight: 600; transition: all 0.3s ease; }
         .delivery-fast { background: var(--delivery-fast); color: white; }
         .delivery-medium { background: var(--delivery-medium); color: white; }
@@ -222,7 +223,7 @@
         .reviews-section { margin-top: 16px; overflow: hidden; position: relative; width: 100%; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
         .section-header h3 { font-size: 0.9rem; font-weight: 600; font-family: 'Poppins', sans-serif; }
-        .section-header span { font-size: 0.65rem; color: var(--text-light); }
+        /* REMOVED the span with "infinite scroll" text */
         .infinite-carousel { overflow: hidden; position: relative; width: 100%; }
         .carousel-track { display: flex; gap: 16px; animation: scrollInfinite 40s linear infinite; width: max-content; }
         .carousel-track:hover { animation-play-state: paused; }
@@ -306,7 +307,6 @@
         .btn-review { width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 30px; font-size: 0.8rem; font-weight: bold; cursor: pointer; margin-top: 6px; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
         .btn-review:hover { filter: brightness(1.05); transform: translateY(-1px); }
 
-        /* COMPACT ADMIN STYLES */
         .admin-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -545,7 +545,9 @@
     <div class="main-content"><div class="container">
         <div class="user-info-bar" id="userInfoBar" style="display:none;"><div class="user-greeting"><div class="user-avatar" id="userAvatar">G</div><div><div id="userNameDisplay">Guest</div><div id="userEmailDisplay"></div></div></div><div style="display:flex;gap:8px;"><div class="wallet-mini"><span>💰</span><span class="wallet-balance" id="walletBalanceDisplay">KSh 0</span><button class="wallet-deposit-btn" id="walletDepositBtn">+</button></div><button class="free-credit-btn" id="claimFreeFollowersBtn" style="display:none;" onclick="claimFreeFollowers()">Claim 100 Free 🎁</button><button class="logout-btn" onclick="handleLogout()">Logout</button></div></div>
         <div class="offer-banner" id="offerBanner" style="display:none;"></div>
-        <div class="trust-badges"><span class="badge">Instant Start</span><span class="badge">No Password</span><span class="badge">Delivery Guarantee</span><span class="badge">24/7 Support</span></div>
+        
+        <!-- REMOVED trust-badges section completely -->
+        
         <div class="progress-container"><div class="progress-steps"><div class="step-indicator" id="step1Indicator">1. Select</div><div class="step-indicator" id="step2Indicator">2. Details</div><div class="step-indicator" id="step3Indicator">3. Payment</div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
         
         <!-- STEP 1 -->
@@ -597,8 +599,8 @@
         
         <div class="happy-customers"><img src="https://media.istockphoto.com/id/1995160648/photo/wide-angle-shot-of-gen-z-group-of-friends-hanging-out-together.jpg?s=612x612&w=0&k=20&c=7SEvkSe_PCeUfF8-YR6_9I77gL_6z_RTimidlf3BMGE=" alt="Happy Customers"><p>📱 Join thousands of happy customers growing their social media!</p></div>
         
-        <!-- INFINITE SCROLLING REVIEWS CAROUSEL -->
-        <div class="reviews-section"><div class="section-header"><h3>⭐ Customer Reviews</h3><span>✨ infinite scroll ✨</span></div><div class="infinite-carousel"><div class="carousel-track" id="reviewsTrack"></div></div></div>
+        <!-- REVIEWS SECTION - removed infinite scroll text -->
+        <div class="reviews-section"><div class="section-header"><h3>⭐ Customer Reviews</h3></div><div class="infinite-carousel"><div class="carousel-track" id="reviewsTrack"></div></div></div>
     </div></div>
 </div>
 
@@ -620,7 +622,7 @@
 <a href="https://wa.me/254750600715?text=Hi" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
 
 <script>
-// ========== FULL JAVASCRIPT - COMPLETE 3000+ LINES ==========
+// ========== FULL JAVASCRIPT - 3000+ LINES COMPLETE ==========
 const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxE6e5f7eT9OAPCVkaD5AxoAYBF6pJ5m_1cA76RPiWaVawsZlPWGMRgged4FMpww0bJ1Q/exec";
 const ADMIN_PASSWORD = "GetFans2024";
 const PAYSTACK_PUBLIC_KEY = "pk_test_cc050603fb87c205f0012550e86ce6fe7c5db254";
