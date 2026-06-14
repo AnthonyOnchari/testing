@@ -11,28 +11,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         :root {
-            --bg: #f8f9fc; --card-bg: #ffffff; --text: #1a1a2e; --text-light: #666;
-            --border: #e5e5e5; --primary: #1877f2; --primary-dark: #0d65d9;
-            --instagram: #e4405f; --instagram-dark: #c13584; --success: #2ecc71;
-            --warning: #f39c12; --danger: #e74c3c; --info: #3498db; --whatsapp: #25D366;
-            --review-star: #ffc107; --delivery-fast: #2ecc71; --delivery-medium: #f39c12;
-            --delivery-slow: #e74c3c; --header-bg-start: #1877f2; --header-bg-end: #0d65d9;
+            --bg: #f8f9fc;
+            --card-bg: #ffffff;
+            --text: #1a1a2e;
+            --text-light: #666;
+            --border: #e5e5e5;
+            --primary: #1877f2;
+            --primary-dark: #0d65d9;
+            --instagram: #e4405f;
+            --instagram-dark: #c13584;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --whatsapp: #25D366;
+            --review-star: #ffc107;
+            --delivery-fast: #2ecc71;
+            --delivery-medium: #f39c12;
+            --delivery-slow: #e74c3c;
+            --header-bg-start: #1877f2;
+            --header-bg-end: #0d65d9;
             --offer-bg: linear-gradient(135deg, #ff6b6b, #ee5a24);
             --bottom-nav-height: 65px;
         }
+        
         body.dark {
-            --bg: #121212; --card-bg: #1e1e2a; --text: #eeeeee; --text-light: #999;
-            --border: #2c2c3a; --header-bg-start: #0d65d9; --header-bg-end: #0a4faa;
+            --bg: #121212;
+            --card-bg: #1e1e2a;
+            --text: #eeeeee;
+            --text-light: #999;
+            --border: #2c2c3a;
+            --header-bg-start: #0d65d9;
+            --header-bg-end: #0a4faa;
         }
+        
         body {
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg); color: var(--text); min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
             padding-bottom: var(--bottom-nav-height);
         }
 
-        /* LANDING PAGE - REDUCED HEADROOM */
+        /* ========== LANDING PAGE ========== */
         .landing-page {
             background: linear-gradient(135deg, #1877f2 0%, #0d65d9 50%, #001f3f 100%);
             min-height: 100vh;
@@ -50,11 +78,13 @@
             opacity: 1;
             visibility: visible;
         }
+        
         .landing-page.hide-landing {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
+        
         .landing-container { 
             max-width: 480px; 
             width: 100%; 
@@ -62,218 +92,1293 @@
             margin: 0 auto;
             padding: 5px 0;
         }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .logo-section { text-align: center; margin-bottom: 12px; }
-        .logo-img-landing { height: 55px; width: auto; border-radius: 16px; margin-bottom: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-        .logo-section h1 { color: white; font-size: 1.4rem; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.2); letter-spacing: -0.5px; }
-        .logo-section p { color: rgba(255,255,255,0.85); font-size: 0.7rem; margin-top: 2px; font-weight: 500; }
-        .options-container { background: white; border-radius: 20px; padding: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
-        .options-title { text-align: center; margin-bottom: 12px; }
-        .options-title h2 { font-size: 1rem; font-weight: 700; color: #1a1a2e; }
-        .options-title p { font-size: 0.65rem; color: #666; margin-top: 2px; }
-        .option-cards { display: flex; flex-direction: column; gap: 8px; }
-        .option-card { padding: 12px; border-radius: 14px; cursor: pointer; transition: all 0.3s ease; text-align: center; }
-        .option-card:hover { transform: translateY(-2px); }
-        .option-card:active { transform: scale(0.98); }
-        .option-card.guest { background: #f8f9fc; border: 2px solid #e5e5e5; }
-        .option-card.guest:hover { border-color: #1877f2; box-shadow: 0 8px 25px rgba(24,119,242,0.15); }
-        .option-card.account { background: linear-gradient(135deg, #1877f2, #0d65d9); color: white; border: 2px solid transparent; }
-        .option-card.account:hover { box-shadow: 0 8px 25px rgba(24,119,242,0.4); }
-        .option-icon { font-size: 1.8rem; margin-bottom: 4px; display: block; }
-        .option-card.guest .option-icon { color: #1877f2; }
-        .option-card h3 { font-size: 0.85rem; font-weight: 700; margin-bottom: 2px; }
-        .option-card.guest h3 { color: #1a1a2e; }
-        .option-card p { font-size: 0.6rem; }
-        .option-card.guest p { color: #666; }
-        .option-card.account p { color: rgba(255,255,255,0.85); }
-        .free-badge { display: inline-block; background: #ffd700; color: #333; padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 700; margin-top: 4px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        .login-link { text-align: center; margin-top: 10px; font-size: 0.65rem; color: #666; }
-        .login-link a { color: #1877f2; font-weight: 600; text-decoration: none; cursor: pointer; }
-        .trust-strip { display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-        .trust-item { color: rgba(255,255,255,0.8); font-size: 0.6rem; display: flex; align-items: center; gap: 4px; }
-        .trust-item i { color: #2ecc71; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* LOGO SECTION WITH WHITE BACKGROUND */
+        .logo-section { 
+            text-align: center; 
+            margin-bottom: 12px; 
+        }
+        
+        .logo-img-landing { 
+            height: 65px; 
+            width: auto; 
+            border-radius: 16px; 
+            margin-bottom: 8px; 
+            background: white;
+            padding: 8px 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            display: inline-block;
+        }
+        
+        .logo-section h1 { 
+            color: white; 
+            font-size: 1.4rem; 
+            font-weight: 800; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+            letter-spacing: -0.5px; 
+            margin-top: 8px;
+        }
+        
+        .logo-section p { 
+            color: rgba(255,255,255,0.85); 
+            font-size: 0.7rem; 
+            margin-top: 2px; 
+            font-weight: 500; 
+        }
+        
+        .options-container { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 16px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15); 
+        }
+        
+        .options-title { 
+            text-align: center; 
+            margin-bottom: 12px; 
+        }
+        
+        .options-title h2 { 
+            font-size: 1rem; 
+            font-weight: 700; 
+            color: #1a1a2e; 
+        }
+        
+        .options-title p { 
+            font-size: 0.65rem; 
+            color: #666; 
+            margin-top: 2px; 
+        }
+        
+        .option-cards { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
+        
+        .option-card { 
+            padding: 12px; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            text-align: center; 
+        }
+        
+        .option-card:hover { 
+            transform: translateY(-2px); 
+        }
+        
+        .option-card:active { 
+            transform: scale(0.98); 
+        }
+        
+        .option-card.guest { 
+            background: #f8f9fc; 
+            border: 2px solid #e5e5e5; 
+        }
+        
+        .option-card.guest:hover { 
+            border-color: #1877f2; 
+            box-shadow: 0 8px 25px rgba(24,119,242,0.15); 
+        }
+        
+        .option-card.account { 
+            background: linear-gradient(135deg, #1877f2, #0d65d9); 
+            color: white; 
+            border: 2px solid transparent; 
+        }
+        
+        .option-card.account:hover { 
+            box-shadow: 0 8px 25px rgba(24,119,242,0.4); 
+        }
+        
+        .option-icon { 
+            font-size: 1.8rem; 
+            margin-bottom: 4px; 
+            display: block; 
+        }
+        
+        .option-card.guest .option-icon { 
+            color: #1877f2; 
+        }
+        
+        .option-card h3 { 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            margin-bottom: 2px; 
+        }
+        
+        .option-card.guest h3 { 
+            color: #1a1a2e; 
+        }
+        
+        .option-card p { 
+            font-size: 0.6rem; 
+        }
+        
+        .option-card.guest p { 
+            color: #666; 
+        }
+        
+        .option-card.account p { 
+            color: rgba(255,255,255,0.85); 
+        }
+        
+        .free-badge { 
+            display: inline-block; 
+            background: #ffd700; 
+            color: #333; 
+            padding: 3px 10px; 
+            border-radius: 20px; 
+            font-size: 0.6rem; 
+            font-weight: 700; 
+            margin-top: 4px; 
+            animation: pulse 2s infinite; 
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .login-link { 
+            text-align: center; 
+            margin-top: 10px; 
+            font-size: 0.65rem; 
+            color: #666; 
+        }
+        
+        .login-link a { 
+            color: #1877f2; 
+            font-weight: 600; 
+            text-decoration: none; 
+            cursor: pointer; 
+        }
+        
+        .trust-strip { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-top: 12px; 
+            flex-wrap: wrap; 
+        }
+        
+        .trust-item { 
+            color: rgba(255,255,255,0.8); 
+            font-size: 0.6rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+        }
+        
+        .trust-item i { 
+            color: #2ecc71; 
+        }
 
-        .auth-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; }
-        .auth-modal.show { display: flex; animation: modalFadeInBg 0.3s ease; }
-        @keyframes modalFadeInBg { from { background: rgba(0,0,0,0); } to { background: rgba(0,0,0,0.8); } }
-        .auth-modal-content { background: white; border-radius: 24px; padding: 24px; width: 90%; max-width: 420px; animation: modalSlideIn 0.3s ease; max-height: 90vh; overflow-y: auto; }
-        @keyframes modalSlideIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #e5e5e5; padding-bottom: 10px; }
-        .auth-tab { padding: 8px 16px; cursor: pointer; font-weight: 600; font-size: 0.8rem; border-radius: 20px; transition: all 0.2s; font-family: 'Poppins', sans-serif; background: transparent; border: none; color: #666; }
-        .auth-tab.active { background: #1877f2; color: white; }
-        .auth-form { display: none; transition: opacity 0.2s; }
-        .auth-form.active { display: block; animation: formFadeIn 0.2s ease; }
-        @keyframes formFadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        .benefits-list { background: #f0f8ff; border-radius: 12px; padding: 12px; margin: 12px 0; font-size: 0.7rem; }
-        .benefits-list div { display: flex; align-items: center; gap: 8px; margin: 6px 0; color: #333; }
-        .benefits-list i { color: #2ecc71; }
-        .btn-close-auth { width: 100%; padding: 12px; background: #e5e5e5; color: #333; border: none; border-radius: 30px; font-size: 0.8rem; font-weight: 600; cursor: pointer; margin-top: 10px; font-family: 'Poppins', sans-serif; }
-        .guest-notice { background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px; padding: 10px; margin-bottom: 16px; font-size: 0.7rem; text-align: center; color: #856404; }
-        .error-message { color: #e74c3c; font-size: 0.7rem; margin-top: 5px; display: none; }
-        .error-message.show { display: block; }
+        /* ========== AUTH MODAL ========== */
+        .auth-modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            z-index: 10000; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        
+        .auth-modal.show { 
+            display: flex; 
+            animation: modalFadeInBg 0.3s ease; 
+        }
+        
+        @keyframes modalFadeInBg { 
+            from { background: rgba(0,0,0,0); } 
+            to { background: rgba(0,0,0,0.8); } 
+        }
+        
+        .auth-modal-content { 
+            background: white; 
+            border-radius: 24px; 
+            padding: 24px; 
+            width: 90%; 
+            max-width: 420px; 
+            animation: modalSlideIn 0.3s ease; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+        
+        @keyframes modalSlideIn { 
+            from { opacity: 0; transform: scale(0.9) translateY(20px); } 
+            to { opacity: 1; transform: scale(1) translateY(0); } 
+        }
+        
+        .auth-tabs { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #e5e5e5; 
+            padding-bottom: 10px; 
+        }
+        
+        .auth-tab { 
+            padding: 8px 16px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.8rem; 
+            border-radius: 20px; 
+            transition: all 0.2s; 
+            font-family: 'Poppins', sans-serif; 
+            background: transparent; 
+            border: none; 
+            color: #666; 
+        }
+        
+        .auth-tab.active { 
+            background: #1877f2; 
+            color: white; 
+        }
+        
+        .auth-form { 
+            display: none; 
+            transition: opacity 0.2s; 
+        }
+        
+        .auth-form.active { 
+            display: block; 
+            animation: formFadeIn 0.2s ease; 
+        }
+        
+        @keyframes formFadeIn { 
+            from { opacity: 0; transform: translateX(-10px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+        
+        .benefits-list { 
+            background: #f0f8ff; 
+            border-radius: 12px; 
+            padding: 12px; 
+            margin: 12px 0; 
+            font-size: 0.7rem; 
+        }
+        
+        .benefits-list div { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            margin: 6px 0; 
+            color: #333; 
+        }
+        
+        .benefits-list i { 
+            color: #2ecc71; 
+        }
+        
+        .btn-close-auth { 
+            width: 100%; 
+            padding: 12px; 
+            background: #e5e5e5; 
+            color: #333; 
+            border: none; 
+            border-radius: 30px; 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        .guest-notice { 
+            background: #fff3cd; 
+            border: 1px solid #ffc107; 
+            border-radius: 12px; 
+            padding: 10px; 
+            margin-bottom: 16px; 
+            font-size: 0.7rem; 
+            text-align: center; 
+            color: #856404; 
+        }
+        
+        .error-message { 
+            color: #e74c3c; 
+            font-size: 0.7rem; 
+            margin-top: 5px; 
+            display: none; 
+        }
+        
+        .error-message.show { 
+            display: block; 
+        }
 
+        /* ========== MAIN SITE ========== */
         .main-site { 
             display: none; 
             animation: siteFadeIn 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
+        
         @keyframes siteFadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .main-site.active { display: block; }
         
-        .sticky-header { position: sticky; top: 0; z-index: 100; background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end)); padding: 12px 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-bottom: 1px solid rgba(255,255,255,0.2); }
-        .container { max-width: 550px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo-container { display: flex; align-items: center; gap: 10px; }
-        .logo-img { height: 42px; width: auto; border-radius: 10px; background: rgba(255,255,255,0.1); padding: 3px; }
-        .header h1 { font-size: 1rem; font-weight: 800; color: white; letter-spacing: -0.3px; font-family: 'Poppins', sans-serif; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .header-buttons { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
-        .track-btn, .admin-small-btn, .login-header-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 30px; padding: 5px 10px; font-size: 0.65rem; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif; white-space: nowrap; transition: all 0.2s ease; }
-        .login-header-btn { background: rgba(46,204,113,0.3); border-color: rgba(46,204,113,0.5); }
-        .theme-toggle { background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3); border-radius: 30px; padding: 4px 10px; cursor: pointer; font-size: 0.8rem; color: white; }
-        .main-content { padding: 0 16px 16px 16px; }
-
-        .user-info-bar { background: var(--card-bg); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); flex-wrap: wrap; gap: 8px; animation: slideInDown 0.4s ease; }
-        @keyframes slideInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        .user-greeting { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.8rem; }
-        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; }
-        .wallet-mini { display: flex; align-items: center; gap: 8px; background: var(--bg); padding: 6px 12px; border-radius: 25px; }
-        .wallet-balance { font-weight: 700; font-size: 0.8rem; color: var(--success); }
-        .wallet-deposit-btn { background: var(--success); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .logout-btn { background: var(--danger); color: white; border: none; border-radius: 30px; padding: 5px 12px; cursor: pointer; font-size: 0.65rem; font-weight: 600; font-family: 'Poppins', sans-serif; }
-        .free-credit-btn { background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; border: none; border-radius: 30px; padding: 6px 12px; cursor: pointer; font-size: 0.65rem; font-weight: 600; font-family: 'Poppins', sans-serif; animation: pulse 2s infinite; }
-
-        .offer-banner { background: var(--offer-bg); border-radius: 16px; padding: 12px 16px; margin-bottom: 20px; display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; animation: pulse 2s infinite; box-shadow: 0 4px 15px rgba(238,90,36,0.3); }
-        .progress-container { margin-bottom: 20px; }
-        .progress-steps { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .step-indicator { text-align: center; flex: 1; font-size: 0.65rem; color: var(--text-light); font-weight: 500; transition: all 0.3s ease; }
-        .step-indicator.active { color: var(--primary); font-weight: bold; transform: scale(1.05); }
-        .step-indicator.completed { color: var(--success); }
-        .progress-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-        .progress-fill { height: 100%; width: 0%; background: var(--primary); transition: width 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .main-site.active { 
+            display: block; 
+        }
         
-        .step { display: none; animation: stepSlideIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .sticky-header { 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            background: linear-gradient(135deg, var(--header-bg-start), var(--header-bg-end)); 
+            padding: 12px 16px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            border-bottom: 1px solid rgba(255,255,255,0.2); 
+        }
+        
+        /* LOGO IN HEADER WITH WHITE BACKGROUND */
+        .logo-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            background: white;
+            padding: 5px 15px;
+            border-radius: 40px;
+        }
+        
+        .logo-img { 
+            height: 35px; 
+            width: auto; 
+            border-radius: 8px;
+        }
+        
+        .logo-container h1 { 
+            font-size: 0.9rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            letter-spacing: -0.3px; 
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .container { 
+            max-width: 550px; 
+            margin: 0 auto; 
+        }
+        
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            width: 100%; 
+        }
+        
+        .header-buttons { 
+            display: flex; 
+            gap: 6px; 
+            align-items: center; 
+            flex-shrink: 0; 
+        }
+        
+        .track-btn, .admin-small-btn, .login-header-btn { 
+            background: rgba(255,255,255,0.2); 
+            backdrop-filter: blur(5px); 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            border-radius: 30px; 
+            padding: 5px 10px; 
+            font-size: 0.65rem; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-family: 'Poppins', sans-serif; 
+            white-space: nowrap; 
+            transition: all 0.2s ease; 
+        }
+        
+        .login-header-btn { 
+            background: rgba(46,204,113,0.3); 
+            border-color: rgba(46,204,113,0.5); 
+        }
+        
+        .theme-toggle { 
+            background: rgba(255,255,255,0.2); 
+            backdrop-filter: blur(5px); 
+            border: 1px solid rgba(255,255,255,0.3); 
+            border-radius: 30px; 
+            padding: 4px 10px; 
+            cursor: pointer; 
+            font-size: 0.8rem; 
+            color: white; 
+        }
+        
+        .main-content { 
+            padding: 0 16px 16px 16px; 
+        }
+
+        .user-info-bar { 
+            background: var(--card-bg); 
+            border-radius: 14px; 
+            padding: 10px 14px; 
+            margin-bottom: 14px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            border: 1px solid var(--border); 
+            flex-wrap: wrap; 
+            gap: 8px; 
+            animation: slideInDown 0.4s ease; 
+        }
+        
+        @keyframes slideInDown { 
+            from { opacity: 0; transform: translateY(-20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .user-greeting { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-weight: 600; 
+            font-size: 0.8rem; 
+        }
+        
+        .user-avatar { 
+            width: 36px; 
+            height: 36px; 
+            border-radius: 50%; 
+            background: var(--primary); 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            font-size: 1rem; 
+        }
+        
+        .wallet-mini { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            background: var(--bg); 
+            padding: 6px 12px; 
+            border-radius: 25px; 
+        }
+        
+        .wallet-balance { 
+            font-weight: 700; 
+            font-size: 0.8rem; 
+            color: var(--success); 
+        }
+        
+        .wallet-deposit-btn { 
+            background: var(--success); 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 28px; 
+            height: 28px; 
+            cursor: pointer; 
+            font-size: 1rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+        }
+        
+        .logout-btn { 
+            background: var(--danger); 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            padding: 5px 12px; 
+            cursor: pointer; 
+            font-size: 0.65rem; 
+            font-weight: 600; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        .free-credit-btn { 
+            background: linear-gradient(135deg, #2ecc71, #27ae60); 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            padding: 6px 12px; 
+            cursor: pointer; 
+            font-size: 0.65rem; 
+            font-weight: 600; 
+            font-family: 'Poppins', sans-serif; 
+            animation: pulse 2s infinite; 
+        }
+
+        .offer-banner { 
+            background: var(--offer-bg); 
+            border-radius: 16px; 
+            padding: 12px 16px; 
+            margin-bottom: 20px; 
+            display: none; 
+            align-items: center; 
+            justify-content: space-between; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            animation: pulse 2s infinite; 
+            box-shadow: 0 4px 15px rgba(238,90,36,0.3); 
+        }
+        
+        .progress-container { 
+            margin-bottom: 20px; 
+        }
+        
+        .progress-steps { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 8px; 
+        }
+        
+        .step-indicator { 
+            text-align: center; 
+            flex: 1; 
+            font-size: 0.65rem; 
+            color: var(--text-light); 
+            font-weight: 500; 
+            transition: all 0.3s ease; 
+        }
+        
+        .step-indicator.active { 
+            color: var(--primary); 
+            font-weight: bold; 
+            transform: scale(1.05); 
+        }
+        
+        .step-indicator.completed { 
+            color: var(--success); 
+        }
+        
+        .progress-bar { 
+            height: 3px; 
+            background: var(--border); 
+            border-radius: 2px; 
+            overflow: hidden; 
+        }
+        
+        .progress-fill { 
+            height: 100%; 
+            width: 0%; 
+            background: var(--primary); 
+            transition: width 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1); 
+        }
+        
+        .step { 
+            display: none; 
+            animation: stepSlideIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); 
+        }
+        
         @keyframes stepSlideIn {
             from { opacity: 0; transform: translateX(20px); }
             to { opacity: 1; transform: translateX(0); }
         }
-        .step.active { display: block; }
         
-        .card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.05); }
-        .step-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; color: var(--primary); font-family: 'Poppins', sans-serif; }
-        .platform-buttons { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-        .platform-btn { flex: 1; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 30px; cursor: pointer; font-weight: 600; text-align: center; font-size: 0.8rem; font-family: 'Poppins', sans-serif; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .platform-btn i { font-size: 1rem; }
-        .platform-btn:active { transform: scale(0.97); }
-        .platform-btn.active { background: var(--primary); color: white; border-color: transparent; }
-        .platform-btn[data-platform="instagram"].active { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
-        .service-buttons { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-        .service-btn { flex: 1; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 30px; cursor: pointer; font-weight: 600; text-align: center; font-size: 0.8rem; font-family: 'Poppins', sans-serif; transition: all 0.2s ease; }
-        .service-btn:active { transform: scale(0.97); }
-        .service-btn.active { background: var(--primary); color: white; border-color: transparent; }
-        .qty-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .qty-row label { font-weight: 600; font-size: 0.85rem; min-width: 60px; font-family: 'Poppins', sans-serif; }
-        .qty-row input { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.9rem; text-align: center; }
-        input[type="range"] { width: 100%; height: 4px; -webkit-appearance: none; background: var(--border); border-radius: 4px; margin: 10px 0; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; cursor: pointer; transition: transform 0.1s; }
-        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-        .price { text-align: center; font-size: 1.5rem; font-weight: 800; color: var(--primary); margin: 8px 0; font-family: 'Poppins', sans-serif; }
-        .form-group { margin-bottom: 14px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.8rem; font-family: 'Poppins', sans-serif; }
-        label .required { color: #e74c3c; }
-        input, textarea { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.9rem; font-family: 'Poppins', sans-serif; transition: border 0.2s, box-shadow 0.2s; }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(24,119,242,0.1); }
+        .step.active { 
+            display: block; 
+        }
         
-        .delivery-time-note { padding: 10px; border-radius: 12px; font-size: 0.75rem; text-align: center; margin-bottom: 12px; font-weight: 600; transition: all 0.3s ease; }
-        .delivery-fast { background: var(--delivery-fast); color: white; }
-        .delivery-medium { background: var(--delivery-medium); color: white; }
-        .delivery-slow { background: var(--delivery-slow); color: white; }
-        .summary-card { background: var(--bg); border-radius: 14px; padding: 12px; margin: 12px 0; }
-        .info-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.8rem; flex-wrap: wrap; gap: 6px; }
-        hr { border-color: var(--border); margin: 8px 0; }
-        .btn-next, .btn-back, .btn-submit { padding: 12px 20px; border-radius: 40px; font-size: 0.9rem; font-weight: 700; cursor: pointer; border: none; margin-top: 6px; font-family: 'Poppins', sans-serif; transition: all 0.2s ease; }
-        .btn-next { background: var(--primary); color: white; width: 100%; }
-        .btn-next:hover { background: var(--primary-dark); transform: translateY(-1px); }
-        .btn-back { background: var(--border); color: var(--text); flex: 1; }
-        .btn-back:hover { background: var(--text-light); color: white; }
-        .btn-submit { background: var(--success); color: white; width: 100%; }
-        .btn-submit:hover { filter: brightness(1.05); transform: translateY(-1px); }
-        .btn-paystack { background: #0d65d9; color: white; width: 100%; }
-        .button-group { display: flex; gap: 10px; margin-top: 6px; }
-        .whatsapp-float { position: fixed; bottom: 80px; right: 20px; background: var(--whatsapp); color: white; border-radius: 50px; padding: 8px 14px; display: flex; align-items: center; gap: 6px; text-decoration: none; font-weight: bold; font-size: 0.75rem; z-index: 1000; font-family: 'Poppins', sans-serif; transition: transform 0.2s; }
-        .whatsapp-float:hover { transform: scale(1.05); }
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            padding: 20px; 
+            margin-bottom: 16px; 
+            border: 1px solid var(--border); 
+            transition: transform 0.2s, box-shadow 0.2s; 
+        }
+        
+        .card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05); 
+        }
+        
+        .step-title { 
+            font-size: 1.2rem; 
+            font-weight: 700; 
+            margin-bottom: 16px; 
+            color: var(--primary); 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        .platform-buttons { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 16px; 
+            flex-wrap: wrap; 
+        }
+        
+        .platform-btn { 
+            flex: 1; 
+            padding: 10px; 
+            background: var(--bg); 
+            border: 1px solid var(--border); 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            text-align: center; 
+            font-size: 0.8rem; 
+            font-family: 'Poppins', sans-serif; 
+            transition: all 0.2s ease; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 6px; 
+        }
+        
+        .platform-btn i { 
+            font-size: 1rem; 
+        }
+        
+        .platform-btn:active { 
+            transform: scale(0.97); 
+        }
+        
+        .platform-btn.active { 
+            background: var(--primary); 
+            color: white; 
+            border-color: transparent; 
+        }
+        
+        .platform-btn[data-platform="instagram"].active { 
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
+            color: white; 
+        }
+        
+        .service-buttons { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 16px; 
+            flex-wrap: wrap; 
+        }
+        
+        .service-btn { 
+            flex: 1; 
+            padding: 10px; 
+            background: var(--bg); 
+            border: 1px solid var(--border); 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            text-align: center; 
+            font-size: 0.8rem; 
+            font-family: 'Poppins', sans-serif; 
+            transition: all 0.2s ease; 
+        }
+        
+        .service-btn:active { 
+            transform: scale(0.97); 
+        }
+        
+        .service-btn.active { 
+            background: var(--primary); 
+            color: white; 
+            border-color: transparent; 
+        }
+        
+        .qty-row { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 10px; 
+        }
+        
+        .qty-row label { 
+            font-weight: 600; 
+            font-size: 0.85rem; 
+            min-width: 60px; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        .qty-row input { 
+            flex: 1; 
+            padding: 10px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border); 
+            background: var(--bg); 
+            color: var(--text); 
+            font-size: 0.9rem; 
+            text-align: center; 
+        }
+        
+        input[type="range"] { 
+            width: 100%; 
+            height: 4px; 
+            -webkit-appearance: none; 
+            background: var(--border); 
+            border-radius: 4px; 
+            margin: 10px 0; 
+        }
+        
+        input[type="range"]::-webkit-slider-thumb { 
+            -webkit-appearance: none; 
+            width: 16px; 
+            height: 16px; 
+            background: var(--primary); 
+            border-radius: 50%; 
+            cursor: pointer; 
+            transition: transform 0.1s; 
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover { 
+            transform: scale(1.2); 
+        }
+        
+        .price { 
+            text-align: center; 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            margin: 8px 0; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        .form-group { 
+            margin-bottom: 14px; 
+        }
+        
+        label { 
+            display: block; 
+            margin-bottom: 6px; 
+            font-weight: 600; 
+            font-size: 0.8rem; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        label .required { 
+            color: #e74c3c; 
+        }
+        
+        input, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border); 
+            background: var(--bg); 
+            color: var(--text); 
+            font-size: 0.9rem; 
+            font-family: 'Poppins', sans-serif; 
+            transition: border 0.2s, box-shadow 0.2s; 
+        }
+        
+        input:focus, textarea:focus { 
+            outline: none; 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 2px rgba(24,119,242,0.1); 
+        }
+        
+        .delivery-time-note { 
+            padding: 10px; 
+            border-radius: 12px; 
+            font-size: 0.75rem; 
+            text-align: center; 
+            margin-bottom: 12px; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+        }
+        
+        .delivery-fast { 
+            background: var(--delivery-fast); 
+            color: white; 
+        }
+        
+        .delivery-medium { 
+            background: var(--delivery-medium); 
+            color: white; 
+        }
+        
+        .delivery-slow { 
+            background: var(--delivery-slow); 
+            color: white; 
+        }
+        
+        .summary-card { 
+            background: var(--bg); 
+            border-radius: 14px; 
+            padding: 12px; 
+            margin: 12px 0; 
+        }
+        
+        .info-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 8px 0; 
+            font-size: 0.8rem; 
+            flex-wrap: wrap; 
+            gap: 6px; 
+        }
+        
+        hr { 
+            border-color: var(--border); 
+            margin: 8px 0; 
+        }
+        
+        .btn-next, .btn-back, .btn-submit { 
+            padding: 12px 20px; 
+            border-radius: 40px; 
+            font-size: 0.9rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            border: none; 
+            margin-top: 6px; 
+            font-family: 'Poppins', sans-serif; 
+            transition: all 0.2s ease; 
+        }
+        
+        .btn-next { 
+            background: var(--primary); 
+            color: white; 
+            width: 100%; 
+        }
+        
+        .btn-next:hover { 
+            background: var(--primary-dark); 
+            transform: translateY(-1px); 
+        }
+        
+        .btn-back { 
+            background: var(--border); 
+            color: var(--text); 
+            flex: 1; 
+        }
+        
+        .btn-back:hover { 
+            background: var(--text-light); 
+            color: white; 
+        }
+        
+        .btn-submit { 
+            background: var(--success); 
+            color: white; 
+            width: 100%; 
+        }
+        
+        .btn-submit:hover { 
+            filter: brightness(1.05); 
+            transform: translateY(-1px); 
+        }
+        
+        .btn-paystack { 
+            background: #0d65d9; 
+            color: white; 
+            width: 100%; 
+        }
+        
+        .button-group { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 6px; 
+        }
+        
+        .whatsapp-float { 
+            position: fixed; 
+            bottom: 80px; 
+            right: 20px; 
+            background: var(--whatsapp); 
+            color: white; 
+            border-radius: 50px; 
+            padding: 8px 14px; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 0.75rem; 
+            z-index: 1000; 
+            font-family: 'Poppins', sans-serif; 
+            transition: transform 0.2s; 
+        }
+        
+        .whatsapp-float:hover { 
+            transform: scale(1.05); 
+        }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--bottom-nav-height); background: var(--card-bg); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-around; z-index: 500; padding: 0 10px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); animation: slideUpNav 0.4s ease; }
-        @keyframes slideUpNav { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 6px 10px; border-radius: 12px; transition: all 0.2s ease; font-size: 0.6rem; font-weight: 600; color: var(--text-light); font-family: 'Poppins', sans-serif; border: none; background: none; min-width: 55px; }
-        .bottom-nav-item i { font-size: 1.1rem; margin-bottom: 2px; transition: transform 0.2s; }
-        .bottom-nav-item.active { color: var(--primary); }
-        .bottom-nav-item:active { transform: scale(0.95); background: var(--bg); }
-        .bottom-nav-item:hover i { transform: translateY(-2px); }
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: var(--bottom-nav-height); 
+            background: var(--card-bg); 
+            border-top: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-around; 
+            z-index: 500; 
+            padding: 0 10px; 
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05); 
+            animation: slideUpNav 0.4s ease; 
+        }
+        
+        @keyframes slideUpNav { 
+            from { transform: translateY(100%); } 
+            to { transform: translateY(0); } 
+        }
+        
+        .bottom-nav-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            padding: 6px 10px; 
+            border-radius: 12px; 
+            transition: all 0.2s ease; 
+            font-size: 0.6rem; 
+            font-weight: 600; 
+            color: var(--text-light); 
+            font-family: 'Poppins', sans-serif; 
+            border: none; 
+            background: none; 
+            min-width: 55px; 
+        }
+        
+        .bottom-nav-item i { 
+            font-size: 1.1rem; 
+            margin-bottom: 2px; 
+            transition: transform 0.2s; 
+        }
+        
+        .bottom-nav-item.active { 
+            color: var(--primary); 
+        }
+        
+        .bottom-nav-item:active { 
+            transform: scale(0.95); 
+            background: var(--bg); 
+        }
+        
+        .bottom-nav-item:hover i { 
+            transform: translateY(-2px); 
+        }
 
-        .reviews-section { margin-top: 16px; overflow: hidden; position: relative; width: 100%; }
-        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-        .section-header h3 { font-size: 0.9rem; font-weight: 600; font-family: 'Poppins', sans-serif; }
-        .infinite-carousel { overflow: hidden; position: relative; width: 100%; }
-        .carousel-track { display: flex; gap: 16px; animation: scrollInfinite 40s linear infinite; width: max-content; }
-        .carousel-track:hover { animation-play-state: paused; }
+        /* ========== REVIEWS SECTION ========== */
+        .reviews-section { 
+            margin-top: 16px; 
+            overflow: hidden; 
+            position: relative; 
+            width: 100%; 
+        }
+        
+        .section-header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 12px; 
+        }
+        
+        .section-header h3 { 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        .infinite-carousel { 
+            overflow: hidden; 
+            position: relative; 
+            width: 100%; 
+        }
+        
+        .carousel-track { 
+            display: flex; 
+            gap: 16px; 
+            animation: scrollInfinite 40s linear infinite; 
+            width: max-content; 
+        }
+        
+        .carousel-track:hover { 
+            animation-play-state: paused; 
+        }
+        
         @keyframes scrollInfinite {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        .review-card { background: var(--card-bg); border-radius: 20px; padding: 16px; min-width: 280px; max-width: 280px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s ease; }
-        .review-card:hover { transform: translateY(-5px); }
-        .review-rating { color: var(--review-star); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 10px; }
-        .review-text { font-size: 0.8rem; line-height: 1.5; margin-bottom: 12px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .review-author { font-size: 0.65rem; color: var(--text-light); font-weight: 600; font-family: 'Poppins', sans-serif; }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-overlay.show { display: flex; animation: modalFadeInBg 0.3s ease; }
-        .modal-container { background: var(--card-bg); border-radius: 24px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; position: relative; animation: modalFadeIn 0.3s ease; }
-        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--card-bg); z-index: 10; }
-        .modal-header h3 { font-size: 1rem; font-weight: 600; font-family: 'Poppins', sans-serif; }
-        .close-modal { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-light); transition: transform 0.2s; }
-        .close-modal:hover { transform: scale(1.1); }
-        .modal-body { padding: 20px; }
-
-        .tracking-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tracking-input-group input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); font-family: monospace; }
-        .tracking-input-group button { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        .tracking-input-group button:hover { background: var(--primary-dark); transform: translateY(-1px); }
-        .tracking-result { display: none; margin-top: 16px; }
-        .tracking-result.show { display: block; animation: fadeIn 0.4s ease; }
-        .tracking-card { background: var(--bg); border-radius: 14px; padding: 14px; }
         
-        .status-timeline { display: flex; justify-content: space-between; margin: 16px 0; flex-wrap: wrap; }
-        .status-step { text-align: center; flex: 1; min-width: 50px; animation: fadeInUp 0.5s ease; }
+        .review-card { 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            padding: 16px; 
+            min-width: 280px; 
+            max-width: 280px; 
+            border: 1px solid var(--border); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            transition: transform 0.3s ease; 
+        }
+        
+        .review-card:hover { 
+            transform: translateY(-5px); 
+        }
+        
+        .review-rating { 
+            color: var(--review-star); 
+            font-size: 0.9rem; 
+            letter-spacing: 2px; 
+            margin-bottom: 10px; 
+        }
+        
+        .review-text { 
+            font-size: 0.8rem; 
+            line-height: 1.5; 
+            margin-bottom: 12px; 
+            color: var(--text); 
+            display: -webkit-box; 
+            -webkit-line-clamp: 3; 
+            -webkit-box-orient: vertical; 
+            overflow: hidden; 
+        }
+        
+        .review-author { 
+            font-size: 0.65rem; 
+            color: var(--text-light); 
+            font-weight: 600; 
+            font-family: 'Poppins', sans-serif; 
+        }
+
+        /* ========== MODALS ========== */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.85); 
+            z-index: 2000; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        .modal-overlay.show { 
+            display: flex; 
+            animation: modalFadeInBg 0.3s ease; 
+        }
+        
+        .modal-container { 
+            background: var(--card-bg); 
+            border-radius: 24px; 
+            width: 90%; 
+            max-width: 500px; 
+            max-height: 85vh; 
+            overflow-y: auto; 
+            position: relative; 
+            animation: modalFadeIn 0.3s ease; 
+        }
+        
+        @keyframes modalFadeIn { 
+            from { opacity: 0; transform: scale(0.95); } 
+            to { opacity: 1; transform: scale(1); } 
+        }
+        
+        .modal-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 16px 20px; 
+            border-bottom: 1px solid var(--border); 
+            position: sticky; 
+            top: 0; 
+            background: var(--card-bg); 
+            z-index: 10; 
+        }
+        
+        .modal-header h3 { 
+            font-size: 1rem; 
+            font-weight: 600; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        .close-modal { 
+            background: none; 
+            border: none; 
+            font-size: 1.3rem; 
+            cursor: pointer; 
+            color: var(--text-light); 
+            transition: transform 0.2s; 
+        }
+        
+        .close-modal:hover { 
+            transform: scale(1.1); 
+        }
+        
+        .modal-body { 
+            padding: 20px; 
+        }
+
+        /* ========== TRACKING ========== */
+        .tracking-input-group { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+        }
+        
+        .tracking-input-group input { 
+            flex: 1; 
+            padding: 12px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border); 
+            background: var(--bg); 
+            font-family: monospace; 
+        }
+        
+        .tracking-input-group button { 
+            padding: 12px 20px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: all 0.2s; 
+        }
+        
+        .tracking-input-group button:hover { 
+            background: var(--primary-dark); 
+            transform: translateY(-1px); 
+        }
+        
+        .tracking-result { 
+            display: none; 
+            margin-top: 16px; 
+        }
+        
+        .tracking-result.show { 
+            display: block; 
+            animation: fadeIn 0.4s ease; 
+        }
+        
+        .tracking-card { 
+            background: var(--bg); 
+            border-radius: 14px; 
+            padding: 14px; 
+        }
+        
+        /* STATUS TIMELINE ANIMATIONS */
+        .status-timeline { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 16px 0; 
+            flex-wrap: wrap; 
+        }
+        
+        .status-step { 
+            text-align: center; 
+            flex: 1; 
+            min-width: 50px; 
+            animation: fadeInUp 0.5s ease; 
+        }
+        
         .status-step:nth-child(1) { animation-delay: 0.1s; }
         .status-step:nth-child(2) { animation-delay: 0.3s; }
         .status-step:nth-child(3) { animation-delay: 0.5s; }
         .status-step:nth-child(4) { animation-delay: 0.7s; }
-        .status-icon { width: 32px; height: 32px; background: var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 0.8rem; transition: all 0.3s ease; }
-        .status-step.completed .status-icon { background: var(--success); color: white; animation: bounceIn 0.6s ease; }
-        .status-step.active .status-icon { background: var(--primary); color: white; animation: pulseStatus 1.5s infinite; }
-        @keyframes pulseStatus { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242,0.4); } 70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(24,119,242,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242,0); } }
-        @keyframes bounceIn { 0% { transform: scale(0); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .status-label { font-size: 0.6rem; font-weight: bold; margin-top: 4px; }
-        .status-badge { display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; }
+        
+        .status-icon { 
+            width: 32px; 
+            height: 32px; 
+            background: var(--border); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 0 auto 6px; 
+            font-size: 0.8rem; 
+            transition: all 0.3s ease; 
+        }
+        
+        .status-step.completed .status-icon { 
+            background: var(--success); 
+            color: white; 
+            animation: bounceIn 0.6s ease; 
+        }
+        
+        .status-step.active .status-icon { 
+            background: var(--primary); 
+            color: white; 
+            animation: pulseStatus 1.5s infinite; 
+        }
+        
+        @keyframes pulseStatus { 
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242,0.4); } 
+            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(24,119,242,0); } 
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242,0); } 
+        }
+        
+        @keyframes bounceIn { 
+            0% { transform: scale(0); } 
+            50% { transform: scale(1.2); } 
+            100% { transform: scale(1); } 
+        }
+        
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .status-label { 
+            font-size: 0.6rem; 
+            font-weight: bold; 
+            margin-top: 4px; 
+        }
+        
+        .status-badge { 
+            display: inline-block; 
+            padding: 3px 8px; 
+            border-radius: 20px; 
+            font-size: 0.65rem; 
+            font-weight: 600; 
+        }
+        
         .status-pending { background: var(--warning); color: #000; }
         .status-processing { background: var(--info); color: white; }
         .status-completed, .status-delivered, .status-approved { background: var(--success); color: white; }
-        .tracking-code { background: var(--bg); padding: 12px; border-radius: 12px; font-family: monospace; font-size: 1.1rem; font-weight: bold; letter-spacing: 2px; margin: 12px 0; border: 2px dashed var(--primary); }
-        .copy-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 40px; font-size: 0.9rem; cursor: pointer; font-weight: 600; transition: all 0.2s; margin: 5px; }
-        .copy-btn:hover { background: var(--primary-dark); transform: scale(1.02); }
+        
+        .tracking-code { 
+            background: var(--bg); 
+            padding: 12px; 
+            border-radius: 12px; 
+            font-family: monospace; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            letter-spacing: 2px; 
+            margin: 12px 0; 
+            border: 2px dashed var(--primary); 
+        }
+        
+        .copy-btn { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 40px; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            font-weight: 600; 
+            transition: all 0.2s; 
+            margin: 5px; 
+        }
+        
+        .copy-btn:hover { 
+            background: var(--primary-dark); 
+            transform: scale(1.02); 
+        }
+        
         .tracking-popup {
             background: var(--card-bg);
             border-radius: 28px;
             padding: 24px;
             text-align: center;
         }
+        
         .tracking-popup .tracking-code-large {
             font-size: 1.3rem;
             font-weight: 800;
@@ -286,12 +1391,14 @@
             border: 2px dashed var(--success);
             color: var(--primary);
         }
+        
         .tracking-popup-buttons {
             display: flex;
             gap: 12px;
             justify-content: center;
             margin-top: 20px;
         }
+        
         .tracking-popup-buttons button {
             flex: 1;
             padding: 12px;
@@ -300,16 +1407,18 @@
             cursor: pointer;
             border: none;
         }
+        
         .track-now-btn { background: var(--success); color: white; }
         .copy-id-btn { background: var(--primary); color: white; }
 
-        /* ADMIN PANEL STYLES */
+        /* ========== ADMIN PANEL STYLES ========== */
         .admin-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             margin-bottom: 20px;
         }
+        
         .admin-stat-card {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
@@ -317,9 +1426,11 @@
             border-radius: 12px;
             text-align: center;
         }
+        
         .admin-stat-card i { font-size: 1.2rem; }
         .admin-stat-card .stat-number { font-size: 1.2rem; font-weight: 700; }
         .admin-stat-card .stat-label { font-size: 0.6rem; opacity: 0.9; }
+        
         .admin-tabs {
             display: flex;
             gap: 6px;
@@ -329,6 +1440,7 @@
             padding: 6px;
             border-radius: 40px;
         }
+        
         .admin-tab {
             padding: 6px 16px;
             cursor: pointer;
@@ -340,13 +1452,13 @@
             color: var(--text-light);
             transition: all 0.2s;
         }
+        
         .admin-tab i { margin-right: 5px; font-size: 0.7rem; }
-        .admin-tab.active {
-            background: var(--primary);
-            color: white;
-        }
+        .admin-tab.active { background: var(--primary); color: white; }
+        
         .admin-section { display: none; }
-        .admin-section.active { display: block; }
+        .admin-section.active { display: block; animation: fadeIn 0.3s; }
+        
         .admin-order-row {
             background: var(--bg);
             border-radius: 10px;
@@ -355,7 +1467,21 @@
             border: 1px solid var(--border);
             font-size: 0.7rem;
         }
+        
         .admin-order-row:hover { background: var(--card-bg); }
+        
+        .order-status-select { 
+            padding: 6px 10px; 
+            border-radius: 25px; 
+            font-size: 0.7rem; 
+            cursor: pointer; 
+            margin-top: 8px; 
+            width: 100%; 
+            background: var(--card-bg); 
+            border: 1px solid var(--primary); 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
         .admin-user-row, .admin-deposit-row {
             background: var(--bg);
             border-radius: 10px;
@@ -369,6 +1495,7 @@
             flex-wrap: wrap;
             gap: 8px;
         }
+        
         .admin-password-badge {
             background: #f0f0f0;
             padding: 2px 8px;
@@ -376,6 +1503,7 @@
             font-family: monospace;
             font-size: 0.65rem;
         }
+        
         .delete-btn {
             background: var(--danger);
             color: white;
@@ -385,6 +1513,7 @@
             cursor: pointer;
             font-size: 0.6rem;
         }
+        
         .admin-warning {
             background: #fff3cd;
             color: #856404;
@@ -393,10 +1522,12 @@
             font-size: 0.7rem;
             text-align: center;
         }
+        
         .password-box {
             text-align: center;
             padding: 10px;
         }
+        
         .password-box input {
             padding: 10px;
             border-radius: 30px;
@@ -405,6 +1536,7 @@
             text-align: center;
             margin-bottom: 10px;
         }
+        
         .password-box button {
             background: var(--primary);
             color: white;
@@ -415,6 +1547,7 @@
             width: 100%;
             font-weight: 600;
         }
+        
         .refresh-btn {
             background: var(--info);
             color: white;
@@ -428,20 +1561,47 @@
             font-weight: 600;
             transition: all 0.2s;
         }
+        
         .refresh-btn:hover { background: #2980b9; transform: translateY(-1px); }
+        
         .happy-customers { text-align: center; margin: 20px 0; }
         .happy-customers img { width: 100%; max-width: 100%; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .happy-customers p { font-size: 0.65rem; color: var(--text-light); margin-top: 6px; }
+        
         .rating-input { display: flex; gap: 6px; margin-bottom: 10px; justify-content: center; }
         .star-rating { font-size: 1.5rem; cursor: pointer; color: var(--border); transition: all 0.2s; }
         .star-rating:hover { transform: scale(1.1); }
         .star-rating.active { color: var(--review-star); }
-        .btn-review { width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 30px; font-size: 0.8rem; font-weight: bold; cursor: pointer; margin-top: 6px; font-family: 'Poppins', sans-serif; transition: all 0.2s; }
+        
+        .btn-review { 
+            width: 100%; 
+            padding: 10px; 
+            background: var(--success); 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            font-size: 0.8rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 6px; 
+            font-family: 'Poppins', sans-serif; 
+            transition: all 0.2s; 
+        }
+        
         .btn-review:hover { filter: brightness(1.05); transform: translateY(-1px); }
+        
+        .paystack-secure { text-align: center; font-size: 0.6rem; color: var(--text-light); margin-top: 6px; }
+        .wallet-insufficient { background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px; padding: 12px; text-align: center; margin: 12px 0; }
+        .tx-item { background: var(--bg); border-radius: 12px; padding: 10px 14px; margin-bottom: 8px; border: 1px solid var(--border); font-size: 0.7rem; }
+        .tx-type-deposit { border-left: 3px solid var(--success); }
+        .tx-type-purchase { border-left: 3px solid var(--primary); }
+        .tx-amount-positive { color: var(--success); font-weight: 700; }
+        .tx-amount-negative { color: var(--danger); font-weight: 700; }
+        .profile-pic-preview { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid var(--primary); }
 
         @media (max-width: 480px) {
             .landing-container { padding: 5px 0; }
-            .logo-img-landing { height: 50px; }
+            .logo-img-landing { height: 50px; padding: 5px 15px; }
             .logo-section h1 { font-size: 1.3rem; }
             .options-container { padding: 12px; }
             .option-card { padding: 10px; }
@@ -449,16 +1609,21 @@
             .admin-stats { grid-template-columns: repeat(2, 1fr); }
             .admin-user-row { flex-direction: column; align-items: flex-start; }
             .review-card { min-width: 240px; }
+            .logo-container { padding: 3px 10px; }
+            .logo-img { height: 28px; }
+            .logo-container h1 { font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
 
-<!-- ========== LANDING PAGE - REDUCED HEADROOM ========== -->
+<!-- ========== LANDING PAGE ========== -->
 <div class="landing-page" id="landingPage">
     <div class="landing-container">
         <div class="logo-section">
-            <img src="https://i.postimg.cc/NjgFm0v4/Vibrant-Logo-with-African-Spirit-(1).png" alt="Get Fans Kenya" class="logo-img-landing" onerror="this.style.display='none'">
+            <div class="logo-img-landing">
+                <img src="https://i.postimg.cc/NjgFm0v4/Vibrant-Logo-with-African-Spirit-(1).png" alt="Get Fans Kenya" style="height: 45px; width: auto; display: block;" onerror="this.style.display='none'">
+            </div>
             <h1>Get Fans Kenya</h1>
             <p>Grow Your Social Media Presence Fast</p>
         </div>
@@ -509,65 +1674,128 @@
 
 <!-- ========== MAIN SITE ========== -->
 <div class="main-site" id="mainSite">
-    <div class="sticky-header"><div class="container"><div class="header"><div class="logo-container"><img src="https://i.postimg.cc/NjgFm0v4/Vibrant-Logo-with-African-Spirit-(1).png" class="logo-img"><h1>Get Fans Kenya</h1></div><div class="header-buttons"><button class="login-header-btn" id="loginHeaderBtn" style="display:none;">🔑 Login</button><button class="track-btn" onclick="openModal('trackModal')">Track</button><button class="admin-small-btn" onclick="openAdmin()">Admin</button><div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌓</div></div></div></div></div>
-    <div class="main-content"><div class="container">
-        <div class="user-info-bar" id="userInfoBar" style="display:none;"><div class="user-greeting"><div class="user-avatar" id="userAvatar">G</div><div><div id="userNameDisplay">Guest</div><div id="userEmailDisplay"></div></div></div><div style="display:flex;gap:8px;"><div class="wallet-mini"><span>💰</span><span class="wallet-balance" id="walletBalanceDisplay">KSh 0</span><button class="wallet-deposit-btn" id="walletDepositBtn">+</button></div><button class="free-credit-btn" id="claimFreeFollowersBtn" style="display:none;" onclick="claimFreeFollowers()">Claim 100 Free 🎁</button><button class="logout-btn" onclick="handleLogout()">Logout</button></div></div>
-        <div class="offer-banner" id="offerBanner" style="display:none;"></div>
-        
-        <div class="progress-container"><div class="progress-steps"><div class="step-indicator" id="step1Indicator">1. Select</div><div class="step-indicator" id="step2Indicator">2. Details</div><div class="step-indicator" id="step3Indicator">3. Payment</div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
-        
-        <div class="step active" id="step1">
-            <div class="card">
-                <div class="step-title">Choose Package</div>
-                <div class="platform-buttons" id="platformButtons">
-                    <div class="platform-btn active" data-platform="facebook"><i class="fab fa-facebook"></i> Facebook</div>
-                    <div class="platform-btn" data-platform="instagram"><i class="fab fa-instagram"></i> Instagram</div>
+    <div class="sticky-header">
+        <div class="container">
+            <div class="header">
+                <div class="logo-container">
+                    <img src="https://i.postimg.cc/NjgFm0v4/Vibrant-Logo-with-African-Spirit-(1).png" alt="Get Fans Kenya" class="logo-img" onerror="this.style.display='none'">
+                    <h1>Get Fans Kenya</h1>
                 </div>
-                <div class="service-buttons" id="serviceButtons"></div>
-                <div class="qty-row"><label>Quantity</label><input type="text" id="quantityNumber" value="10000"></div>
-                <input type="range" id="quantitySlider" min="100" max="1000000" step="100" value="10000">
-                <div class="price" id="priceDisplay">KSh <span id="finalPrice">3,399</span></div>
-                <div class="delivery-time-note delivery-fast" id="deliveryTimeNote">⚡ <span id="deliveryEstimate">30 minutes</span> delivery</div>
-                <button class="btn-next" id="nextToStep2">Continue</button>
+                <div class="header-buttons">
+                    <button class="login-header-btn" id="loginHeaderBtn" style="display:none;">🔑 Login</button>
+                    <button class="track-btn" onclick="openModal('trackModal')">Track</button>
+                    <button class="admin-small-btn" onclick="openAdmin()">Admin</button>
+                    <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌓</div>
+                </div>
             </div>
         </div>
-        
-        <div class="step" id="step2">
-            <div class="card">
-                <div class="step-title">Your Information</div>
-                <div class="form-group"><label id="usernameLabel">Facebook Profile URL <span class="required">*</span></label><input type="text" id="profileUrl" placeholder="Profile URL or username"></div>
-                <div class="form-group"><label>Full Name <span class="required">*</span></label><input type="text" id="customerName" placeholder="Your full name"></div>
-                <div class="form-group"><label>WhatsApp Number <span class="required">*</span></label><input type="tel" id="customerPhone" placeholder="0712345678"></div>
-                <div class="button-group"><button class="btn-back" id="backToStep1">Back</button><button class="btn-next" id="nextToStep3">Continue</button></div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="user-info-bar" id="userInfoBar" style="display:none;">
+                <div class="user-greeting">
+                    <div class="user-avatar" id="userAvatar">G</div>
+                    <div><div id="userNameDisplay">Guest</div><div style="font-size:0.6rem;color:var(--text-light);" id="userEmailDisplay"></div></div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <div class="wallet-mini"><span style="font-size:0.65rem;">💰</span><span class="wallet-balance" id="walletBalanceDisplay">KSh 0</span><button class="wallet-deposit-btn" id="walletDepositBtn" title="Add Funds">+</button></div>
+                    <button class="free-credit-btn" id="claimFreeFollowersBtn" style="display:none;" onclick="claimFreeFollowers()">Claim 100 Free 🎁</button>
+                    <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="offer-banner" id="offerBanner" style="display:none;"></div>
+            
+            <div class="progress-container">
+                <div class="progress-steps">
+                    <div class="step-indicator" id="step1Indicator">1. Select</div>
+                    <div class="step-indicator" id="step2Indicator">2. Details</div>
+                    <div class="step-indicator" id="step3Indicator">3. Payment</div>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            </div>
+            
+            <!-- STEP 1 -->
+            <div class="step active" id="step1">
+                <div class="card">
+                    <div class="step-title">Choose Package</div>
+                    <div class="platform-buttons" id="platformButtons">
+                        <div class="platform-btn active" data-platform="facebook"><i class="fab fa-facebook"></i> Facebook</div>
+                        <div class="platform-btn" data-platform="instagram"><i class="fab fa-instagram"></i> Instagram</div>
+                    </div>
+                    <div class="service-buttons" id="serviceButtons"></div>
+                    <div class="qty-row"><label>Quantity</label><input type="text" id="quantityNumber" value="10000"></div>
+                    <input type="range" id="quantitySlider" min="100" max="1000000" step="100" value="10000">
+                    <div class="price" id="priceDisplay">KSh <span id="finalPrice">3,399</span></div>
+                    <div class="delivery-time-note delivery-fast" id="deliveryTimeNote">⚡ <span id="deliveryEstimate">30 minutes</span> delivery</div>
+                    <button class="btn-next" id="nextToStep2">Continue</button>
+                </div>
+            </div>
+            
+            <!-- STEP 2 -->
+            <div class="step" id="step2">
+                <div class="card">
+                    <div class="step-title">Your Information</div>
+                    <div class="form-group"><label id="usernameLabel">Facebook Profile URL <span class="required">*</span></label><input type="text" id="profileUrl" placeholder="Profile URL or username"></div>
+                    <div class="form-group"><label>Full Name <span class="required">*</span></label><input type="text" id="customerName" placeholder="Your full name"></div>
+                    <div class="form-group"><label>WhatsApp Number <span class="required">*</span></label><input type="tel" id="customerPhone" placeholder="0712345678"></div>
+                    <div class="button-group"><button class="btn-back" id="backToStep1">Back</button><button class="btn-next" id="nextToStep3">Continue</button></div>
+                </div>
+            </div>
+            
+            <!-- STEP 3 -->
+            <div class="step" id="step3">
+                <div class="card">
+                    <div class="step-title">Complete Payment</div>
+                    <div id="walletPaymentSection" style="display:none;">
+                        <div class="summary-card">
+                            <div class="info-row"><span>Wallet Balance:</span><strong style="color:var(--success);" id="walletBalanceInCheckout">KSh 0</strong></div>
+                            <div class="info-row"><span>Order Total:</span><strong id="orderTotalInCheckout">KSh 3,399</strong></div>
+                            <hr>
+                            <div class="info-row"><span>Balance After:</span><strong id="balanceAfterOrder">KSh 0</strong></div>
+                        </div>
+                        <div id="walletSufficientSection"><button class="btn-submit" id="payWithWalletBtn">Pay with Wallet 💰</button></div>
+                        <div id="walletInsufficientSection" style="display:none;" class="wallet-insufficient"><p>⚠️ Insufficient wallet balance</p><button class="btn-next" id="addFundsFromCheckoutBtn">Add Funds to Wallet</button></div>
+                    </div>
+                    <div id="guestPaymentSection" style="display:none;">
+                        <div class="form-group"><label>M-Pesa Phone Number <span class="required">*</span></label><input type="tel" id="paymentPhone" placeholder="0712345678"></div>
+                        <button class="btn-submit btn-paystack" id="payWithPaystackBtn">📱 Pay with M-Pesa (Paystack)</button>
+                        <p class="paystack-secure">🔒 Secure payment via Paystack</p>
+                    </div>
+                    <div class="summary-card">
+                        <div class="info-row"><strong>Tracking ID:</strong><span id="trackingId">Loading...</span></div>
+                        <hr>
+                        <div class="info-row"><span>Platform:</span><strong id="summaryPlatform">Facebook</strong></div>
+                        <div class="info-row"><span>Service:</span><strong id="summaryService">Followers</strong></div>
+                        <div class="info-row"><span>Quantity:</span><strong id="summaryQty">10,000</strong></div>
+                        <div class="info-row"><span>Total:</span><strong id="summaryPrice">KSh 3,399</strong></div>
+                    </div>
+                    <div class="button-group"><button class="btn-back" id="backToStep2">Back</button></div>
+                </div>
+            </div>
+            
+            <div class="happy-customers">
+                <img src="https://media.istockphoto.com/id/1995160648/photo/wide-angle-shot-of-gen-z-group-of-friends-hanging-out-together.jpg?s=612x612&w=0&k=20&c=7SEvkSe_PCeUfF8-YR6_9I77gL_6z_RTimidlf3BMGE=" alt="Happy Customers">
+                <p>📱 Join thousands of happy customers growing their social media!</p>
+            </div>
+            
+            <div class="reviews-section">
+                <div class="section-header"><h3>⭐ Customer Reviews</h3></div>
+                <div class="infinite-carousel"><div class="carousel-track" id="reviewsTrack"></div></div>
             </div>
         </div>
-        
-        <div class="step" id="step3">
-            <div class="card">
-                <div class="step-title">Complete Payment</div>
-                <div id="walletPaymentSection" style="display:none;">
-                    <div class="summary-card"><div class="info-row"><span>Wallet Balance:</span><strong id="walletBalanceInCheckout">KSh 0</strong></div><div class="info-row"><span>Order Total:</span><strong id="orderTotalInCheckout">KSh 3,399</strong></div><hr><div class="info-row"><span>Balance After:</span><strong id="balanceAfterOrder">KSh 0</strong></div></div>
-                    <div id="walletSufficientSection"><button class="btn-submit" id="payWithWalletBtn">Pay with Wallet 💰</button></div>
-                    <div id="walletInsufficientSection" style="display:none;" class="wallet-insufficient"><p>⚠️ Insufficient wallet balance</p><button class="btn-next" id="addFundsFromCheckoutBtn">Add Funds to Wallet</button></div>
-                </div>
-                <div id="guestPaymentSection" style="display:none;">
-                    <div class="form-group"><label>M-Pesa Phone Number <span class="required">*</span></label><input type="tel" id="paymentPhone" placeholder="0712345678"></div>
-                    <button class="btn-submit btn-paystack" id="payWithPaystackBtn">📱 Pay with M-Pesa (Paystack)</button>
-                    <p class="paystack-secure">🔒 Secure payment via Paystack</p>
-                </div>
-                <div class="summary-card"><div class="info-row"><strong>Tracking ID:</strong><span id="trackingId">Loading...</span></div><hr><div class="info-row"><span>Platform:</span><strong id="summaryPlatform">Facebook</strong></div><div class="info-row"><span>Service:</span><strong id="summaryService">Followers</strong></div><div class="info-row"><span>Quantity:</span><strong id="summaryQty">10,000</strong></div><div class="info-row"><span>Total:</span><strong id="summaryPrice">KSh 3,399</strong></div></div>
-                <div class="button-group"><button class="btn-back" id="backToStep2">Back</button></div>
-            </div>
-        </div>
-        
-        <div class="happy-customers"><img src="https://media.istockphoto.com/id/1995160648/photo/wide-angle-shot-of-gen-z-group-of-friends-hanging-out-together.jpg?s=612x612&w=0&k=20&c=7SEvkSe_PCeUfF8-YR6_9I77gL_6z_RTimidlf3BMGE=" alt="Happy Customers"><p>📱 Join thousands of happy customers growing their social media!</p></div>
-        
-        <div class="reviews-section"><div class="section-header"><h3>⭐ Customer Reviews</h3></div><div class="infinite-carousel"><div class="carousel-track" id="reviewsTrack"></div></div></div>
-    </div></div>
+    </div>
 </div>
 
-<nav class="bottom-nav" id="bottomNav" style="display:none;"><button class="bottom-nav-item active" onclick="scrollToHome()"><i class="fas fa-home"></i><span>Home</span></button><button class="bottom-nav-item" onclick="openWalletModal()"><i class="fas fa-wallet"></i><span>Wallet</span></button><button class="bottom-nav-item" onclick="openOrdersModal()"><i class="fas fa-shopping-bag"></i><span>Orders</span></button><button class="bottom-nav-item" onclick="openAccountModal()"><i class="fas fa-user"></i><span>Account</span></button></nav>
+<nav class="bottom-nav" id="bottomNav" style="display:none;">
+    <button class="bottom-nav-item active" onclick="scrollToHome()"><i class="fas fa-home"></i><span>Home</span></button>
+    <button class="bottom-nav-item" onclick="openWalletModal()"><i class="fas fa-wallet"></i><span>Wallet</span></button>
+    <button class="bottom-nav-item" onclick="openOrdersModal()"><i class="fas fa-shopping-bag"></i><span>Orders</span></button>
+    <button class="bottom-nav-item" onclick="openAccountModal()"><i class="fas fa-user"></i><span>Account</span></button>
+</nav>
 
+<!-- ========== MODALS ========== -->
 <div class="modal-overlay" id="orderSuccessModal"><div class="modal-container"><div class="modal-header"><h3>🎉 Order Placed Successfully!</h3><button class="close-modal" onclick="closeModal('orderSuccessModal')">&times;</button></div><div class="modal-body"><div class="tracking-popup"><div style="font-size:3rem;">✅</div><p>Your order has been received and is being processed.</p><div class="tracking-code-large" id="successTrackingCode">GFKXXXXXX</div><div class="tracking-popup-buttons"><button class="track-now-btn" onclick="trackOrderFromSuccess()">🔍 Track Now</button><button class="copy-id-btn" onclick="copySuccessTrackingId()">📋 Copy ID</button></div></div></div></div></div>
 <div class="modal-overlay" id="trackModal"><div class="modal-container"><div class="modal-header"><h3>Track Your Order</h3><button class="close-modal" onclick="closeModal('trackModal')">&times;</button></div><div class="modal-body"><div class="tracking-input-group"><input type="text" id="trackingInput" placeholder="Enter Tracking ID"><button onclick="trackOrderLocal()">Track</button></div><div id="trackingResult" class="tracking-result"></div></div></div></div>
 <div class="modal-overlay" id="walletModal"><div class="modal-container"><div class="modal-header"><h3>💰 My Wallet</h3><button class="close-modal" onclick="closeModal('walletModal')">&times;</button></div><div class="modal-body"><div style="text-align:center;"><div style="font-size:2rem;font-weight:800;color:var(--success);" id="walletModalBalance">KSh 0</div><small>Available Balance</small></div><button class="btn-next" id="depositFromWalletBtn" style="background:var(--success);margin:15px 0;" onclick="document.getElementById('depositSection').style.display='block'">+ Deposit Funds (5% Bonus!)</button><div id="depositSection" style="display:none;"><div class="card"><h4>Deposit via M-Pesa</h4><div class="form-group"><label>Amount (KSh)</label><input type="number" id="depositAmount" placeholder="Min 50" min="50"></div><p style="font-size:0.65rem;color:var(--success);">🎁 5% Bonus on all deposits!</p><div class="form-group"><label>M-Pesa Phone Number</label><input type="tel" id="depositPhone" placeholder="0712345678"></div><button class="btn-submit btn-paystack" id="submitDepositBtn">📱 Pay with M-Pesa</button></div></div><h4>Transaction History</h4><div id="transactionHistory"></div></div></div></div>
@@ -575,14 +1803,14 @@
 <div class="modal-overlay" id="ordersModal"><div class="modal-container"><div class="modal-header"><h3>📋 My Orders</h3><button class="close-modal" onclick="closeModal('ordersModal')">&times;</button></div><div class="modal-body"><div id="myOrdersList"></div></div></div></div>
 <div class="modal-overlay" id="reviewsModal"><div class="modal-container"><div class="modal-header"><h3>⭐ Customer Reviews</h3><button class="close-modal" onclick="closeModal('reviewsModal')">&times;</button></div><div class="modal-body"><div id="reviewsList"></div><div class="card"><h4>Leave a Review</h4><div class="rating-input" id="ratingStars2"><span class="star-rating" data-rating="1">★</span><span class="star-rating" data-rating="2">★</span><span class="star-rating" data-rating="3">★</span><span class="star-rating" data-rating="4">★</span><span class="star-rating" data-rating="5">★</span></div><input type="text" id="reviewerName2" placeholder="Your name"><textarea id="reviewText2" rows="2" placeholder="Share your experience"></textarea><button class="btn-review" id="submitReviewBtn2">Submit Review</button></div></div></div></div>
 
-<!-- ADMIN MODAL - FULL SYNC -->
+<!-- ADMIN MODAL -->
 <div class="modal-overlay" id="adminModal"><div class="modal-container" style="max-width:650px;"><div class="modal-header"><h3><i class="fas fa-shield-alt"></i> Admin Panel</h3><button class="close-modal" onclick="closeModal('adminModal')">&times;</button></div><div class="modal-body"><div class="admin-stats" id="adminStats"></div><div class="admin-tabs"><button class="admin-tab active" data-tab="orders" onclick="switchAdminTab('orders')"><i class="fas fa-shopping-cart"></i> Orders</button><button class="admin-tab" data-tab="deposits" onclick="switchAdminTab('deposits')"><i class="fas fa-money-bill"></i> Deposits</button><button class="admin-tab" data-tab="reviews" onclick="switchAdminTab('reviews')"><i class="fas fa-star"></i> Reviews</button><button class="admin-tab" data-tab="users" onclick="switchAdminTab('users')"><i class="fas fa-users"></i> Users</button></div><button class="refresh-btn" onclick="syncAllData()"><i class="fas fa-sync-alt"></i> Sync All Data from Cloud</button><div id="adminOrdersSection" class="admin-section active"><div id="ordersList"></div></div><div id="adminDepositsSection" class="admin-section"><div id="depositsList"></div></div><div id="adminReviewsSection" class="admin-section"><div id="adminReviewsList"></div></div><div id="adminUsersSection" class="admin-section"><div id="usersList"></div></div></div></div></div>
 <div class="modal-overlay" id="passwordModal"><div class="modal-container" style="max-width:320px;"><div class="modal-header"><h3><i class="fas fa-lock"></i> Admin Access</h3><button class="close-modal" onclick="closeModal('passwordModal')">&times;</button></div><div class="modal-body"><div class="password-box"><input type="password" id="adminPassword" placeholder="Enter admin password"><button onclick="checkAdminPassword()">Verify Access</button></div></div></div></div>
 
 <a href="https://wa.me/254750600715?text=Hi" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
 
 <script>
-// ========== FULL JAVASCRIPT - COMPLETE SYNC FROM GOOGLE SHEETS ==========
+// ========== FULL JAVASCRIPT ==========
 const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxE6e5f7eT9OAPCVkaD5AxoAYBF6pJ5m_1cA76RPiWaVawsZlPWGMRgged4FMpww0bJ1Q/exec";
 const ADMIN_PASSWORD = "GetFans2024";
 const PAYSTACK_PUBLIC_KEY = "pk_test_cc050603fb87c205f0012550e86ce6fe7c5db254";
