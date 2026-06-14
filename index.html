@@ -11,56 +11,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg: #f8f9fc;
-            --card-bg: #ffffff;
-            --text: #1a1a2e;
-            --text-light: #666;
-            --border: #e5e5e5;
-            --primary: #1877f2;
-            --primary-dark: #0d65d9;
-            --instagram: #e4405f;
-            --instagram-dark: #c13584;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --info: #3498db;
-            --whatsapp: #25D366;
-            --review-star: #ffc107;
-            --delivery-fast: #2ecc71;
-            --delivery-medium: #f39c12;
-            --delivery-slow: #e74c3c;
-            --header-bg-start: #1877f2;
-            --header-bg-end: #0d65d9;
+            --bg: #f8f9fc; --card-bg: #ffffff; --text: #1a1a2e; --text-light: #666;
+            --border: #e5e5e5; --primary: #1877f2; --primary-dark: #0d65d9;
+            --instagram: #e4405f; --instagram-dark: #c13584; --success: #2ecc71;
+            --warning: #f39c12; --danger: #e74c3c; --info: #3498db; --whatsapp: #25D366;
+            --review-star: #ffc107; --delivery-fast: #2ecc71; --delivery-medium: #f39c12;
+            --delivery-slow: #e74c3c; --header-bg-start: #1877f2; --header-bg-end: #0d65d9;
             --offer-bg: linear-gradient(135deg, #ff6b6b, #ee5a24);
             --bottom-nav-height: 65px;
         }
-        
         body.dark {
-            --bg: #121212;
-            --card-bg: #1e1e2a;
-            --text: #eeeeee;
-            --text-light: #999;
-            --border: #2c2c3a;
-            --header-bg-start: #0d65d9;
-            --header-bg-end: #0a4faa;
+            --bg: #121212; --card-bg: #1e1e2a; --text: #eeeeee; --text-light: #999;
+            --border: #2c2c3a; --header-bg-start: #0d65d9; --header-bg-end: #0a4faa;
         }
-        
         body {
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
+            background: var(--bg); color: var(--text); min-height: 100vh;
             padding-bottom: var(--bottom-nav-height);
         }
 
-        /* ========== LANDING PAGE ========== */
         .landing-page {
             background: linear-gradient(135deg, #1877f2 0%, #0d65d9 50%, #001f3f 100%);
             min-height: 100vh;
@@ -78,13 +49,11 @@
             opacity: 1;
             visibility: visible;
         }
-        
         .landing-page.hide-landing {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-        
         .landing-container { 
             max-width: 480px; 
             width: 100%; 
@@ -92,27 +61,26 @@
             margin: 0 auto;
             padding: 5px 0;
         }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* LOGO SECTION WITH WHITE BACKGROUND */
         .logo-section { 
             text-align: center; 
             margin-bottom: 12px; 
         }
         
+        /* LOGO WRAPPER - CONTAINER SIZE NOT INCREASED, ONLY LOGO SIZE INCREASED */
         .logo-img-landing { 
-            height: 65px; 
-            width: auto; 
-            border-radius: 16px; 
-            margin-bottom: 8px; 
+            display: inline-block;
             background: white;
             padding: 8px 20px;
+            border-radius: 16px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            display: inline-block;
+        }
+        
+        .logo-img-landing img {
+            height: 70px;
+            width: auto;
+            display: block;
         }
         
         .logo-section h1 { 
@@ -281,7 +249,6 @@
             color: #2ecc71; 
         }
 
-        /* ========== AUTH MODAL ========== */
         .auth-modal { 
             display: none; 
             position: fixed; 
@@ -418,7 +385,6 @@
             display: block; 
         }
 
-        /* ========== MAIN SITE ========== */
         .main-site { 
             display: none; 
             animation: siteFadeIn 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
@@ -444,7 +410,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.2); 
         }
         
-        /* LOGO IN HEADER WITH WHITE BACKGROUND */
         .logo-container { 
             display: flex; 
             align-items: center; 
@@ -455,7 +420,7 @@
         }
         
         .logo-img { 
-            height: 35px; 
+            height: 45px; 
             width: auto; 
             border-radius: 8px;
         }
@@ -1061,7 +1026,6 @@
             transform: translateY(-2px); 
         }
 
-        /* ========== REVIEWS SECTION ========== */
         .reviews-section { 
             margin-top: 16px; 
             overflow: hidden; 
@@ -1144,7 +1108,6 @@
             font-family: 'Poppins', sans-serif; 
         }
 
-        /* ========== MODALS ========== */
         .modal-overlay { 
             display: none; 
             position: fixed; 
@@ -1214,7 +1177,6 @@
             padding: 20px; 
         }
 
-        /* ========== TRACKING ========== */
         .tracking-input-group { 
             display: flex; 
             gap: 10px; 
@@ -1262,7 +1224,6 @@
             padding: 14px; 
         }
         
-        /* STATUS TIMELINE ANIMATIONS */
         .status-timeline { 
             display: flex; 
             justify-content: space-between; 
@@ -1411,7 +1372,6 @@
         .track-now-btn { background: var(--success); color: white; }
         .copy-id-btn { background: var(--primary); color: white; }
 
-        /* ========== ADMIN PANEL STYLES ========== */
         .admin-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -1601,7 +1561,7 @@
 
         @media (max-width: 480px) {
             .landing-container { padding: 5px 0; }
-            .logo-img-landing { height: 50px; padding: 5px 15px; }
+            .logo-img-landing img { height: 55px; }
             .logo-section h1 { font-size: 1.3rem; }
             .options-container { padding: 12px; }
             .option-card { padding: 10px; }
@@ -1610,7 +1570,7 @@
             .admin-user-row { flex-direction: column; align-items: flex-start; }
             .review-card { min-width: 240px; }
             .logo-container { padding: 3px 10px; }
-            .logo-img { height: 28px; }
+            .logo-img { height: 35px; }
             .logo-container h1 { font-size: 0.75rem; }
         }
     </style>
@@ -1622,7 +1582,7 @@
     <div class="landing-container">
         <div class="logo-section">
             <div class="logo-img-landing">
-                <img src="https://i.postimg.cc/NjgFm0v4/Vibrant-Logo-with-African-Spirit-(1).png" alt="Get Fans Kenya" style="height: 45px; width: auto; display: block;" onerror="this.style.display='none'">
+                <img src="https://i.postimg.cc/NjgFm0v4/Vibrant-Logo-with-African-Spirit-(1).png" alt="Get Fans Kenya">
             </div>
             <h1>Get Fans Kenya</h1>
             <p>Grow Your Social Media Presence Fast</p>
@@ -1716,7 +1676,6 @@
                 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             </div>
             
-            <!-- STEP 1 -->
             <div class="step active" id="step1">
                 <div class="card">
                     <div class="step-title">Choose Package</div>
@@ -1733,7 +1692,6 @@
                 </div>
             </div>
             
-            <!-- STEP 2 -->
             <div class="step" id="step2">
                 <div class="card">
                     <div class="step-title">Your Information</div>
@@ -1744,7 +1702,6 @@
                 </div>
             </div>
             
-            <!-- STEP 3 -->
             <div class="step" id="step3">
                 <div class="card">
                     <div class="step-title">Complete Payment</div>
@@ -1795,7 +1752,6 @@
     <button class="bottom-nav-item" onclick="openAccountModal()"><i class="fas fa-user"></i><span>Account</span></button>
 </nav>
 
-<!-- ========== MODALS ========== -->
 <div class="modal-overlay" id="orderSuccessModal"><div class="modal-container"><div class="modal-header"><h3>🎉 Order Placed Successfully!</h3><button class="close-modal" onclick="closeModal('orderSuccessModal')">&times;</button></div><div class="modal-body"><div class="tracking-popup"><div style="font-size:3rem;">✅</div><p>Your order has been received and is being processed.</p><div class="tracking-code-large" id="successTrackingCode">GFKXXXXXX</div><div class="tracking-popup-buttons"><button class="track-now-btn" onclick="trackOrderFromSuccess()">🔍 Track Now</button><button class="copy-id-btn" onclick="copySuccessTrackingId()">📋 Copy ID</button></div></div></div></div></div>
 <div class="modal-overlay" id="trackModal"><div class="modal-container"><div class="modal-header"><h3>Track Your Order</h3><button class="close-modal" onclick="closeModal('trackModal')">&times;</button></div><div class="modal-body"><div class="tracking-input-group"><input type="text" id="trackingInput" placeholder="Enter Tracking ID"><button onclick="trackOrderLocal()">Track</button></div><div id="trackingResult" class="tracking-result"></div></div></div></div>
 <div class="modal-overlay" id="walletModal"><div class="modal-container"><div class="modal-header"><h3>💰 My Wallet</h3><button class="close-modal" onclick="closeModal('walletModal')">&times;</button></div><div class="modal-body"><div style="text-align:center;"><div style="font-size:2rem;font-weight:800;color:var(--success);" id="walletModalBalance">KSh 0</div><small>Available Balance</small></div><button class="btn-next" id="depositFromWalletBtn" style="background:var(--success);margin:15px 0;" onclick="document.getElementById('depositSection').style.display='block'">+ Deposit Funds (5% Bonus!)</button><div id="depositSection" style="display:none;"><div class="card"><h4>Deposit via M-Pesa</h4><div class="form-group"><label>Amount (KSh)</label><input type="number" id="depositAmount" placeholder="Min 50" min="50"></div><p style="font-size:0.65rem;color:var(--success);">🎁 5% Bonus on all deposits!</p><div class="form-group"><label>M-Pesa Phone Number</label><input type="tel" id="depositPhone" placeholder="0712345678"></div><button class="btn-submit btn-paystack" id="submitDepositBtn">📱 Pay with M-Pesa</button></div></div><h4>Transaction History</h4><div id="transactionHistory"></div></div></div></div>
@@ -1803,7 +1759,6 @@
 <div class="modal-overlay" id="ordersModal"><div class="modal-container"><div class="modal-header"><h3>📋 My Orders</h3><button class="close-modal" onclick="closeModal('ordersModal')">&times;</button></div><div class="modal-body"><div id="myOrdersList"></div></div></div></div>
 <div class="modal-overlay" id="reviewsModal"><div class="modal-container"><div class="modal-header"><h3>⭐ Customer Reviews</h3><button class="close-modal" onclick="closeModal('reviewsModal')">&times;</button></div><div class="modal-body"><div id="reviewsList"></div><div class="card"><h4>Leave a Review</h4><div class="rating-input" id="ratingStars2"><span class="star-rating" data-rating="1">★</span><span class="star-rating" data-rating="2">★</span><span class="star-rating" data-rating="3">★</span><span class="star-rating" data-rating="4">★</span><span class="star-rating" data-rating="5">★</span></div><input type="text" id="reviewerName2" placeholder="Your name"><textarea id="reviewText2" rows="2" placeholder="Share your experience"></textarea><button class="btn-review" id="submitReviewBtn2">Submit Review</button></div></div></div></div>
 
-<!-- ADMIN MODAL -->
 <div class="modal-overlay" id="adminModal"><div class="modal-container" style="max-width:650px;"><div class="modal-header"><h3><i class="fas fa-shield-alt"></i> Admin Panel</h3><button class="close-modal" onclick="closeModal('adminModal')">&times;</button></div><div class="modal-body"><div class="admin-stats" id="adminStats"></div><div class="admin-tabs"><button class="admin-tab active" data-tab="orders" onclick="switchAdminTab('orders')"><i class="fas fa-shopping-cart"></i> Orders</button><button class="admin-tab" data-tab="deposits" onclick="switchAdminTab('deposits')"><i class="fas fa-money-bill"></i> Deposits</button><button class="admin-tab" data-tab="reviews" onclick="switchAdminTab('reviews')"><i class="fas fa-star"></i> Reviews</button><button class="admin-tab" data-tab="users" onclick="switchAdminTab('users')"><i class="fas fa-users"></i> Users</button></div><button class="refresh-btn" onclick="syncAllData()"><i class="fas fa-sync-alt"></i> Sync All Data from Cloud</button><div id="adminOrdersSection" class="admin-section active"><div id="ordersList"></div></div><div id="adminDepositsSection" class="admin-section"><div id="depositsList"></div></div><div id="adminReviewsSection" class="admin-section"><div id="adminReviewsList"></div></div><div id="adminUsersSection" class="admin-section"><div id="usersList"></div></div></div></div></div>
 <div class="modal-overlay" id="passwordModal"><div class="modal-container" style="max-width:320px;"><div class="modal-header"><h3><i class="fas fa-lock"></i> Admin Access</h3><button class="close-modal" onclick="closeModal('passwordModal')">&times;</button></div><div class="modal-body"><div class="password-box"><input type="password" id="adminPassword" placeholder="Enter admin password"><button onclick="checkAdminPassword()">Verify Access</button></div></div></div></div>
 
